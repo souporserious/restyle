@@ -122,7 +122,7 @@ function css(styles, nonce) {
       ? React.createElement('style', {
           nonce,
           href: hash(rules),
-          precedence: 'reset',
+          precedence: 'high',
           children: rules,
         })
       : null,

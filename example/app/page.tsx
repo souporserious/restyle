@@ -2,7 +2,7 @@ import { CodeBlock, GitProviderLink } from 'mdxts/components'
 import { MdxtsLogoLink } from 'mdxts/assets'
 
 import { Button } from './Button'
-import restyleLogoSource from './logo-ligbt.png'
+// import restyleLogoSource from './logo-light.png'
 
 const exampleCode = `
 import React from 'react'
@@ -63,7 +63,7 @@ export default function Page() {
                 aria-label="restyle"
                 className="text-3xl font-bold tracking-tighter sm:text-5xl"
               >
-                <img src={restyleLogoSource.src} alt="restyle logo" />
+                {/* <img src={restyleLogoSource.src} alt="restyle logo" /> */}
               </h1>
               <p className="max-w-[900px] text-gray-600 font-medium md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                 The simplest way to add CSS styles to your React components.
