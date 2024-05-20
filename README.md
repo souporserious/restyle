@@ -10,13 +10,15 @@
 
 ## Features
 
+- Zero-runtime CSS in JS
 - Generates atomic class names
 - De-duplicates styles
+- Works in Server and Client Components
 - Encourages encapsulation
+- Supports `css` prop with JSX pragma
 - Loads styles on demand
-- Zero configuration
-- Works in NPM packages
-- `694` bytes minified and gzipped
+- Allows shipping CSS in NPM packages
+- Core is `694` bytes minified and gzipped
 
 [View Example](https://reactstyle.vercel.app/)
 
@@ -27,9 +29,16 @@ npm install restyle
 ```
 
 > [!IMPORTANT]
-> This library requires React 19 since it utilizes the new [style hoisting feature](https://react.dev/reference/react-dom/components/style).
+> This library requires React 19 since it utilizes the new [style hoisting feature](https://react.dev/reference/react-dom/components/style) in React.
 
 ## Examples
+
+- [Basic Usage](#basic-usage)
+- [Box Component](#box-component)
+- [CSS Prop](#css-prop)
+- [Psuedoclasses](#psuedoclasses)
+- [Media Queries](#media-queries)
+- [Child Selectors](#child-selectors)
 
 ### Basic Usage
 
@@ -52,10 +61,68 @@ export default function BasicUsage() {
 }
 ```
 
-### Psuedoclasses
+### Box Component
 
 ```tsx
 import React from 'react'
+import { css } from 'restyle'
+
+export function Box({
+  children,
+  display = 'flex',
+  alignItems,
+  justifyContent,
+  padding,
+  backgroundColor,
+}) {
+  const [classNames, styles] = css({
+    display,
+    alignItems,
+    justifyContent,
+    padding,
+    backgroundColor,
+  })
+  return (
+    <>
+      <div className={classNames}>{children}</div>
+      {styles}
+    </>
+  )
+}
+```
+
+### CSS Prop
+
+First, configure the pragma in your `tsconfig.json` file:
+
+```json
+{
+  "compilerOptions": {
+    "jsxImportSource": "restyle"
+  }
+}
+```
+
+Now, you can use the `css` prop to style elements:
+
+```tsx
+export default function CSSProp() {
+  return (
+    <div
+      css={{
+        padding: '1rem',
+        backgroundColor: 'peachpuff',
+      }}
+    >
+      Hello World
+    </div>
+  )
+}
+```
+
+### Psuedoclasses
+
+```tsx
 import { css } from 'restyle'
 
 export default function Hover() {
@@ -77,7 +144,6 @@ export default function Hover() {
 ### Media Queries
 
 ```tsx
-import React from 'react'
 import { css } from 'restyle'
 
 export default function MediaQueries() {
@@ -100,7 +166,6 @@ export default function MediaQueries() {
 ### Child Selectors
 
 ```tsx
-import React from 'react'
 import { css } from 'restyle'
 
 export default function ChildSelectors() {
