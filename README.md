@@ -120,23 +120,41 @@ export default function CSSProp() {
 }
 ```
 
+Alternatively, you can set the pragma at the top of the file:
+
+```tsx
+/** @jsxImportSource restyle */
+
+export default function CSSProp() {
+  return (
+    <div
+      css={{
+        padding: '1rem',
+        backgroundColor: 'peachpuff',
+      }}
+    >
+      Hello World
+    </div>
+  )
+}
+```
+
 ### Psuedoclasses
 
 ```tsx
-import { css } from 'restyle'
+/** @jsxImportSource restyle */
 
 export default function Hover() {
-  const [classNames, styles] = css({
-    ':hover': {
-      opacity: 0.8,
-    },
-  })
-
   return (
-    <>
-      {styles}
-      <div className={classNames}>Hover me</div>
-    </>
+    <div
+      css={{
+        ':hover': {
+          opacity: 0.8,
+        },
+      }}
+    >
+      Hover me
+    </div>
   )
 }
 ```
@@ -144,21 +162,20 @@ export default function Hover() {
 ### Media Queries
 
 ```tsx
-import { css } from 'restyle'
+/** @jsxImportSource restyle */
 
 export default function MediaQueries() {
-  const [classNames, styles] = css({
-    fontSize: '2rem',
-    '@media screen and (min-width: 40em)': {
-      fontSize: '3.5rem',
-    },
-  })
-
   return (
-    <>
-      {styles}
-      <h1 className={classNames}>Resize the window</h1>
-    </>
+    <h1
+      css={{
+        fontSize: '2rem',
+        '@media screen and (min-width: 40em)': {
+          fontSize: '3.5rem',
+        },
+      }}
+    >
+      Resize the window
+    </h1>
   )
 }
 ```
@@ -166,24 +183,21 @@ export default function MediaQueries() {
 ### Child Selectors
 
 ```tsx
-import { css } from 'restyle'
+/** @jsxImportSource restyle */
 
 export default function ChildSelectors() {
-  const [classNames, styles] = css({
-    color: 'black',
-    '> a': {
-      color: 'tomato',
-    },
-  })
-
   return (
-    <>
-      {styles}
-      <div className={classNames}>
-        Parent
-        <a href="#">Link</a>
-      </div>
-    </>
+    <div
+      css={{
+        color: 'black',
+        '> a': {
+          color: 'tomato',
+        },
+      }}
+    >
+      Parent
+      <a href="#">Link</a>
+    </div>
   )
 }
 ```
