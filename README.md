@@ -14,7 +14,7 @@
 - Loads styles on demand
 - Zero configuration
 - Works in NPM packages
-- `731` bytes minified and gzipped
+- `694` bytes minified and gzipped
 
 [View Example](https://reactstyle.vercel.app/)
 

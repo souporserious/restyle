@@ -5,7 +5,7 @@ const React = require('react')
  * @typedef {Styles[keyof Styles]} Style
  */
 
-const cache = new Set()
+const cache = React.cache(() => ({ current: new Set() }))
 
 /**
  * Create a hash from a string.
@@ -14,23 +14,22 @@ const cache = new Set()
  */
 function hash(str) {
   // FNV-1a Hash Function
-  var h = 0 ^ 0x811c9dc5
-  for (var i = 0; i < str.length; i++) {
-    h ^= str.charCodeAt(i)
+  let h = 0 ^ 0x811c9dc5
+  for (let index = 0; index < str.length; index++) {
+    h ^= str.charCodeAt(index)
     h = (h * 0x01000193) >>> 0
   }
 
   // Base36 Encoding Function
   const letters = 'abcdefghijklmnopqrstuvwxyz'
-  var base36 = '0123456789' + letters
-  var result = ''
+  const base36 = '0123456789' + letters
+  let result = ''
   do {
     result = base36[h % 36] + result
     h = Math.floor(h / 36)
   } while (h > 0)
 
-  // Ensure the first character is a letter (a-z)
-  return letters[0 % 26] + result.slice(1)
+  return `x${result}`
 }
 
 /**
@@ -49,6 +48,7 @@ function createRule(name, selector, prop, value) {
       ? selector.replace('&', `.${name}`)
       : `.${name}${selector}`
   const hyphenProp = prop.replace(/[A-Z]|^ms/g, '-$&').toLowerCase()
+
   return `${className.trim()}{${hyphenProp}:${
     typeof value === 'number' ? `${value}px` : value
   }}`
@@ -94,13 +94,13 @@ function parseStyles(styles, selector = '', parentSelector = '') {
 
     const cacheKey = hash(`${key}${value}`)
 
-    if (cache.has(cacheKey)) {
+    if (cache().current.has(cacheKey)) {
       className += ` ${cacheKey}`
     } else {
       const rule = createRule(cacheKey, selector, key, value)
       rules.push(parentSelector === '' ? rule : `${parentSelector}{${rule}}`)
       className += ` ${cacheKey}`
-      cache.add(cacheKey)
+      cache().current.add(cacheKey)
     }
   }
 
@@ -122,7 +122,7 @@ function css(styles, nonce) {
       ? React.createElement('style', {
           nonce,
           href: hash(rules),
-          precedence: 'high',
+          precedence: 'reset',
           children: rules,
         })
       : null,
