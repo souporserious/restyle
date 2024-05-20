@@ -8,9 +8,11 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      // use larger text sizes
       fontSize: {
         xl: '1.5rem',
+        '2xl': '1.75rem',
+        '3xl': '2rem',
+        '4xl': '4rem',
       },
     },
   },

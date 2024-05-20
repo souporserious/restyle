@@ -1,9 +1,10 @@
 <div align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="/example/app/logo-dark.png"/>
-    <img src="/example/app/logo-light.png" alt="restyle" width="280"/>
-  </picture>
-  <br />
+  <p align="center">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="/example/public/logo-dark.png"/>
+      <img src="/example/public/logo-light.png" alt="restyle" width="280"/>
+    </picture>
+  </p>
   <p>The simplest way to add CSS styles to your React components.</p>
 </div>
 
@@ -11,6 +12,7 @@
 
 - Generates atomic class names
 - De-duplicates styles
+- Encourages encapsulation
 - Loads styles on demand
 - Zero configuration
 - Works in NPM packages
