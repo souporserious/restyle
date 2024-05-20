@@ -16,7 +16,11 @@ function createRestyleProps(props) {
       : classNames
 
     if (styleElement) {
-      props.children = [styleElement, ...props.children]
+      if (props.children.constructor === Array) {
+        props.children = props.children.concat(styleElement)
+      } else {
+        props.children = [props.children, styleElement]
+      }
     }
   }
 
