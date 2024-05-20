@@ -1,9 +1,11 @@
-# restyle
-
-The simplest way to add CSS styles to your React components.
-
-> [!WARNING]  
-> This library requires React 19 since it utilizes the new [style hoisting feature](https://react.dev/reference/react-dom/components/style).
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="/example/app/logo-dark.png"/>
+    <img src="/example/app/logo-light.png" alt="restyle" width="280"/>
+  </picture>
+  <br />
+  <p>The simplest way to add CSS styles to your React components.</p>
+</div>
 
 ## Features
 
@@ -14,11 +16,16 @@ The simplest way to add CSS styles to your React components.
 - Works in NPM packages
 - `731` bytes minified and gzipped
 
+[View Example](https://reactstyle.vercel.app/)
+
 ## Installation
 
 ```bash
 npm install restyle
 ```
+
+> [!IMPORTANT]
+> This library requires React 19 since it utilizes the new [style hoisting feature](https://react.dev/reference/react-dom/components/style).
 
 ## Examples
 

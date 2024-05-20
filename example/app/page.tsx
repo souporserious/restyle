@@ -2,7 +2,7 @@ import { CodeBlock, GitProviderLink } from 'mdxts/components'
 import { MdxtsLogoLink } from 'mdxts/assets'
 
 import { Button } from './Button'
-import restyleLogoSource from './restyle.png'
+import restyleLogoSource from './logo-ligbt.png'
 
 const exampleCode = `
 import React from 'react'
