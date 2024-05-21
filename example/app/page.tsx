@@ -5,7 +5,6 @@ import Examples from './Examples.mdx'
 import { FeaturesGrid } from './FeaturesGrid'
 
 const exampleCode = `
-import React from 'react'
 import { css } from 'restyle'
 
 export function Button({
@@ -91,6 +90,7 @@ export default function Page() {
           <CodeBlock
             value={exampleCode}
             language="tsx"
+            highlightedLines="1,11-17,21,24"
             className={{ container: 'md:col-span-4' }}
           />
         </div>
@@ -101,6 +101,9 @@ export default function Page() {
       <section className="prose max-w-screen-md mx-auto p-8">
         <Examples
           components={{
+            h2: (props: any) => (
+              <h2 {...props} className="text-3xl font-extrabold" />
+            ),
             h3: (props: any) => (
               <h3 {...props} className="text-2xl font-semibold" />
             ),
