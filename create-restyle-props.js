@@ -15,12 +15,14 @@ function createRestyleProps(props) {
       ? `${props.className} ${classNames}`
       : classNames
 
-    if (styleElement) {
+    if (styleElement && props.children) {
       if (props.children.constructor === Array) {
         props.children = props.children.concat(styleElement)
       } else {
         props.children = [props.children, styleElement]
       }
+    } else if (styleElement) {
+      props.children = styleElement
     }
   }
 
