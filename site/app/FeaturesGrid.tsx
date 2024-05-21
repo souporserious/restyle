@@ -29,7 +29,7 @@ const features = [
   {
     title: (
       <>
-        Supports <code>css</code> prop
+        Supports <code className="px-1 rounded bg-red-50">css</code> prop
       </>
     ),
     description: 'Apply styles directly to your JSX elements.',
@@ -48,7 +48,8 @@ const features = [
   {
     title: (
       <>
-        <CodeInline value="<1kb" language="ts" /> minified and gzipped
+        <code className="px-1 rounded bg-pink-50">{'<1kb'}</code> minified and
+        gzipped
       </>
     ),
     description: `Tiny core size for optimal performance.`,
