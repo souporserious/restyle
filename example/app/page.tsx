@@ -2,6 +2,7 @@ import { CodeBlock, GitProviderLink } from 'mdxts/components'
 import { MdxtsLogoLink } from 'mdxts/assets'
 
 import { Button } from './Button'
+import { FeaturesGrid } from './FeaturesGrid'
 
 const exampleCode = `
 import React from 'react'
@@ -61,7 +62,7 @@ export default function Page() {
                   src="logo-light.png"
                   alt="restyle logo"
                   title="restyle"
-                  className="w-96"
+                  className="w-48"
                 />
               </h1>
               <p className="text-4xl font-bold leading-snug">
@@ -80,7 +81,6 @@ export default function Page() {
           </div>
           <div className="md:col-span-4 flex flex-col gap-6">
             <CodeBlock value={exampleCode} language="tsx" />
-            <h2 className="text-2xl font-bold">Example</h2>
             <div className="grid grid-cols-3 gap-4">
               <Button>Primary</Button>
               <Button backgroundColor="#ff6347">Danger</Button>
@@ -89,6 +89,8 @@ export default function Page() {
           </div>
         </div>
       </main>
+
+      <FeaturesGrid />
 
       <footer className="flex items-baseline justify-center p-4 gap-2">
         <span className="text-gray-500 dark:text-gray-400">Built with</span>
