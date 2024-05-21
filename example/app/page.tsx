@@ -1,7 +1,6 @@
 import { CodeBlock, GitProviderLink } from 'mdxts/components'
-import { MdxtsLogoLink } from 'mdxts/assets'
+import { Copyright } from 'mdxts/components/Copyright'
 
-import { Button } from './Button'
 import { FeaturesGrid } from './FeaturesGrid'
 
 const exampleCode = `
@@ -40,14 +39,23 @@ export default function Page() {
     <>
       <header className="flex items-center justify-center p-4 bg-yellow-100">
         <p className="text-yellow-800">
-          This package requires{' '}
+          This library requires a{' '}
           <a
             className="font-bold"
-            href="https://react.dev/reference/react-dom/components/style"
+            href="https://react.dev/community/versioning-policy#all-release-channels"
             target="_blank"
             rel="noopener noreferrer"
           >
             <strong>React Canary</strong>
+          </a>{' '}
+          version since it utilizes the new{' '}
+          <a
+            className="font-bold"
+            href="https://react.dev/reference/react-dom/components/style#rendering-an-inline-css-stylesheet"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            style hoisting feature
           </a>
           .
         </p>
@@ -62,7 +70,7 @@ export default function Page() {
                   src="logo-light.png"
                   alt="restyle logo"
                   title="restyle"
-                  className="w-48"
+                  className="w-40"
                 />
               </h1>
               <p className="text-4xl font-bold leading-snug">
@@ -79,22 +87,45 @@ export default function Page() {
               </GitProviderLink>
             </div>
           </div>
-          <div className="md:col-span-4 flex flex-col gap-6">
-            <CodeBlock value={exampleCode} language="tsx" />
-            <div className="grid grid-cols-3 gap-4">
-              <Button>Primary</Button>
-              <Button backgroundColor="#ff6347">Danger</Button>
-              <Button backgroundColor="#2f9a2f">Success</Button>
-            </div>
-          </div>
+          <CodeBlock
+            value={exampleCode}
+            language="tsx"
+            className={{ container: 'md:col-span-4' }}
+          />
         </div>
       </main>
 
       <FeaturesGrid />
 
-      <footer className="flex items-baseline justify-center p-4 gap-2">
-        <span className="text-gray-500 dark:text-gray-400">Built with</span>
-        <MdxtsLogoLink className="h-3" style={{ fill: 'black' }} />
+      <footer
+        className="text-center p-4"
+        css={{ display: 'flex', justifyContent: 'end', gap: '1rem' }}
+      >
+        <span>
+          <span className="text-gray-500 dark:text-gray-400">Built with</span>{' '}
+          <a
+            href="https://www.mdxts.dev"
+            rel="noopener"
+            target="_blank"
+            className="font-semibold text-gray-700"
+          >
+            MDXTS
+          </a>
+        </span>
+        <span
+          className="text-gray-400"
+          css={{ display: 'inline-flex', gap: '0.5ch' }}
+        >
+          <Copyright showLabel={false} />
+          <a
+            href="https://souporserious.com/"
+            rel="noopener"
+            target="_blank"
+            className="text-gray-700"
+          >
+            souporserious
+          </a>
+        </span>
       </footer>
     </>
   )
