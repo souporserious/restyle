@@ -63,7 +63,7 @@ export default function Page() {
 
       <main className="flex flex-col min-h-screen max-w-screen-xl p-8 mx-auto gap-8">
         <div className="flex-1 grid grid-cols-1 md:grid-cols-8 items-center gap-16">
-          <div className="md:col-span-4 flex flex-col justify-center w-[max-content] space-y-6">
+          <div className="md:col-span-4 flex flex-col justify-center space-y-6">
             <div className="space-y-8">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">
                 <img
@@ -74,8 +74,8 @@ export default function Page() {
                 />
               </h1>
               <p className="text-4xl font-bold leading-snug">
-                A <mark className="bg-yellow-300">really good</mark> <br />
-                <mark className="bg-yellow-300">CSS-in-JS</mark> library
+                A <mark className="bg-amber-200">really good</mark> <br />
+                <mark className="bg-amber-200">CSS-in-JS</mark> library
                 <br />
                 for React
               </p>
@@ -98,17 +98,25 @@ export default function Page() {
 
       <FeaturesGrid />
 
-      <section className="prose max-w-screen-md mx-auto p-8">
+      <section className="prose max-w-screen-md mx-auto px-2 py-24 text-lg">
         <Examples
-          components={{
-            h2: (props: any) => (
-              <h2 {...props} className="text-3xl font-extrabold" />
-            ),
-            h3: (props: any) => (
-              <h3 {...props} className="text-2xl font-semibold" />
-            ),
-            pre: (props: any) => <MDXComponents.pre allowErrors {...props} />,
-          }}
+          components={
+            {
+              h2: (props) => (
+                <h2
+                  {...props}
+                  className="text-3xl font-extrabold text-violet-400"
+                />
+              ),
+              h3: (props) => (
+                <h3
+                  {...props}
+                  className="text-2xl font-semibold text-cyan-600"
+                />
+              ),
+              pre: (props) => <MDXComponents.pre allowErrors {...props} />,
+            } satisfies MDXComponents as any
+          }
         />
       </section>
 

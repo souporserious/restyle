@@ -4,22 +4,27 @@ const features = [
   {
     title: 'Zero-runtime CSS in JS',
     description: 'Add styles without any runtime overhead.',
+    color: 'text-blue-500',
   },
   {
-    title: 'Generates atomic class names',
+    title: 'Atomic class names',
     description: 'Optimized for minimal CSS style generation.',
+    color: 'text-green-600',
   },
   {
-    title: 'De-duplicates styles',
+    title: 'De-duplicated styles',
     description: 'Reuses styles for smaller bundles.',
+    color: 'text-yellow-600',
   },
   {
     title: 'Isomorphic styling',
     description: 'Compatible with server and client rendering.',
+    color: 'text-red-500',
   },
   {
     title: 'Encourages encapsulation',
     description: 'Keeps styles scoped and maintainable.',
+    color: 'text-purple-500',
   },
   {
     title: (
@@ -28,14 +33,17 @@ const features = [
       </>
     ),
     description: 'Apply styles directly to your JSX elements.',
+    color: 'text-indigo-500',
   },
   {
     title: 'Loads styles on demand',
     description: 'Only injects styles when they are used.',
+    color: 'text-pink-500',
   },
   {
     title: 'Ship CSS in NPM packages',
     description: 'Distribute styles with your NPM packages.',
+    color: 'text-cyan-500',
   },
   {
     title: (
@@ -44,8 +52,9 @@ const features = [
       </>
     ),
     description: `Tiny core size for optimal performance.`,
+    color: 'text-teal-700',
   },
-]
+] as const
 
 export function FeaturesGrid() {
   return (
@@ -54,6 +63,7 @@ export function FeaturesGrid() {
       css={{ position: 'relative', overflow: 'clip' }}
     >
       <div
+        className="bg-amber-500"
         css={{
           position: `absolute`,
           inset: '-50%',
@@ -66,10 +76,12 @@ export function FeaturesGrid() {
         <h2 className="text-3xl font-extrabold text-white text-center mb-12">
           Features
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
           {features.map((feature, index) => (
-            <div key={index} className="p-6 bg-white rounded-lg shadow-md">
-              <h3 className="text-md font-semibold text-gray-800 mb-1">
+            <div key={index} className="px-8 py-12 bg-white">
+              <h3
+                className={`text-lg font-semibold text-gray-800 mb-1 ${feature.color}`}
+              >
                 {feature.title}
               </h3>
               <p className="text-gray-600">{feature.description}</p>
