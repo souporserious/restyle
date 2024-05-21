@@ -1,5 +1,6 @@
-import { CodeBlock, GitProviderLink } from 'mdxts/components'
+import { CodeBlock, GitProviderLink, MDXComponents } from 'mdxts/components'
 import { Copyright } from 'mdxts/components/Copyright'
+import Examples from './Examples.mdx'
 
 import { FeaturesGrid } from './FeaturesGrid'
 
@@ -97,8 +98,19 @@ export default function Page() {
 
       <FeaturesGrid />
 
+      <section className="prose max-w-screen-md mx-auto p-8">
+        <Examples
+          components={{
+            h3: (props: any) => (
+              <h3 {...props} className="text-2xl font-semibold" />
+            ),
+            pre: (props: any) => <MDXComponents.pre allowErrors {...props} />,
+          }}
+        />
+      </section>
+
       <footer
-        className="text-center p-4"
+        className="text-center p-4 bg-slate-50"
         css={{ display: 'flex', justifyContent: 'end', gap: '1rem' }}
       >
         <span>
