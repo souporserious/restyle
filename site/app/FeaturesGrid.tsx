@@ -4,7 +4,7 @@ const features = [
   {
     title: 'Zero-runtime CSS in JS',
     description: 'Add styles without any runtime overhead.',
-    color: 'text-blue-500',
+    color: 'text-indigo-500',
   },
   {
     title: 'Atomic class names',
@@ -19,31 +19,31 @@ const features = [
   {
     title: 'Isomorphic styling',
     description: 'Compatible with server and client rendering.',
-    color: 'text-red-500',
+    color: 'text-blue-500',
   },
   {
     title: 'Encourages encapsulation',
     description: 'Keeps styles scoped and maintainable.',
-    color: 'text-purple-500',
+    color: 'text-emerald-500',
   },
   {
     title: (
       <>
-        Supports <CodeInline value="css" language="ts" /> prop with JSX pragma
+        Supports <code>css</code> prop
       </>
     ),
     description: 'Apply styles directly to your JSX elements.',
-    color: 'text-indigo-500',
+    color: 'text-red-500',
   },
   {
     title: 'Loads styles on demand',
     description: 'Only injects styles when they are used.',
-    color: 'text-pink-500',
+    color: 'text-cyan-500',
   },
   {
     title: 'Ship CSS in NPM packages',
     description: 'Distribute styles with your NPM packages.',
-    color: 'text-cyan-500',
+    color: 'text-lime-500',
   },
   {
     title: (
@@ -52,7 +52,7 @@ const features = [
       </>
     ),
     description: `Tiny core size for optimal performance.`,
-    color: 'text-teal-700',
+    color: 'text-pink-500',
   },
 ] as const
 
@@ -78,13 +78,14 @@ export function FeaturesGrid() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
           {features.map((feature, index) => (
-            <div key={index} className="px-8 py-12 bg-white">
-              <h3
-                className={`text-lg font-semibold text-gray-800 mb-1 ${feature.color}`}
-              >
+            <div
+              key={index}
+              className="flex flex-col px-8 py-12 gap-4 bg-white text-center"
+            >
+              <h3 className={`text-xl font-semibold ${feature.color}`}>
                 {feature.title}
               </h3>
-              <p className="text-gray-600">{feature.description}</p>
+              <p className="text-gray-500">{feature.description}</p>
             </div>
           ))}
         </div>
