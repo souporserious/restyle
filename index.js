@@ -5,7 +5,25 @@ const React = require('react')
  * @typedef {Styles[keyof Styles]} Style
  */
 
-const cache = React.cache(() => ({ current: new Set() }))
+const serverCache = React.cache(() => ({ current: null }))
+const clientCache = () => ({ current: null })
+let cache = null
+
+function getCache() {
+  try {
+    cache = serverCache()
+  } catch {
+    if (cache === null) {
+      cache = clientCache()
+    }
+  }
+
+  if (cache.current === null) {
+    cache.current = new Set()
+  }
+
+  return cache.current
+}
 
 /**
  * Create a hash from a string.
@@ -123,14 +141,15 @@ function parseStyles(styles, selector = '', parentSelector = '') {
     }
 
     const cacheKey = hash(`${key}${value}`)
+    const cache = getCache()
 
-    if (cache().current.has(cacheKey)) {
+    if (cache.has(cacheKey)) {
       className += ` ${cacheKey}`
     } else {
       const rule = createRule(cacheKey, selector, key, value)
       rules.push(parentSelector === '' ? rule : `${parentSelector}{${rule}}`)
       className += ` ${cacheKey}`
-      cache().current.add(cacheKey)
+      cache.add(cacheKey)
     }
   }
 

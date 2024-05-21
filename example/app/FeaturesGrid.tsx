@@ -48,7 +48,7 @@ const features = [
   {
     title: (
       <>
-        <CodeInline value="837" language="ts" /> bytes minified and gzipped
+        <CodeInline value="<1kb" language="ts" /> minified and gzipped
       </>
     ),
     description: `Tiny core size for optimal performance.`,
