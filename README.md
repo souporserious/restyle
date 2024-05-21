@@ -201,8 +201,8 @@ export default function BasicUsage() {
 
   return (
     <>
-      {styles}
       <div className={classNames}>Hello World</div>
+      {styles}
     </>
   )
 }
