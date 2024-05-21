@@ -32,6 +32,38 @@ function hash(str) {
   return `x${result}`
 }
 
+const unitlessProps = [
+  'lineHeight',
+  'zIndex',
+  'opacity',
+  'flexGrow',
+  'flexShrink',
+  'order',
+  'gridRow',
+  'gridColumn',
+  'columns',
+  'columnCount',
+  'tabSize',
+  'orphans',
+  'widows',
+  'counterIncrement',
+  'counterReset',
+  'flex',
+]
+
+/**
+ * Parse a value.
+ * @param {string} prop
+ * @param {Style} value
+ * @returns {Style}
+ */
+function parseValue(prop, value) {
+  if (unitlessProps.includes(prop)) {
+    return value
+  }
+  return typeof value === 'number' ? `${value}px` : value
+}
+
 /**
  * Create a CSS rule.
  * @param {string} name
@@ -49,9 +81,7 @@ function createRule(name, selector, prop, value) {
       : `.${name}${selector}`
   const hyphenProp = prop.replace(/[A-Z]|^ms/g, '-$&').toLowerCase()
 
-  return `${className.trim()}{${hyphenProp}:${
-    typeof value === 'number' ? `${value}px` : value
-  }}`
+  return `${className.trim()}{${hyphenProp}:${parseValue(prop, value)}}`
 }
 
 /**
