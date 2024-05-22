@@ -3,6 +3,7 @@ import {
   CodeInline,
   Copyright,
   GitProviderLink,
+  GitProviderLogo,
   MDXComponents,
   RenderedHTML,
 } from 'mdxts/components'
@@ -128,8 +129,8 @@ export default function Page() {
                   paddingX="0.8em"
                   paddingY="0.5em"
                 />
-                <GitProviderLink className="flex items-center gap-2 px-6 py-2 font-bold tracking-wider text-white bg-gray-800 rounded-md">
-                  GitHub
+                <GitProviderLink className="flex items-center gap-2 px-3 py-2 text-white bg-gray-800 rounded-md">
+                  <GitProviderLogo />
                 </GitProviderLink>
               </div>
             </div>
@@ -142,13 +143,17 @@ export default function Page() {
           </section>
         </div>
 
-        <section className="px-12 py-24 bg-indigo-50">
-          <div className="flex flex-col gap-2 max-w-screen-md mx-auto text-center">
-            <h2 className="text-3xl font-extrabold text-violet-400">
-              CSS One Import Away
+        <section className="px-12 pt-32 pb-24 bg-indigo-50">
+          <div className="flex flex-col gap-8 max-w-screen-md mx-auto text-center">
+            <h2
+              className="text-3xl font-extrabold text-violet-400"
+              css={{ textWrap: 'balance', lineHeight: 1.2 }}
+            >
+              CSS Styles One Import Away
             </h2>
-            <p className="text-lg">
-              The simplest way to add CSS styles to your React components.
+            <p className="text-lg" css={{ textWrap: 'balance' }}>
+              The simplest way to add CSS styles to your React components. No
+              build configuration required.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 py-20 gap-8">
@@ -199,17 +204,20 @@ export default function Page() {
         className="text-center p-4 bg-slate-50"
         css={{
           display: 'flex',
-          alignItems: 'baseline',
+          alignItems: 'center',
           justifyContent: 'end',
-          gap: '1.5rem',
+          gap: '1rem',
         }}
       >
         <div css={{ display: 'flex', alignItems: 'baseline', gap: '0.5ch' }}>
-          <span className="text-gray-500 dark:text-gray-400">Built with</span>{' '}
-          <MdxtsLogoLink style={{ height: '0.8rem' }} />
+          <span className="text-sky-800">Built with</span>{' '}
+          <MdxtsLogoLink
+            className="text-violet-500"
+            style={{ height: '0.8rem' }}
+          />
         </div>
         <span
-          className="text-gray-400"
+          className="text-sky-800"
           css={{ display: 'inline-flex', gap: '0.5ch' }}
         >
           <Copyright showLabel={false} />
@@ -217,7 +225,7 @@ export default function Page() {
             href="https://souporserious.com/"
             rel="noopener"
             target="_blank"
-            className="text-gray-700"
+            className="text-violet-500"
           >
             souporserious
           </a>
