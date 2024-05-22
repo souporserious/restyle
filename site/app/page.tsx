@@ -1,4 +1,9 @@
-import { CodeBlock, GitProviderLink, MDXComponents } from 'mdxts/components'
+import {
+  CodeBlock,
+  CodeInline,
+  GitProviderLink,
+  MDXComponents,
+} from 'mdxts/components'
 import { Copyright } from 'mdxts/components/Copyright'
 import { MdxtsLogoLink } from 'mdxts/assets'
 
@@ -82,7 +87,13 @@ export default function Page() {
               </p>
             </div>
             <div className="flex gap-4">
-              <CodeBlock value="npm install restyle" language="bash" />
+              <CodeInline
+                allowCopy
+                value={`npm install restyle`}
+                language="bash"
+                paddingX="0.8em"
+                paddingY="0.5em"
+              />
               <GitProviderLink className="flex items-center gap-2 px-6 py-2 font-bold tracking-wider text-white bg-gray-800 rounded-md">
                 GitHub
               </GitProviderLink>
