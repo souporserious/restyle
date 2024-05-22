@@ -40,7 +40,7 @@ export function Button({
 }
 `
 
-export function Button({
+function Button({
   children,
   padding = '0.5rem 1rem',
   borderRadius = '4px',
