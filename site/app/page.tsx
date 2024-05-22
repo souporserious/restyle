@@ -76,7 +76,7 @@ export default function Page() {
                   src="logo-light.png"
                   alt="restyle logo"
                   title="restyle"
-                  className="w-40"
+                  className="h-10 sm:h-20"
                 />
               </h1>
               <p className="text-4xl font-bold leading-snug">
