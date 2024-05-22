@@ -44,7 +44,7 @@ npm install restyle
 
 ## How it Works
 
-Restyle leverages the power of atomic CSS and on-demand CSS generation to provide a flexible and efficient styling solution for React components that works everywhere. Here's a high-level overview of how it operates:
+Restyle leverages React's new ability to [hoist `style` elements](https://react.dev/reference/react-dom/components/style#rendering-an-inline-css-stylesheet) by generating atomic CSS on-demand to provide a flexible and efficient styling solution for React components. Here's a high-level overview of how it operates:
 
 1. **Styles Parsing**: Restyle takes a styles object of CSS and parses it, generating atomic class names for each unique style property and value pair:
 
@@ -60,7 +60,7 @@ const [classNames, styleElement] = css({
 // styleElement: <style>.x1y2{padding:1rem}.x3z4{background-color:peachpuff}</style>
 ```
 
-2. **Class Names Generation**: Atomic class names are generated using a hashing function to ensure uniqueness and prevent collisions:
+2. **Class Names Generation and Deduplication**: Atomic class names are generated using a hashing function to ensure uniqueness and prevent collisions. Class names are cached per request, optimizing performance and reducing the overall size of the generated CSS:
 
 ```ts
 import { css } from 'restyle'
@@ -73,49 +73,7 @@ const [classNames] = css({
 // Example output: 'x1y2 xfg3'
 ```
 
-3. **Style Deduplication**: Class names are cached per request, optimizing performance and reducing the overall size of the generated CSS:
-
-```tsx
-/** @jsxImportSource restyle */
-
-export default function StyleDeduplication() {
-  return (
-    <div
-      css={{
-        padding: '0.5rem 1rem',
-        backgroundColor: 'white',
-        color: 'black',
-        borderRadius: '4px',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-      }}
-    >
-      <h2>Card Title</h2>
-      <p>This is a card with some reusable styles.</p>
-      <button
-        css={{
-          padding: '0.5rem 1rem',
-          backgroundColor: 'blue',
-          color: 'white',
-          borderRadius: '4px',
-        }}
-      >
-        Click Me
-      </button>
-    </div>
-  )
-}
-
-// Example output:
-// .x1y2abc { padding: 0.5rem 1rem; }
-// .x3z4def { background-color: blue; }
-// .x5a6ghi { color: white; }
-// .x7j8klm { border-radius: 4px; }
-// .x1r2stu { background-color: white; }
-// .x3v4wxy { color: black; }
-// .x5z6abc { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
-```
-
-4. **Atomic CSS**: By breaking down styles into atomic units, it allows for highly reusable class names, making it easy to manage and override styles while reducing the overall size of the CSS produced:
+3. **Atomic CSS**: By breaking down styles into atomic units, it allows for highly reusable class names, making it easy to manage and override styles while reducing the overall size of the CSS produced:
 
 ```ts
 import { css } from 'restyle'
@@ -139,7 +97,7 @@ const [buttonClassNames, buttonStyleElement] = css(buttonStyles)
 // buttonClassNames: 'x1y2 x4z1 x5a6'
 ```
 
-5. **On-Demand Style Injection**: Styles are only added to the DOM when the component or element is rendered:
+4. **On-Demand Style Injection**: Styles are only added to the DOM when the component or element is rendered:
 
 ```tsx
 import { css } from 'restyle'
@@ -159,7 +117,7 @@ export default function OnDemandStyles() {
 }
 ```
 
-6. **Integration with JSX Pragma**: It supports the `css` prop via the JSX pragma, allowing for inline styling directly within JSX elements.
+5. **Integration with JSX Pragma**: Easily add support for the `css` prop via the JSX pragma, allowing colocated inline CSS styles directly on JSX elements.
 
 ```tsx
 /** @jsxImportSource restyle */
