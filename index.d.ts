@@ -1,6 +1,48 @@
 import * as React from 'react'
 
-export type Styles = React.CSSProperties | { [key: string]: Styles }
+type ShorthandProps =
+  | 'margin'
+  | 'padding'
+  | 'border'
+  | 'borderWidth'
+  | 'borderStyle'
+  | 'borderColor'
+  | 'borderRadius'
+  | 'borderTop'
+  | 'borderRight'
+  | 'borderBottom'
+  | 'borderLeft'
+  | 'background'
+  | 'backgroundPosition'
+  | 'backgroundSize'
+  | 'backgroundRepeat'
+  | 'backgroundAttachment'
+  | 'backgroundOrigin'
+  | 'backgroundClip'
+  | 'font'
+  | 'listStyle'
+  | 'transition'
+  | 'animation'
+  | 'flex'
+  | 'flexFlow'
+  | 'grid'
+  | 'gridTemplate'
+  | 'gridArea'
+  | 'gridRow'
+  | 'gridColumn'
+  | 'gridGap'
+  | 'columns'
+  | 'columnRule'
+  | 'outline'
+  | 'overflow'
+  | 'placeContent'
+  | 'placeItems'
+  | 'placeSelf'
+  | 'textDecoration'
+
+export type Styles =
+  | Omit<React.CSSProperties, ShorthandProps>
+  | { [key: string]: Styles }
 
 export type Style = Styles[keyof Styles]
 

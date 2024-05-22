@@ -50,6 +50,47 @@ function hash(str) {
   return `x${result}`
 }
 
+const shorthandProps = [
+  'margin',
+  'padding',
+  'border',
+  'borderWidth',
+  'borderStyle',
+  'borderColor',
+  'borderRadius',
+  'borderTop',
+  'borderRight',
+  'borderBottom',
+  'borderLeft',
+  'background',
+  'backgroundPosition',
+  'backgroundSize',
+  'backgroundRepeat',
+  'backgroundAttachment',
+  'backgroundOrigin',
+  'backgroundClip',
+  'font',
+  'listStyle',
+  'transition',
+  'animation',
+  'flex',
+  'flexFlow',
+  'grid',
+  'gridTemplate',
+  'gridArea',
+  'gridRow',
+  'gridColumn',
+  'gridGap',
+  'columns',
+  'columnRule',
+  'outline',
+  'overflow',
+  'placeContent',
+  'placeItems',
+  'placeSelf',
+  'textDecoration',
+]
+
 const unitlessProps = [
   'lineHeight',
   'zIndex',
@@ -57,8 +98,6 @@ const unitlessProps = [
   'flexGrow',
   'flexShrink',
   'order',
-  'gridRow',
-  'gridColumn',
   'columns',
   'columnCount',
   'tabSize',
@@ -66,7 +105,6 @@ const unitlessProps = [
   'widows',
   'counterIncrement',
   'counterReset',
-  'flex',
 ]
 
 /**
@@ -115,6 +153,12 @@ function parseStyles(styles, selector = '', parentSelector = '') {
 
   for (const key in styles) {
     const value = styles[key]
+
+    if (shorthandProps.includes(key)) {
+      throw new Error(
+        `Shorthand properties are not supported since they break atomic CSS rules. Use longhand properties instead.`
+      )
+    }
 
     if (value === undefined || value === null) {
       continue
