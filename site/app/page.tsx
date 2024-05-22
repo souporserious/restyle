@@ -143,26 +143,28 @@ export default function Page() {
         </div>
 
         <section className="px-12 py-24 bg-indigo-50">
-          <div
-            css={{
-              display: 'grid',
-              gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
-              gap: '2rem',
-            }}
-          >
-            <div>
-              <h2 className="text-3xl font-extrabold text-violet-400">Input</h2>
+          <div className="flex flex-col gap-2 max-w-screen-md mx-auto text-center">
+            <h2 className="text-3xl font-extrabold text-violet-400">
+              CSS One Import Away
+            </h2>
+            <p className="text-lg">
+              The simplest way to add CSS styles to your React components.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 py-20 gap-8">
+            <div className="flex flex-col gap-4">
+              <h3 className="text-2xl font-extrabold text-violet-400">Input</h3>
               <CodeBlock
-                value={`${exampleCode}\nexport default function Example() {\nreturn <Button onClick={() => alert()}>Click me!</Button>\n}`}
+                value={`${exampleCode}\nexport default function Example() {\nreturn <Button backgroundColor="tomato" onClick={() => alert()}>Click me!</Button>\n}`}
                 language="tsx"
               />
             </div>
-            <div>
-              <h2 className="text-3xl font-extrabold text-violet-400">
+            <div className="flex flex-col gap-4">
+              <h3 className="text-2xl font-extrabold text-violet-400">
                 Output
-              </h2>
+              </h3>
               <RenderedHTML>
-                <Button>Click me!</Button>
+                <Button backgroundColor="tomato">Click me!</Button>
               </RenderedHTML>
             </div>
           </div>
