@@ -1,5 +1,3 @@
-import { CodeInline } from 'mdxts/components'
-
 const features = [
   {
     title: 'Zero-runtime CSS in JS',
