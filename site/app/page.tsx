@@ -106,15 +106,15 @@ export default function Page() {
           <section className="flex-1 grid grid-cols-1 md:grid-cols-8 items-center gap-16">
             <div className="md:col-span-4 flex flex-col justify-center space-y-6">
               <div className="space-y-8">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+                <h1>
                   <img
                     src="logo-light.png"
                     alt="restyle logo"
                     title="restyle"
-                    className="h-10 sm:h-20"
+                    className="h-10 sm:h-16"
                   />
                 </h1>
-                <p className="text-4xl font-bold leading-snug">
+                <p className="text-3xl sm:text-4xl font-bold leading-snug">
                   A <mark className="bg-amber-200">really great</mark> <br />
                   <mark className="bg-amber-200">CSS-in-JS</mark> library
                   <br />
@@ -146,7 +146,7 @@ export default function Page() {
         <section className="px-12 pt-32 pb-24 bg-indigo-50">
           <div className="flex flex-col gap-8 max-w-screen-md mx-auto text-center">
             <h2
-              className="text-3xl font-extrabold text-violet-400"
+              className="text-2xl sm:text-3xl font-extrabold text-violet-400"
               css={{ textWrap: 'balance', lineHeight: 1.2 }}
             >
               CSS Styles One Import Away
@@ -184,7 +184,7 @@ export default function Page() {
                 h2: (props) => (
                   <h2
                     {...props}
-                    className="text-3xl font-extrabold text-violet-400"
+                    className="text-2xl sm:text-3xltext-3xl font-extrabold text-violet-400"
                   />
                 ),
                 h3: (props) => (
