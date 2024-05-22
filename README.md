@@ -157,12 +157,7 @@ export default function BasicUsage() {
     backgroundColor: 'peachpuff',
   })
 
-  return (
-    <>
-      <div className={classNames}>Hello World</div>
-      {styles}
-    </>
-  )
+  return <div className={classNames}><spa>Hello World {styles}</div>
 }
 ```
 
@@ -197,6 +192,8 @@ export function Box({
 ```
 
 ### CSS Prop
+
+The `css` function is most useful for components. However, you can use the `css` prop to style elements directly. The pragma will take care of applying the class names and injecting the style tag.
 
 First, configure the pragma in your `tsconfig.json` file:
 
