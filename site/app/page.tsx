@@ -1,7 +1,8 @@
 import { CodeBlock, GitProviderLink, MDXComponents } from 'mdxts/components'
 import { Copyright } from 'mdxts/components/Copyright'
-import Examples from './Examples.mdx'
+import { MdxtsLogoLink } from 'mdxts/assets'
 
+import Examples from './Examples.mdx'
 import { FeaturesGrid } from './FeaturesGrid'
 
 const exampleCode = `
@@ -122,19 +123,17 @@ export default function Page() {
 
       <footer
         className="text-center p-4 bg-slate-50"
-        css={{ display: 'flex', justifyContent: 'end', gap: '1rem' }}
+        css={{
+          display: 'flex',
+          alignItems: 'baseline',
+          justifyContent: 'end',
+          gap: '1.5rem',
+        }}
       >
-        <span>
+        <div css={{ display: 'flex', alignItems: 'baseline', gap: '0.5ch' }}>
           <span className="text-gray-500 dark:text-gray-400">Built with</span>{' '}
-          <a
-            href="https://www.mdxts.dev"
-            rel="noopener"
-            target="_blank"
-            className="font-semibold text-gray-700"
-          >
-            MDXTS
-          </a>
-        </span>
+          <MdxtsLogoLink style={{ height: '0.8rem' }} />
+        </div>
         <span
           className="text-gray-400"
           css={{ display: 'inline-flex', gap: '0.5ch' }}
