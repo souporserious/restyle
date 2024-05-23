@@ -68,7 +68,14 @@ return <><Box
 export default function Test() {
   return (
     <>
-      <div css={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+      <div
+        css={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          padding: '1rem',
+          gap: '1rem',
+        }}
+      >
         <CodeBlock allowErrors value={sourceText} language="tsx" />
 
         <RenderedHTML>
