@@ -140,7 +140,7 @@ function parseStyles(styles, selector = '', parentSelector = '') {
       continue
     }
 
-    const cacheKey = hash(`${key}${value}`)
+    const cacheKey = hash(`${key}${value}${selector}${parentSelector}`)
     const cache = getCache()
 
     if (cache.has(cacheKey)) {
