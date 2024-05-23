@@ -98,6 +98,8 @@ const unitlessProps = [
   'flexGrow',
   'flexShrink',
   'order',
+  'gridRow',
+  'gridColumn',
   'columns',
   'columnCount',
   'tabSize',
@@ -105,6 +107,7 @@ const unitlessProps = [
   'widows',
   'counterIncrement',
   'counterReset',
+  'flex',
 ]
 
 /**
@@ -145,20 +148,15 @@ function createRule(name, selector, prop, value) {
  * @param {Styles} styles
  * @param {string} [selector='']
  * @param {string} [parentSelector='']
- * @returns {[string, string]}
+ * @returns {{classNames: string, lowRules: string, mediumRules: string}}
  */
 function parseStyles(styles, selector = '', parentSelector = '') {
-  let className = ''
-  let rules = []
+  let classNames = ''
+  let lowRules = []
+  let mediumRules = []
 
   for (const key in styles) {
     const value = styles[key]
-
-    if (shorthandProps.includes(key)) {
-      throw new Error(
-        `Shorthand properties are not supported since they break atomic CSS rules. Use longhand properties instead.`
-      )
-    }
 
     if (value === undefined || value === null) {
       continue
@@ -172,14 +170,15 @@ function parseStyles(styles, selector = '', parentSelector = '') {
         ? `${selector}${key}`
         : `${selector} ${key}`
 
-      const [chainedClassName, chainedRules] = parseStyles(
+      const chainedResults = parseStyles(
         value,
         chainedSelector,
         atSelector || parentSelector
       )
 
-      rules = rules.concat(chainedRules)
-      className += ` ${chainedClassName}`
+      lowRules = lowRules.concat(chainedResults.lowRules)
+      mediumRules = mediumRules.concat(chainedResults.mediumRules)
+      classNames += ` ${chainedResults.classNames}`
 
       continue
     }
@@ -188,37 +187,59 @@ function parseStyles(styles, selector = '', parentSelector = '') {
     const cache = getCache()
 
     if (cache.has(cacheKey)) {
-      className += ` ${cacheKey}`
+      classNames += ` ${cacheKey}`
     } else {
       const rule = createRule(cacheKey, selector, key, value)
-      rules.push(parentSelector === '' ? rule : `${parentSelector}{${rule}}`)
-      className += ` ${cacheKey}`
+      const wrappedRule =
+        parentSelector === '' ? rule : `${parentSelector}{${rule}}`
+      if (shorthandProps.includes(key)) {
+        lowRules.push(wrappedRule)
+      } else {
+        mediumRules.push(wrappedRule)
+      }
+      classNames += ` ${cacheKey}`
       cache.add(cacheKey)
     }
   }
 
-  return [className.trim(), rules.join('')]
+  return {
+    classNames: classNames.trim(),
+    lowRules: lowRules.join(''),
+    mediumRules: mediumRules.join(''),
+  }
 }
 
 /**
- * Generate CSS from an object of styles and returns atomic class names and a style element.
+ * Generates CSS from an object of styles and returns atomic class names and style elements.
  * @param {Styles} styles
  * @param {string} [nonce]
- * @returns {[string, JSX.Element | null]}
+ * @returns {[string, React.ReactNode]}
  */
 function css(styles, nonce) {
-  const [classNames, rules] = parseStyles(styles)
+  const { classNames, lowRules, mediumRules } = parseStyles(styles)
 
   return [
     classNames,
-    rules.length > 0
-      ? React.createElement('style', {
-          nonce,
-          href: hash(rules),
-          precedence: 'reset',
-          children: rules,
-        })
-      : null,
+    [
+      lowRules.length > 0
+        ? React.createElement('style', {
+            nonce,
+            key: 'low',
+            precedence: 'low',
+            href: hash(lowRules),
+            children: lowRules,
+          })
+        : null,
+      mediumRules.length > 0
+        ? React.createElement('style', {
+            nonce,
+            key: 'medium',
+            precedence: 'medium',
+            href: hash(mediumRules),
+            children: mediumRules,
+          })
+        : null,
+    ],
   ]
 }
 

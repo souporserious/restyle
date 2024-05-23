@@ -1,53 +1,11 @@
 import * as React from 'react'
 
-type ShorthandProps =
-  | 'margin'
-  | 'padding'
-  | 'border'
-  | 'borderWidth'
-  | 'borderStyle'
-  | 'borderColor'
-  | 'borderRadius'
-  | 'borderTop'
-  | 'borderRight'
-  | 'borderBottom'
-  | 'borderLeft'
-  | 'background'
-  | 'backgroundPosition'
-  | 'backgroundSize'
-  | 'backgroundRepeat'
-  | 'backgroundAttachment'
-  | 'backgroundOrigin'
-  | 'backgroundClip'
-  | 'font'
-  | 'listStyle'
-  | 'transition'
-  | 'animation'
-  | 'flex'
-  | 'flexFlow'
-  | 'grid'
-  | 'gridTemplate'
-  | 'gridArea'
-  | 'gridRow'
-  | 'gridColumn'
-  | 'gridGap'
-  | 'columns'
-  | 'columnRule'
-  | 'outline'
-  | 'overflow'
-  | 'placeContent'
-  | 'placeItems'
-  | 'placeSelf'
-  | 'textDecoration'
-
-export type Styles =
-  | Omit<React.CSSProperties, ShorthandProps>
-  | { [key: string]: Styles }
+export type Styles = React.CSSProperties | { [key: string]: Styles }
 
 export type Style = Styles[keyof Styles]
 
 /**
- * Generate CSS from an object of styles and returns atomic class names and a style element.
+ * Generates CSS from an object of styles and returns atomic class names and style elements.
  * @param styles - The styles to generate CSS from.
  * @param nonce - The nonce for the style element.
  * @returns A tuple containing the class names and the JSX style element.
