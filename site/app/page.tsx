@@ -102,59 +102,45 @@ export default function Page() {
       </header>
 
       <main>
-        <div className="flex flex-col min-h-screen max-w-screen-xl p-8 mx-auto gap-8">
-          <section className="flex-1 grid grid-cols-1 md:grid-cols-8 items-center gap-16">
-            <div className="md:col-span-4 flex flex-col justify-center space-y-6">
-              <div className="space-y-8">
-                <h1>
-                  <img
-                    src="logo-light.png"
-                    alt="restyle logo"
-                    title="restyle"
-                    className="h-10 sm:h-16"
-                  />
-                </h1>
-                <p className="text-3xl sm:text-4xl font-bold leading-snug">
-                  A <mark className="bg-amber-200">really great</mark> <br />
-                  <mark className="bg-amber-200">CSS-in-JS</mark> library
-                  <br />
-                  for React
-                </p>
-              </div>
-              <div className="flex gap-4">
-                <CodeInline
-                  allowCopy
-                  value={`npm install restyle`}
-                  language="bash"
-                  paddingX="0.8em"
-                  paddingY="0.5em"
-                />
-                <GitProviderLink className="flex items-center gap-2 px-3 py-2 text-white bg-gray-800 rounded-md">
-                  <GitProviderLogo />
-                </GitProviderLink>
-              </div>
-            </div>
-            <CodeBlock
-              value={exampleCode}
-              language="tsx"
-              highlightedLines="1,11-17,20,22"
-              className={{ container: 'md:col-span-4' }}
-            />
-          </section>
-        </div>
-
         <section className="px-12 pt-32 pb-24 bg-indigo-50">
           <div className="flex flex-col gap-8 max-w-screen-md mx-auto text-center">
-            <h2
-              className="text-2xl sm:text-3xl font-extrabold text-violet-400"
-              css={{ textWrap: 'balance', lineHeight: 1.2 }}
+            <div className="flex flex-col items-center justify-center gap-6">
+              <h1 className="flex justify-start">
+                <img
+                  src="logo-light.png"
+                  alt="restyle logo"
+                  title="restyle"
+                  className="h-8"
+                />
+              </h1>
+              <h2
+                className="text-4xl sm:text-6xl font-extrabold text-violet-400"
+                css={{ textWrap: 'balance', lineHeight: 1.2 }}
+              >
+                Zero Config <br />
+                CSS Styles for React
+              </h2>
+            </div>
+            <p
+              className="text-xl text-violet-900"
+              css={{ textWrap: 'balance' }}
             >
-              CSS Styles One Import Away
-            </h2>
-            <p className="text-lg" css={{ textWrap: 'balance' }}>
-              The simplest way to add CSS styles to your React components. No
-              build configuration required.
+              The simplest way to add CSS to React.
+              <br />
+              No build configuration required.
             </p>
+            <div className="flex gap-4 m-auto">
+              <CodeInline
+                allowCopy
+                value={`npm install restyle`}
+                language="bash"
+                paddingX="0.8em"
+                paddingY="0.5em"
+              />
+              <GitProviderLink className="flex items-center gap-2 px-3 py-2 text-white bg-gray-800 rounded-md">
+                <GitProviderLogo />
+              </GitProviderLink>
+            </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 py-20 gap-8">
             <div className="flex flex-col gap-4">
