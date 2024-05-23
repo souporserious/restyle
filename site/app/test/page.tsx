@@ -21,7 +21,29 @@ function Box({
 }
 
 const sourceText = `
-<Box
+import { css } from 'restyle'
+
+function Box({
+    children,
+    tag,
+    cssProp,
+}: {
+    children: React.ReactNode
+    tag: string
+    cssProp: React.CSSProperties
+}) {
+    const Element = tag as any
+    const [classNames, styles] = css(cssProp)
+    return (
+      <Element className={classNames}>
+        {children}
+        {styles}
+      </Element>
+    )
+}
+
+function App() {
+return <><Box
     tag="h1"
     cssProp={{
     paddingTop: 10,
@@ -39,7 +61,8 @@ const sourceText = `
     }}
 >
     Two
-</Box>
+</Box></>
+}
 `
 
 export default function Test() {
