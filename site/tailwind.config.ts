@@ -10,8 +10,8 @@ const config: Config = {
     extend: {
       fontSize: {
         xl: '1.5rem',
-        '2xl': '2rem',
-        '3xl': '3.5rem',
+        '2xl': '1.8rem',
+        '3xl': '3rem',
         '4xl': '4rem',
       },
     },

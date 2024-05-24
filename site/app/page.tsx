@@ -77,8 +77,8 @@ function Button({
 export default function Page() {
   return (
     <>
-      <header className="flex items-center justify-center p-4 bg-yellow-100">
-        <p className="text-yellow-800">
+      <header className="flex items-center justify-center px-2 py-4 bg-yellow-100">
+        <p className="text-yellow-800 text-center">
           This library requires a{' '}
           <a
             className="font-bold"
@@ -102,9 +102,9 @@ export default function Page() {
       </header>
 
       <main>
-        <section className="px-12 pt-32 pb-24 bg-indigo-50">
-          <div className="flex flex-col gap-8 max-w-screen-md mx-auto text-center">
-            <div className="flex flex-col items-center justify-center gap-6">
+        <section className="px-4 sm:px-12 pt-12 sm:pt-32 pb-24 bg-indigo-50">
+          <div className="flex flex-col max-w-screen-md mx-auto text-center">
+            <div className="flex flex-col items-center justify-center mb-4 sm:mb-8 gap-6">
               <h1 className="flex justify-start">
                 <img
                   src="logo-light.png"
@@ -114,15 +114,15 @@ export default function Page() {
                 />
               </h1>
               <h2
-                className="text-4xl sm:text-6xl font-extrabold text-violet-400"
+                className="text-3xl sm:text-6xl font-extrabold text-violet-400"
                 css={{ textWrap: 'balance', lineHeight: 1.2 }}
               >
                 Zero Config <br />
-                CSS Styles for React
+                CSS for React
               </h2>
             </div>
             <p
-              className="text-xl text-violet-900"
+              className="text-lg sm:text-xl text-violet-900 mb-8"
               css={{ textWrap: 'balance' }}
             >
               The simplest way to add CSS to React.
@@ -170,7 +170,7 @@ export default function Page() {
                 h2: (props) => (
                   <h2
                     {...props}
-                    className="text-2xl sm:text-3xltext-3xl font-extrabold text-violet-400"
+                    className="text-2xl sm:text-3xl font-extrabold text-violet-400"
                   />
                 ),
                 h3: (props) => (

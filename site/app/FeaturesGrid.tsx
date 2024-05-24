@@ -46,7 +46,7 @@ const features = [
   {
     title: (
       <>
-        <code className="px-1 rounded bg-pink-50">{'1.38kb'}</code> minified and
+        <code className="px-1 rounded bg-pink-50">{'1.38kb'}</code> minified &
         gzipped
       </>
     ),
@@ -66,9 +66,11 @@ export function FeaturesGrid() {
         css={{
           position: `absolute`,
           inset: '-50%',
-          filter: `blur(24rem)`,
-          backgroundImage: `linear-gradient(305deg, color(display-p3 1 0 0), color(display-p3 1 0.5 0), color(display-p3 1 1 0), color(display-p3 0 1 0), color(display-p3 0 0 1), color(display-p3 0.294 0 0.51), color(display-p3 0.545 0 0.85))`,
           zIndex: -1,
+          '@media (color-gamut: p3)': {
+            filter: `blur(12rem)`,
+            backgroundImage: `linear-gradient(305deg, color(display-p3 1 0 0), color(display-p3 1 0.5 0), color(display-p3 1 1 0), color(display-p3 0 1 0), color(display-p3 0 0 1), color(display-p3 0.294 0 0.51), color(display-p3 0.545 0 0.85))`,
+          },
         }}
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
