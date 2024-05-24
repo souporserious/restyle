@@ -6,16 +6,13 @@ const React = require('react')
  */
 
 const serverCache = React.cache(() => ({ current: null }))
-const clientCache = () => ({ current: null })
 let cache = null
 
 function getCache() {
   try {
     cache = serverCache()
   } catch {
-    if (cache === null) {
-      cache = clientCache()
-    }
+    cache = { current: null }
   }
 
   if (cache.current === null) {
@@ -217,30 +214,25 @@ function parseStyles(styles, selector = '', parentSelector = '') {
  */
 function css(styles, nonce) {
   const { classNames, lowRules, mediumRules } = parseStyles(styles)
+  let lowStyles = React.createElement('style', {
+    nonce,
+    key: 'low',
+    precedence: 'low',
+    href: lowRules.length > 0 ? hash(lowRules) : 'initial',
+    children: lowRules,
+  })
+  let mediumStyles =
+    mediumRules.length > 0
+      ? React.createElement('style', {
+          nonce,
+          key: 'medium',
+          precedence: 'medium',
+          href: hash(mediumRules),
+          children: mediumRules,
+        })
+      : null
 
-  return [
-    classNames,
-    [
-      lowRules.length > 0
-        ? React.createElement('style', {
-            nonce,
-            key: 'low',
-            precedence: 'low',
-            href: hash(lowRules),
-            children: lowRules,
-          })
-        : null,
-      mediumRules.length > 0
-        ? React.createElement('style', {
-            nonce,
-            key: 'medium',
-            precedence: 'medium',
-            href: hash(mediumRules),
-            children: mediumRules,
-          })
-        : null,
-    ],
-  ]
+  return [classNames, [lowStyles, mediumStyles]]
 }
 
 module.exports = { css }
