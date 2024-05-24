@@ -1,5 +1,6 @@
 import { CodeBlock, RenderedHTML } from 'mdxts/components'
 import { css } from 'restyle'
+import { ClientComponent } from './ClientComponent'
 
 function Box({
   children,
@@ -66,8 +67,32 @@ return <><Box
 `
 
 export default function Test() {
+  const boxes = (
+    <div>
+      <Box
+        tag="h1"
+        cssProp={{
+          paddingTop: 10,
+          paddingBottom: 10,
+        }}
+      >
+        One
+      </Box>
+      <Box
+        tag="p"
+        cssProp={{
+          padding: 5,
+          paddingTop: 10,
+          paddingBottom: 10,
+        }}
+      >
+        Two
+      </Box>
+    </div>
+  )
   return (
     <>
+      <ClientComponent />
       <div
         css={{
           display: 'grid',
@@ -78,52 +103,10 @@ export default function Test() {
       >
         <CodeBlock allowErrors value={sourceText} language="tsx" />
 
-        <RenderedHTML>
-          <div>
-            <Box
-              tag="h1"
-              cssProp={{
-                paddingTop: 10,
-                paddingBottom: 10,
-              }}
-            >
-              One
-            </Box>
-            <Box
-              tag="p"
-              cssProp={{
-                padding: 5,
-                paddingTop: 10,
-                paddingBottom: 10,
-              }}
-            >
-              Two
-            </Box>
-          </div>
-        </RenderedHTML>
+        <RenderedHTML>{boxes}</RenderedHTML>
       </div>
 
-      {/* <div>
-        <Box
-          tag="h1"
-          cssProp={{
-            paddingTop: 10,
-            paddingBottom: 10,
-          }}
-        >
-          One
-        </Box>
-        <Box
-          tag="p"
-          cssProp={{
-            padding: 5,
-            paddingTop: 10,
-            paddingBottom: 10,
-          }}
-        >
-          Two
-        </Box>
-      </div> */}
+      {boxes}
     </>
   )
 }
