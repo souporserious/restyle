@@ -145,12 +145,12 @@ function createRule(name, selector, prop, value) {
  * @param {Styles} styles
  * @param {string} [selector='']
  * @param {string} [parentSelector='']
- * @returns {{classNames: string, lowRules: string, mediumRules: string}}
+ * @returns {[classNames: string, shorthandRules: string, longhandRules: string]}
  */
 function parseStyles(styles, selector = '', parentSelector = '') {
   let classNames = ''
-  let lowRules = []
-  let mediumRules = []
+  let shorthandRules = []
+  let longhandRules = []
 
   for (const key in styles) {
     const value = styles[key]
@@ -173,9 +173,9 @@ function parseStyles(styles, selector = '', parentSelector = '') {
         atSelector || parentSelector
       )
 
-      lowRules = lowRules.concat(chainedResults.lowRules)
-      mediumRules = mediumRules.concat(chainedResults.mediumRules)
-      classNames += ` ${chainedResults.classNames}`
+      classNames += ` ${chainedResults[0]}`
+      shorthandRules.push(...chainedResults[1])
+      longhandRules.push(...chainedResults[2])
 
       continue
     }
@@ -190,20 +190,16 @@ function parseStyles(styles, selector = '', parentSelector = '') {
       const wrappedRule =
         parentSelector === '' ? rule : `${parentSelector}{${rule}}`
       if (shorthandProps.includes(key)) {
-        lowRules.push(wrappedRule)
+        shorthandRules.push(wrappedRule)
       } else {
-        mediumRules.push(wrappedRule)
+        longhandRules.push(wrappedRule)
       }
       classNames += ` ${cacheKey}`
       cache.add(cacheKey)
     }
   }
 
-  return {
-    classNames: classNames.trim(),
-    lowRules: lowRules.join(''),
-    mediumRules: mediumRules.join(''),
-  }
+  return [classNames.trim(), shorthandRules.join(''), longhandRules.join('')]
 }
 
 /**
@@ -213,26 +209,28 @@ function parseStyles(styles, selector = '', parentSelector = '') {
  * @returns {[string, React.ReactNode]}
  */
 function css(styles, nonce) {
-  const { classNames, lowRules, mediumRules } = parseStyles(styles)
-  let lowStyles = React.createElement('style', {
+  const [classNames, shorthandRules, longhandRules] = parseStyles(styles)
+  const shorthandKey = 'rssh'
+  const shorthandStyles = React.createElement('style', {
     nonce,
-    key: 'low',
-    precedence: 'low',
-    href: lowRules.length > 0 ? hash(lowRules) : 'initial',
-    children: lowRules,
+    key: shorthandKey,
+    precedence: shorthandKey,
+    href: shorthandRules.length > 0 ? hash(shorthandRules) : 'initial',
+    children: shorthandRules,
   })
-  let mediumStyles =
-    mediumRules.length > 0
+  const longhandKey = 'rslh'
+  const longhandStyles =
+    longhandRules.length > 0
       ? React.createElement('style', {
           nonce,
-          key: 'medium',
-          precedence: 'medium',
-          href: hash(mediumRules),
-          children: mediumRules,
+          key: longhandKey,
+          precedence: longhandKey,
+          href: hash(longhandRules),
+          children: longhandRules,
         })
       : null
 
-  return [classNames, [lowStyles, mediumStyles]]
+  return [classNames, [shorthandStyles, longhandStyles]]
 }
 
 module.exports = { css }
