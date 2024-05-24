@@ -157,7 +157,7 @@ export default function BasicUsage() {
     backgroundColor: 'peachpuff',
   })
 
-  return <div className={classNames}><spa>Hello World {styles}</div>
+  return <div className={classNames}>Hello World {styles}</div>
 }
 ```
 
