@@ -104,7 +104,7 @@ export default function Page() {
       <main>
         <section className="px-4 sm:px-12 pt-12 sm:pt-32 pb-24 bg-indigo-50">
           <div className="flex flex-col max-w-screen-md mx-auto text-center">
-            <div className="flex flex-col items-center justify-center mb-4 sm:mb-8 gap-6">
+            <div className="flex flex-col items-center justify-center mb-4 sm:mb-6 gap-6">
               <h1 className="flex justify-start">
                 <img
                   src="logo-light.png"
@@ -122,7 +122,7 @@ export default function Page() {
               </h2>
             </div>
             <p
-              className="text-lg sm:text-xl text-violet-900 mb-8"
+              className="text-lg sm:text-xl leading-relaxed text-violet-900 mb-8 sm:mb-10"
               css={{ textWrap: 'balance' }}
             >
               The simplest way to add CSS to React.
