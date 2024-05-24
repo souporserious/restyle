@@ -29,7 +29,7 @@
 - Supports `css` prop with JSX pragma
 - Loads styles on demand
 - Allows shipping CSS in NPM packages
-- Small [core](./index.js) `2.5kb` minified and gzipped
+- Small [core](./index.js) `1.38kb` minified and gzipped
 
 [View Example](https://reactstyle.vercel.app/)
 
