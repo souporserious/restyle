@@ -6,16 +6,13 @@ const React = require('react')
  */
 
 const serverCache = React.cache(() => ({ current: null }))
-const clientCache = () => ({ current: null })
 let cache = null
 
 function getCache() {
   try {
     cache = serverCache()
   } catch {
-    if (cache === null) {
-      cache = clientCache()
-    }
+    cache = { current: null }
   }
 
   if (cache.current === null) {
@@ -49,6 +46,47 @@ function hash(str) {
 
   return `x${result}`
 }
+
+const shorthandProps = [
+  'margin',
+  'padding',
+  'border',
+  'borderWidth',
+  'borderStyle',
+  'borderColor',
+  'borderRadius',
+  'borderTop',
+  'borderRight',
+  'borderBottom',
+  'borderLeft',
+  'background',
+  'backgroundPosition',
+  'backgroundSize',
+  'backgroundRepeat',
+  'backgroundAttachment',
+  'backgroundOrigin',
+  'backgroundClip',
+  'font',
+  'listStyle',
+  'transition',
+  'animation',
+  'flex',
+  'flexFlow',
+  'grid',
+  'gridTemplate',
+  'gridArea',
+  'gridRow',
+  'gridColumn',
+  'gridGap',
+  'columns',
+  'columnRule',
+  'outline',
+  'overflow',
+  'placeContent',
+  'placeItems',
+  'placeSelf',
+  'textDecoration',
+]
 
 const unitlessProps = [
   'lineHeight',
@@ -107,11 +145,12 @@ function createRule(name, selector, prop, value) {
  * @param {Styles} styles
  * @param {string} [selector='']
  * @param {string} [parentSelector='']
- * @returns {[string, string]}
+ * @returns {{classNames: string, lowRules: string, mediumRules: string}}
  */
 function parseStyles(styles, selector = '', parentSelector = '') {
-  let className = ''
-  let rules = []
+  let classNames = ''
+  let lowRules = []
+  let mediumRules = []
 
   for (const key in styles) {
     const value = styles[key]
@@ -128,14 +167,15 @@ function parseStyles(styles, selector = '', parentSelector = '') {
         ? `${selector}${key}`
         : `${selector} ${key}`
 
-      const [chainedClassName, chainedRules] = parseStyles(
+      const chainedResults = parseStyles(
         value,
         chainedSelector,
         atSelector || parentSelector
       )
 
-      rules = rules.concat(chainedRules)
-      className += ` ${chainedClassName}`
+      lowRules = lowRules.concat(chainedResults.lowRules)
+      mediumRules = mediumRules.concat(chainedResults.mediumRules)
+      classNames += ` ${chainedResults.classNames}`
 
       continue
     }
@@ -144,38 +184,55 @@ function parseStyles(styles, selector = '', parentSelector = '') {
     const cache = getCache()
 
     if (cache.has(cacheKey)) {
-      className += ` ${cacheKey}`
+      classNames += ` ${cacheKey}`
     } else {
       const rule = createRule(cacheKey, selector, key, value)
-      rules.push(parentSelector === '' ? rule : `${parentSelector}{${rule}}`)
-      className += ` ${cacheKey}`
+      const wrappedRule =
+        parentSelector === '' ? rule : `${parentSelector}{${rule}}`
+      if (shorthandProps.includes(key)) {
+        lowRules.push(wrappedRule)
+      } else {
+        mediumRules.push(wrappedRule)
+      }
+      classNames += ` ${cacheKey}`
       cache.add(cacheKey)
     }
   }
 
-  return [className.trim(), rules.join('')]
+  return {
+    classNames: classNames.trim(),
+    lowRules: lowRules.join(''),
+    mediumRules: mediumRules.join(''),
+  }
 }
 
 /**
- * Generate CSS from an object of styles and returns atomic class names and a style element.
+ * Generates CSS from an object of styles and returns atomic class names and style elements.
  * @param {Styles} styles
  * @param {string} [nonce]
- * @returns {[string, JSX.Element | null]}
+ * @returns {[string, React.ReactNode]}
  */
 function css(styles, nonce) {
-  const [classNames, rules] = parseStyles(styles)
-
-  return [
-    classNames,
-    rules.length > 0
+  const { classNames, lowRules, mediumRules } = parseStyles(styles)
+  let lowStyles = React.createElement('style', {
+    nonce,
+    key: 'low',
+    precedence: 'low',
+    href: lowRules.length > 0 ? hash(lowRules) : 'initial',
+    children: lowRules,
+  })
+  let mediumStyles =
+    mediumRules.length > 0
       ? React.createElement('style', {
           nonce,
-          href: hash(rules),
-          precedence: 'reset',
-          children: rules,
+          key: 'medium',
+          precedence: 'medium',
+          href: hash(mediumRules),
+          children: mediumRules,
         })
-      : null,
-  ]
+      : null
+
+  return [classNames, [lowStyles, mediumStyles]]
 }
 
 module.exports = { css }
