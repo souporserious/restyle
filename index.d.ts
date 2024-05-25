@@ -2,6 +2,8 @@ import * as React from 'react'
 
 export type Styles = React.CSSProperties | { [key: string]: Styles }
 
+export type GlobalStyles = { [key: string]: Styles }
+
 export type Style = Styles[keyof Styles]
 
 /**
@@ -10,10 +12,19 @@ export type Style = Styles[keyof Styles]
  * @param nonce - The nonce for the style element.
  * @returns A tuple containing the class names and the JSX style element.
  */
-export function css(
-  styles: Styles,
+export function css(styles: Styles, nonce?: string): [string, React.ReactNode]
+
+export type GlobalStylesProps = {
   nonce?: string
-): [string, React.JSX.Element | null]
+  children: GlobalStyles
+}
+
+/**
+ * Generates CSS from an object of styles and returns atomic class names.
+ * @param props - The global styles to generate CSS from.
+ * @returns The global CSS stringified inside a style element.
+ */
+export function GlobalStyles(props: GlobalStylesProps): React.ReactNode
 
 export declare namespace RestyleJSX {
   export type Element = React.JSX.Element

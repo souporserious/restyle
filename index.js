@@ -2,6 +2,7 @@ const React = require('react')
 
 /**
  * @typedef {React.CSSProperties | { [key: string]: Styles }} Styles
+ * @typedef {{ [key: string]: Styles }} GlobalStyles
  * @typedef {Styles[keyof Styles]} Style
  */
 
@@ -186,15 +187,20 @@ function parseStyles(styles, selector = '', parentSelector = '') {
     if (cache.has(cacheKey)) {
       classNames += ` ${cacheKey}`
     } else {
-      const rule = createRule(cacheKey, selector, key, value)
-      const wrappedRule =
-        parentSelector === '' ? rule : `${parentSelector}{${rule}}`
-      if (shorthandProps.includes(key)) {
-        shorthandRules.push(wrappedRule)
-      } else {
-        longhandRules.push(wrappedRule)
+      let rule = createRule(cacheKey, selector, key, value)
+
+      if (parentSelector !== '') {
+        rule = `${parentSelector}{${rule}}`
       }
+
+      if (shorthandProps.includes(key)) {
+        shorthandRules.push(rule)
+      } else {
+        longhandRules.push(rule)
+      }
+
       classNames += ` ${cacheKey}`
+
       cache.add(cacheKey)
     }
   }
@@ -233,4 +239,81 @@ function css(styles, nonce) {
   return [classNames, [shorthandStyles, longhandStyles]]
 }
 
-module.exports = { css }
+/**
+ * Parse global styles into CSS rules without class names.
+ * @param {Styles} styles
+ * @param {string} [selector='']
+ * @returns {string}
+ */
+function parseGlobalStyles(styles, selector = '') {
+  const rulesMap = {}
+
+  for (const key in styles) {
+    const value = styles[key]
+
+    if (value === undefined || value === null) {
+      continue
+    }
+
+    if (typeof value === 'object') {
+      const nestedSelector = key.startsWith('@')
+        ? key
+        : key.startsWith(':')
+        ? `${selector}${key}`
+        : selector
+        ? `${selector} ${key}`
+        : key
+      const nestedRules = parseGlobalStyles(value, nestedSelector)
+      rulesMap[nestedSelector] = (rulesMap[nestedSelector] || '') + nestedRules
+      continue
+    }
+
+    const currentSelector = selector || key
+    const hyphenProp = key.replace(/[A-Z]|^ms/g, '-$&').toLowerCase()
+    const propertyRule = `${hyphenProp}:${parseValue(key, value)};`
+
+    if (!rulesMap[currentSelector]) {
+      rulesMap[currentSelector] = propertyRule
+    } else {
+      rulesMap[currentSelector] += propertyRule
+    }
+  }
+
+  let rules = ''
+
+  for (const selector in rulesMap) {
+    if (rulesMap[selector].includes('{')) {
+      rules += rulesMap[selector]
+    } else {
+      rules += `${selector}{${rulesMap[selector]}}`
+    }
+  }
+
+  return rules
+}
+
+/**
+ * @typedef {Object} GlobalStylesProps
+ * @property {GlobalStyles} children - The children nodes that contain the global styles.
+ * @property {string} [nonce] - The optional nonce attribute for the style element.
+ */
+
+/**
+ * Generates global CSS from an object of styles and returns a style element.
+ * @param {GlobalStylesProps} props
+ * @returns {React.ReactNode}
+ */
+function GlobalStyles(props) {
+  const { children, nonce } = props
+  const rules = parseGlobalStyles(children)
+  const globalKey = 'rsg'
+  return React.createElement('style', {
+    nonce,
+    key: globalKey,
+    precedence: globalKey,
+    href: hash(rules),
+    children: rules,
+  })
+}
+
+module.exports = { css, GlobalStyles }
