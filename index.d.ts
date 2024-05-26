@@ -23,7 +23,9 @@ export declare namespace RestyleJSX {
   export type ElementChildrenAttribute = React.JSX.ElementChildrenAttribute
   export type LibraryManagedAttributes<C, P> =
     React.JSX.LibraryManagedAttributes<C, P>
-  export type IntrinsicAttributes = React.JSX.IntrinsicAttributes
+  export type IntrinsicAttributes = React.JSX.IntrinsicAttributes & {
+    css?: Styles
+  }
   export type IntrinsicClassAttributes<T> =
     React.JSX.IntrinsicClassAttributes<T>
   export type IntrinsicElements = {
