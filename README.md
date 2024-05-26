@@ -8,6 +8,8 @@
   <p>The simplest way to add CSS styles to your React components.</p>
 </div>
 
+[Visit Site](https://reactstyle.vercel.app/)
+
 - [Features](#features)
 - [Installation](#installation)
 - [How it Works](#how-it-works)
@@ -25,13 +27,12 @@
 - Generates atomic class names
 - De-duplicates styles
 - Works in Server and Client Components
+- Compatible with Suspense and streaming
 - Encourages encapsulation
 - Supports `css` prop with JSX pragma
 - Loads styles on demand
 - Allows shipping CSS in NPM packages
 - Small [core](./index.js) `1.38kb` minified and gzipped
-
-[View Example](https://reactstyle.vercel.app/)
 
 ## Installation
 
