@@ -1,7 +1,7 @@
 const features = [
   {
-    title: 'Zero-runtime CSS in JS',
-    description: 'Add styles without any runtime overhead.',
+    title: 'Zero runtime',
+    description: 'No runtime overhead when pre-rendered.',
     color: 'text-indigo-500',
   },
   {
