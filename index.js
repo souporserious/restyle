@@ -47,65 +47,75 @@ function hash(str) {
   return `x${result}`
 }
 
-const shorthandProps = [
-  'margin',
-  'padding',
-  'border',
-  'borderWidth',
-  'borderStyle',
-  'borderColor',
-  'borderRadius',
-  'borderTop',
-  'borderRight',
-  'borderBottom',
-  'borderLeft',
-  'background',
-  'backgroundPosition',
-  'backgroundSize',
-  'backgroundRepeat',
-  'backgroundAttachment',
-  'backgroundOrigin',
-  'backgroundClip',
-  'font',
-  'listStyle',
-  'transition',
+const shorthandProps = new Set([
+  'all',
   'animation',
-  'flex',
-  'flexFlow',
-  'grid',
-  'gridTemplate',
-  'gridArea',
-  'gridRow',
-  'gridColumn',
-  'gridGap',
+  'background',
+  'border',
+  'border-block',
+  'border-block-end',
+  'border-block-start',
+  'border-bottom',
+  'border-color',
+  'border-image',
+  'border-inline',
+  'border-inline-end',
+  'border-inline-start',
+  'border-left',
+  'border-radius',
+  'border-right',
+  'border-style',
+  'border-top',
+  'border-width',
+  'column-rule',
   'columns',
-  'columnRule',
+  'flex',
+  'flex-flow',
+  'font',
+  'gap',
+  'grid',
+  'grid-area',
+  'grid-column',
+  'grid-row',
+  'grid-template',
+  'list-style',
+  'margin',
+  'mask',
+  'mask-border',
+  'offset',
   'outline',
   'overflow',
-  'placeContent',
-  'placeItems',
-  'placeSelf',
-  'textDecoration',
-]
+  'padding',
+  'place-content',
+  'place-items',
+  'place-self',
+  'scroll-margin',
+  'scroll-padding',
+  'text-decoration',
+  'text-emphasis',
+  'transition',
+])
 
-const unitlessProps = [
-  'lineHeight',
-  'zIndex',
-  'opacity',
+const unitlessProps = new Set([
+  'animationIterationCount',
+  'borderImageSlice',
+  'columnCount',
   'flexGrow',
   'flexShrink',
-  'order',
-  'gridRow',
+  'fontWeight',
   'gridColumn',
-  'columns',
-  'columnCount',
-  'tabSize',
+  'gridColumnEnd',
+  'gridColumnStart',
+  'gridRow',
+  'gridRowEnd',
+  'gridRowStart',
+  'lineHeight',
+  'opacity',
   'orphans',
+  'tabSize',
   'widows',
-  'counterIncrement',
-  'counterReset',
-  'flex',
-]
+  'zIndex',
+])
 
 /**
  * Parse a value.
@@ -114,7 +124,7 @@ const unitlessProps = [
  * @returns {Style}
  */
 function parseValue(prop, value) {
-  if (unitlessProps.includes(prop)) {
+  if (unitlessProps.has(prop)) {
     return value
   }
   return typeof value === 'number' ? `${value}px` : value
@@ -189,7 +199,7 @@ function parseStyles(styles, selector = '', parentSelector = '') {
       const rule = createRule(cacheKey, selector, key, value)
       const wrappedRule =
         parentSelector === '' ? rule : `${parentSelector}{${rule}}`
-      if (shorthandProps.includes(key)) {
+      if (shorthandProps.has(key)) {
         shorthandRules.push(wrappedRule)
       } else {
         longhandRules.push(wrappedRule)
