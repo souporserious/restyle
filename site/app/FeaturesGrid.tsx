@@ -1,17 +1,17 @@
 const features = [
   {
     title: 'Zero runtime',
-    description: 'No runtime overhead when pre-rendered.',
+    description: 'No runtime when statically rendered.',
     color: 'text-indigo-500',
   },
   {
     title: 'Atomic class names',
-    description: 'Optimized for minimal CSS style generation.',
+    description: 'Optimized for minimal CSS generation.',
     color: 'text-green-600',
   },
   {
-    title: 'De-duplicated styles',
-    description: 'Reuses styles for smaller bundles.',
+    title: 'Suspense friendly',
+    description: 'Works with Suspense and streaming.',
     color: 'text-yellow-600',
   },
   {
@@ -21,7 +21,7 @@ const features = [
   },
   {
     title: 'Encourages encapsulation',
-    description: 'Keeps styles scoped and maintainable.',
+    description: 'Keep styles colocated and maintainable.',
     color: 'text-emerald-500',
   },
   {
