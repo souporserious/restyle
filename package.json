@@ -23,7 +23,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "build:site": "npm install && npm run build"
+    "build:site": "npm run build --workspaces"
   },
   "peerDependencies": {
     "react": "^18.0.0"
@@ -31,5 +31,9 @@
   "devDependencies": {
     "@types/react": "^18.3.3",
     "typescript": "^5.4.5"
-  }
+  },
+  "workspaces": [
+    ".",
+    "site"
+  ]
 }

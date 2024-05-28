@@ -4,10 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "predev": "npm run build:package",
     "build": "next build",
-    "prebuild": "npm run build:package",
-    "build:package": "npm run build:site --prefix ../",
     "start": "next start"
   },
   "dependencies": {
