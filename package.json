@@ -22,7 +22,8 @@
     "styling"
   ],
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "build:site": "npm install && npm run build"
   },
   "peerDependencies": {
     "react": "^18.0.0"

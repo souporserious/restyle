@@ -8,4 +8,5 @@ const withMdxtsPlugin = createMdxtsPlugin({
 
 export default withMdxtsPlugin({
   output: 'export',
+  transpilePackages: ['restyle'],
 })
