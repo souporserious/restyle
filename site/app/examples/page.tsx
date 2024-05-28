@@ -1,10 +1,13 @@
-import { css, type CSSProp } from 'restyle'
+import { css, styled, type CSSProp } from 'restyle'
 
 export default function Page() {
   return (
     <>
       <h2>Overriding css prop styles</h2>
       <OverridingCssPropStyles />
+
+      <h2>Precedence</h2>
+      <PrecedenceExample />
     </>
   )
 }
@@ -34,6 +37,7 @@ function Button({
   )
 }
 
+/** The order of rules matters and the last key/value wins. */
 function OverridingCssPropStyles() {
   return (
     <Button
@@ -59,3 +63,14 @@ function OverridingCssPropStyles() {
 //     </>
 //   )
 // }
+
+/**
+ * Order of the values themeselves does not matter since these are based on precedence from
+ * low, medium, and high. The following example will have a red border and a larger blue left border.
+ */
+const PrecedenceExample = styled('div', {
+  height: '1rem',
+  borderLeftWidth: '3px',
+  borderLeft: '2px solid blue',
+  border: '1px solid red',
+})
