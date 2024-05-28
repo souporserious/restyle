@@ -1,14 +1,14 @@
-const React = require('react')
+import * as React from 'react'
 
-/**
- * @typedef {React.CSSProperties | { [key: string]: Styles }} Styles
- * @typedef {Styles[keyof Styles]} Style
- */
+import type { Styles, Style } from './types'
 
+export type CSSProp = Styles
+
+// @ts-expect-error - React 19 types for cache are not available yet
 const serverCache = React.cache(() => ({ current: null }))
 let cache = null
 
-function getCache() {
+function getCache(): Set<string> {
   try {
     cache = serverCache()
   } catch {
@@ -22,12 +22,8 @@ function getCache() {
   return cache.current
 }
 
-/**
- * Create a hash from a string.
- * @param {string} str
- * @returns {string}
- */
-function hash(str) {
+/** Create a hash from a string. */
+function hash(str: string): string {
   // FNV-1a Hash Function
   let h = 0 ^ 0x811c9dc5
   for (let index = 0; index < str.length; index++) {
@@ -117,28 +113,21 @@ const unitlessProps = new Set([
   'zIndex',
 ])
 
-/**
- * Parse a value.
- * @param {string} prop
- * @param {Style} value
- * @returns {Style}
- */
-function parseValue(prop, value) {
+/** Parse a value. */
+function parseValue(prop: string, value: Style): Style {
   if (unitlessProps.has(prop)) {
     return value
   }
   return typeof value === 'number' ? `${value}px` : value
 }
 
-/**
- * Create a CSS rule.
- * @param {string} name
- * @param {string} selector
- * @param {string} prop
- * @param {Style} value
- * @returns {string}
- */
-function createRule(name, selector, prop, value) {
+/** Create a CSS rule. */
+function createRule(
+  name: string,
+  selector: string,
+  prop: string,
+  value: Style
+): string {
   const className =
     selector === ''
       ? `.${name}`
@@ -157,13 +146,17 @@ function createRule(name, selector, prop, value) {
  * @param {string} [parentSelector='']
  * @returns {[classNames: string, shorthandRules: string, longhandRules: string]}
  */
-function parseStyles(styles, selector = '', parentSelector = '') {
+function parseStyles(
+  styles: Styles,
+  selector = '',
+  parentSelector = ''
+): [string, string, string] {
   let classNames = ''
   let shorthandRules = []
   let longhandRules = []
 
   for (const key in styles) {
-    const value = styles[key]
+    const value = styles[key as keyof Styles]
 
     if (value === undefined || value === null) {
       continue
@@ -212,13 +205,8 @@ function parseStyles(styles, selector = '', parentSelector = '') {
   return [classNames.trim(), shorthandRules.join(''), longhandRules.join('')]
 }
 
-/**
- * Generates CSS from an object of styles and returns atomic class names and style elements.
- * @param {Styles} styles
- * @param {string} [nonce]
- * @returns {[string, React.ReactNode]}
- */
-function css(styles, nonce) {
+/** Generates CSS from an object of styles and returns atomic class names and style elements. */
+export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
   const [classNames, shorthandRules, longhandRules] = parseStyles(styles)
   const shorthandKey = 'rssh'
   const shorthandStyles = React.createElement('style', {
@@ -242,5 +230,3 @@ function css(styles, nonce) {
 
   return [classNames, [shorthandStyles, longhandStyles]]
 }
-
-module.exports = { css }

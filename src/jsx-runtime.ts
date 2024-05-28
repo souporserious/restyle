@@ -1,10 +1,13 @@
-const React = require('react')
-const ReactJSXRuntime = require('react/jsx-runtime')
-const { createRestyleProps } = require('./create-restyle-props')
+import * as React from 'react'
+import ReactJSXRuntime from 'react/jsx-runtime'
 
-const Fragment = ReactJSXRuntime.Fragment
+import { createRestyleProps } from './create-restyle-props'
 
-function jsx(type, props, key) {
+export type { RestyleJSX as JSX } from './types'
+
+export const Fragment = ReactJSXRuntime.Fragment
+
+export function jsx(type: any, props: Record<string, any>, key: string) {
   if (props.css) {
     const [parsedProps, styleElement] = createRestyleProps(type, props)
 
@@ -22,7 +25,7 @@ function jsx(type, props, key) {
   return ReactJSXRuntime.jsx(type, props, key)
 }
 
-function jsxs(type, props, key) {
+export function jsxs(type: any, props: Record<string, any>, key: string) {
   if (props.css) {
     const [parsedProps, styleElement] = createRestyleProps(type, props)
 
@@ -39,5 +42,3 @@ function jsxs(type, props, key) {
 
   return ReactJSXRuntime.jsxs(type, props, key)
 }
-
-module.exports = { Fragment, jsx, jsxs }

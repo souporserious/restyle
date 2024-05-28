@@ -1,19 +1,6 @@
-import * as React from 'react'
-
 export type Styles = React.CSSProperties | { [key: string]: Styles }
 
 export type Style = Styles[keyof Styles]
-
-/**
- * Generates CSS from an object of styles and returns atomic class names and style elements.
- * @param styles - The styles to generate CSS from.
- * @param nonce - The nonce for the style element.
- * @returns A tuple containing the class names and the JSX style element.
- */
-export function css(
-  styles: Styles,
-  nonce?: string
-): [string, React.JSX.Element | null]
 
 export declare namespace RestyleJSX {
   export type Element = React.JSX.Element
@@ -23,9 +10,7 @@ export declare namespace RestyleJSX {
   export type ElementChildrenAttribute = React.JSX.ElementChildrenAttribute
   export type LibraryManagedAttributes<C, P> =
     React.JSX.LibraryManagedAttributes<C, P>
-  export type IntrinsicAttributes = React.JSX.IntrinsicAttributes & {
-    css?: Styles
-  }
+  export type IntrinsicAttributes = React.JSX.IntrinsicAttributes
   export type IntrinsicClassAttributes<T> =
     React.JSX.IntrinsicClassAttributes<T>
   export type IntrinsicElements = {
