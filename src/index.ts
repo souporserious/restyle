@@ -43,53 +43,67 @@ function hash(str: string): string {
   return `x${result}`
 }
 
-const shorthandProps = new Set([
+const lowPrecedenceProps = new Set([
   'all',
   'animation',
   'background',
+  'backgroundPosition',
   'border',
-  'border-block',
-  'border-block-end',
-  'border-block-start',
-  'border-bottom',
-  'border-color',
-  'border-image',
-  'border-inline',
-  'border-inline-end',
-  'border-inline-start',
-  'border-left',
-  'border-radius',
-  'border-right',
-  'border-style',
-  'border-top',
-  'border-width',
-  'column-rule',
+  'borderImage',
+  'borderRadius',
+  'columnRule',
   'columns',
   'flex',
-  'flex-flow',
+  'flexFlow',
   'font',
+  'fontVariant',
   'gap',
   'grid',
-  'grid-area',
-  'grid-column',
-  'grid-row',
-  'grid-template',
-  'list-style',
+  'gridArea',
+  'gridColumn',
+  'gridRow',
+  'gridTemplate',
+  'inset',
+  'listStyle',
   'margin',
   'mask',
-  'mask-border',
+  'maskBorder',
   'offset',
   'outline',
   'overflow',
+  'overscrollBehavior',
   'padding',
-  'place-content',
-  'place-items',
-  'place-self',
-  'scroll-margin',
-  'scroll-padding',
-  'text-decoration',
-  'text-emphasis',
+  'placeContent',
+  'placeItems',
+  'placeSelf',
+  'scrollMargin',
+  'scrollPadding',
+  'textDecoration',
+  'textEmphasis',
+  'textWrap',
+  'transform',
   'transition',
+  'viewTimeline',
+])
+
+const mediumPrecedenceProps = new Set([
+  'borderBlockStart',
+  'borderBlockEnd',
+  'borderBlock',
+  'borderInline',
+  'borderInlineStart',
+  'borderInlineEnd',
+  'borderLeft',
+  'borderRight',
+  'borderTop',
+  'borderBottom',
+  'borderWidth',
+  'borderColor',
+  'borderStyle',
+  'marginBlock',
+  'marginInline',
+  'paddingBlock',
+  'paddingInline',
 ])
 
 const unitlessProps = new Set([
@@ -144,10 +158,11 @@ function parseStyles(
   styles: Styles,
   selector = '',
   parentSelector = ''
-): [string, string, string] {
+): [string, string, string, string] {
   let classNames = ''
-  let shorthandRules = []
-  let longhandRules = []
+  let lowPrecedenceRules = []
+  let mediumPrecedenceRules = []
+  let highPrecedenceRules = []
 
   for (const key in styles) {
     const value = styles[key as keyof Styles]
@@ -171,8 +186,9 @@ function parseStyles(
       )
 
       classNames += ` ${chainedResults[0]}`
-      shorthandRules.push(...chainedResults[1])
-      longhandRules.push(...chainedResults[2])
+      lowPrecedenceRules.push(...chainedResults[1])
+      mediumPrecedenceRules.push(...chainedResults[2])
+      highPrecedenceRules.push(...chainedResults[3])
 
       continue
     }
@@ -183,46 +199,77 @@ function parseStyles(
     if (cache.has(cacheKey)) {
       classNames += ` ${cacheKey}`
     } else {
-      const rule = createRule(cacheKey, selector, key, value)
-      const wrappedRule =
-        parentSelector === '' ? rule : `${parentSelector}{${rule}}`
-      if (shorthandProps.has(key)) {
-        shorthandRules.push(wrappedRule)
+      let rule = createRule(cacheKey, selector, key, value)
+      rule = parentSelector === '' ? rule : `${parentSelector}{${rule}}`
+      if (lowPrecedenceProps.has(key)) {
+        lowPrecedenceRules.push(rule)
+      } else if (mediumPrecedenceProps.has(key)) {
+        mediumPrecedenceRules.push(rule)
       } else {
-        longhandRules.push(wrappedRule)
+        highPrecedenceRules.push(rule)
       }
       classNames += ` ${cacheKey}`
       cache.add(cacheKey)
     }
   }
 
-  return [classNames.trim(), shorthandRules.join(''), longhandRules.join('')]
+  return [
+    classNames.trim(),
+    lowPrecedenceRules.join(''),
+    mediumPrecedenceRules.join(''),
+    highPrecedenceRules.join(''),
+  ]
 }
 
-/** Generates CSS from an object of styles and returns atomic class names for each rule and style elements for each precedence. */
+/**
+ * Generates CSS from an object of styles and returns atomic class names for each rule and style
+ * elements for each precedence.
+ */
 export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
-  const [classNames, shorthandRules, longhandRules] = parseStyles(styles)
-  const shorthandKey = 'rssh'
-  const shorthandStyles = React.createElement('style', {
+  const [
+    classNames,
+    lowPrecedenceRules,
+    mediumPrecedenceRules,
+    highPrecedenceRules,
+  ] = parseStyles(styles)
+
+  const lowPrecedenceKey = 'rsl'
+  const lowPrecedenceStyles = React.createElement('style', {
     nonce,
-    key: shorthandKey,
-    precedence: shorthandKey,
-    href: shorthandRules.length > 0 ? hash(shorthandRules) : 'initial',
-    children: shorthandRules,
+    key: lowPrecedenceKey,
+    precedence: lowPrecedenceKey,
+    href: lowPrecedenceRules.length > 0 ? hash(lowPrecedenceRules) : 'initial',
+    children: lowPrecedenceRules,
   })
-  const longhandKey = 'rslh'
-  const longhandStyles =
-    longhandRules.length > 0
+
+  const mediumPrecedenceKey = 'rsm'
+  const mediumPrecedenceStyles = React.createElement('style', {
+    nonce,
+    key: mediumPrecedenceKey,
+    precedence: mediumPrecedenceKey,
+    href:
+      mediumPrecedenceRules.length > 0
+        ? hash(mediumPrecedenceRules)
+        : 'initial',
+    children: mediumPrecedenceRules,
+  })
+
+  const highPrecedenceKey = 'rsh'
+  const highPrecedenceStyles =
+    highPrecedenceRules.length > 0
       ? React.createElement('style', {
           nonce,
-          key: longhandKey,
-          precedence: longhandKey,
-          href: hash(longhandRules),
-          children: longhandRules,
+          key: highPrecedenceKey,
+          precedence: highPrecedenceKey,
+          href: hash(highPrecedenceRules),
+          children: highPrecedenceRules,
         })
       : null
 
-  return [classNames, [shorthandStyles, longhandStyles]]
+  return [
+    classNames,
+    [lowPrecedenceStyles, mediumPrecedenceStyles, highPrecedenceStyles],
+  ]
 }
 
 /**
