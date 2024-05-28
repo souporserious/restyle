@@ -132,20 +132,14 @@ function createRule(
     selector === ''
       ? `.${name}`
       : selector.includes('&')
-      ? selector.replace('&', `.${name}`)
-      : `.${name}${selector}`
+        ? selector.replace('&', `.${name}`)
+        : `.${name}${selector}`
   const hyphenProp = prop.replace(/[A-Z]|^ms/g, '-$&').toLowerCase()
 
   return `${className.trim()}{${hyphenProp}:${parseValue(prop, value)}}`
 }
 
-/**
- * Parse styles into class names and rules.
- * @param {Styles} styles
- * @param {string} [selector='']
- * @param {string} [parentSelector='']
- * @returns {[classNames: string, shorthandRules: string, longhandRules: string]}
- */
+/** Parse styles into class names and rules. */
 function parseStyles(
   styles: Styles,
   selector = '',
@@ -167,8 +161,8 @@ function parseStyles(
       const chainedSelector = atSelector
         ? selector
         : key.startsWith(':')
-        ? `${selector}${key}`
-        : `${selector} ${key}`
+          ? `${selector}${key}`
+          : `${selector} ${key}`
 
       const chainedResults = parseStyles(
         value,
@@ -205,7 +199,7 @@ function parseStyles(
   return [classNames.trim(), shorthandRules.join(''), longhandRules.join('')]
 }
 
-/** Generates CSS from an object of styles and returns atomic class names and style elements. */
+/** Generates CSS from an object of styles and returns atomic class names for each rule and style elements for each precedence. */
 export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
   const [classNames, shorthandRules, longhandRules] = parseStyles(styles)
   const shorthandKey = 'rssh'
@@ -229,4 +223,35 @@ export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
       : null
 
   return [classNames, [shorthandStyles, longhandStyles]]
+}
+
+/**
+ * Creates a JSX component that adds a `css` prop and forwards a `className` prop to the component
+ * based on the `css` styles merged into the initial `styles`.
+ */
+export function styled<ComponentType extends React.ElementType>(
+  Component: ComponentType,
+  styles: Styles
+) {
+  return ({
+    css: cssProp,
+    ...props
+  }: React.ComponentProps<ComponentType> & { css?: Styles }) => {
+    const [classNames, styleElements] = css({
+      ...styles,
+      ...cssProp,
+    })
+    return React.createElement(React.Fragment, {
+      children: [
+        React.createElement(Component, {
+          key: 'styled',
+          ...props,
+          className: props.className
+            ? `${props.className} ${classNames}`
+            : classNames,
+        }),
+        styleElements,
+      ],
+    })
+  }
 }
