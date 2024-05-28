@@ -6,7 +6,7 @@
     </picture>
   </p>
   <p>The simplest way to add CSS styles to your React components.</p>
-  <p><a href="https://reactstyle.vercel.app/">Visit Site</a></p>
+  <p><a href="https://www.restyle.dev/">Visit Site</a></p>
 </div>
 
 - [Features](#features)
