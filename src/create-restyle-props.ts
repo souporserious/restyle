@@ -1,14 +1,17 @@
-const { css } = require('./index')
+import { css } from './index'
 
 const voidElements = new Set(['br', 'embed', 'hr', 'img', 'input'])
 
-/**
- * Create a `restyle` JSX props object that handles the `css` prop to generate atomic class names.
- * @param {any} type
- * @param {object} props
- * @returns {[object, React.ReactNode]}
- */
-function createRestyleProps(type, props) {
+/** Create a `restyle` JSX props object that handles the `css` prop to generate atomic class names. */
+export function createRestyleProps(
+  type: string | React.ComponentType,
+  props: Record<string, any>
+): [Record<string, any>, React.ReactNode] {
+  // Only process the `css` prop for React elements.
+  if (typeof type !== 'string') {
+    return [props, null]
+  }
+
   const [classNames, styleElement] = css(props.css)
 
   delete props.css
@@ -35,5 +38,3 @@ function createRestyleProps(type, props) {
 
   return [props, null]
 }
-
-module.exports = { createRestyleProps }

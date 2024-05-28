@@ -1,16 +1,19 @@
-const React = require('react')
-const ReactJSXRuntimeDev = require('react/jsx-dev-runtime')
-const { createRestyleProps } = require('./create-restyle-props')
+import * as React from 'react'
+import ReactJSXRuntimeDev from 'react/jsx-dev-runtime'
 
-const Fragment = ReactJSXRuntimeDev.Fragment
+import { createRestyleProps } from './create-restyle-props'
 
-/**
- * Create a JSX element that accepts a `css` prop to generate atomic class names.
- * @param {any} type
- * @param {object} props
- * @returns {JSX.Element}
- */
-function jsxDEV(type, props, key, isStaticChildren, source, self) {
+export const Fragment = ReactJSXRuntimeDev.Fragment
+
+/** Create a JSX element that accepts a `css` prop to generate atomic class names. */
+export function jsxDEV(
+  type: any,
+  props: Record<string, any>,
+  key: string,
+  isStaticChildren: boolean,
+  source: any,
+  self: any
+): React.JSX.Element {
   if (props.css) {
     const [parsedProps, styleElement] = createRestyleProps(type, props)
 
@@ -44,5 +47,3 @@ function jsxDEV(type, props, key, isStaticChildren, source, self) {
     self
   )
 }
-
-module.exports = { Fragment, jsxDEV }
