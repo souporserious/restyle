@@ -7,7 +7,7 @@
   </p>
   <p>The simplest way to add CSS styles to your React components.</p>
   <p>No configuration required.</p>
-  <p><a href="https://www.restyle.dev/">Visit Site</a></p>
+  <p><a href="https://www.restyle.dev/">Visit Site</a> | <a href="https://codesandbox.io/p/sandbox/restyle-basic-usage-5v45lg?file=%2Fsrc%2FApp.tsx%3A12%2C11">Codesandbox Demo</a></p>
 </div>
 
 - [Features](#features)
