@@ -43,9 +43,6 @@
 npm install restyle
 ```
 
-> [!IMPORTANT]
-> This library requires a React Canary version since it utilizes the new [style hoisting feature](https://react.dev/reference/react-dom/components/style).
-
 ```tsx
 import { styled } from 'restyle'
 
@@ -54,6 +51,9 @@ export const Box = styled('div', {
   backgroundColor: 'peachpuff',
 })
 ```
+
+> [!IMPORTANT]
+> This library requires a React Canary version since it utilizes the new [style hoisting feature](https://react.dev/reference/react-dom/components/style).
 
 ## How it Works
 
