@@ -21,6 +21,8 @@
   - [Psuedoclasses](#psuedoclasses)
   - [Media Queries](#media-queries)
   - [Child Selectors](#child-selectors)
+- [Acknowledgments](#acknowledgments)
+- [Development](#development)
 
 ## Features
 
@@ -339,6 +341,15 @@ export default function ChildSelectors() {
   )
 }
 ```
+
+## Acknowledgments
+
+This project is inspired by and builds upon the ideas and work of several other projects in the CSS-in-JS ecosystem from over the years:
+
+- [Glamor](https://github.com/threepointone/glamor) for the original `css` prop implementation
+- The [styled-components](https://styled-components.com/) team for the `styled` function
+- [Emotion](https://emotion.sh/docs/introduction) for types and the modern JSX pragma
+- [CXS](https://github.com/jxnblk/cxs) for the atomic CSS generation
 
 ## Development
 
