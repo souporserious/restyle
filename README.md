@@ -6,6 +6,7 @@
     </picture>
   </p>
   <p>The simplest way to add CSS styles to your React components.</p>
+  <p>No configuration required.</p>
   <p><a href="https://www.restyle.dev/">Visit Site</a></p>
 </div>
 
@@ -13,9 +14,10 @@
 - [Installation](#installation)
 - [How it Works](#how-it-works)
 - [Examples](#examples)
-  - [Basic Usage](#basic-usage)
-  - [Box Component](#box-component)
+  - [CSS Function](#css-function)
   - [CSS Prop](#css-prop)
+  - [Styled Function](#styled-function)
+  - [Box Component](#box-component)
   - [Psuedoclasses](#psuedoclasses)
   - [Media Queries](#media-queries)
   - [Child Selectors](#child-selectors)
@@ -41,6 +43,15 @@ npm install restyle
 
 > [!IMPORTANT]
 > This library requires a React Canary version since it utilizes the new [style hoisting feature](https://react.dev/reference/react-dom/components/style).
+
+```tsx
+import { styled } from 'restyle'
+
+export const Box = styled('div', {
+  padding: '1rem',
+  backgroundColor: 'peachpuff',
+})
+```
 
 ## How it Works
 
@@ -138,14 +149,17 @@ export default function MyComponent() {
 
 ## Examples
 
-- [Basic Usage](#basic-usage)
-- [Box Component](#box-component)
+- [CSS Function](#css-function)
 - [CSS Prop](#css-prop)
+- [Styled Function](#styled-function)
+- [Box Component](#box-component)
 - [Psuedoclasses](#psuedoclasses)
 - [Media Queries](#media-queries)
 - [Child Selectors](#child-selectors)
 
-### Basic Usage
+### CSS Function
+
+The `css` function returns a tuple of class names and the style tags to render. You can use the class names to apply styles to an element and the style tag to inject the styles into the head of the document:
 
 ```tsx
 import React from 'react'
@@ -157,34 +171,9 @@ export default function BasicUsage() {
     backgroundColor: 'peachpuff',
   })
 
-  return <div className={classNames}>Hello World {styles}</div>
-}
-```
-
-### Box Component
-
-```tsx
-import React from 'react'
-import { css } from 'restyle'
-
-export function Box({
-  children,
-  display = 'flex',
-  alignItems,
-  justifyContent,
-  padding,
-  backgroundColor,
-}) {
-  const [classNames, styles] = css({
-    display,
-    alignItems,
-    justifyContent,
-    padding,
-    backgroundColor,
-  })
   return (
     <>
-      <div className={classNames}>{children}</div>
+      <div className={classNames}>Hello World</div>
       {styles}
     </>
   )
@@ -236,6 +225,53 @@ export default function CSSProp() {
       }}
     >
       Hello World
+    </div>
+  )
+}
+```
+
+### Styled Function
+
+The `styled` function is a higher-order function that returns a styled component that can accept a `css` prop. It takes an element tag name or a component and a style object:
+
+```tsx
+import Link from 'next/link'
+import { styled } from 'restyle'
+
+const Box = styled(Link, {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '1rem',
+  backgroundColor: 'peachpuff',
+})
+```
+
+### Box Component
+
+```tsx
+import React from 'react'
+import { css } from 'restyle'
+
+export function Box({
+  children,
+  display = 'flex',
+  alignItems,
+  justifyContent,
+  padding,
+  backgroundColor,
+}) {
+  const [classNames, styles] = css({
+    display,
+    alignItems,
+    justifyContent,
+    padding,
+    backgroundColor,
+  })
+  return (
+    <div className={classNames}>
+      {children}
+      {styles}
     </div>
   )
 }
