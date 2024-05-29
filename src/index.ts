@@ -1,11 +1,13 @@
+/// <reference types="react/canary" />
 import * as React from 'react'
 
 import type { Styles, Style } from './types'
 
 export type CSSProp = Styles
 
-// @ts-expect-error - React 19 types for cache are not available yet
-const serverCache = React.cache(() => ({ current: null }))
+const serverCache = React.cache<() => { current: Set<string> | null }>(() => ({
+  current: null,
+}))
 let cache = null
 
 function getCache(): Set<string> {
