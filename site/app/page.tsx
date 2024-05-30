@@ -8,71 +8,42 @@ import {
   RenderedHTML,
 } from 'mdxts/components'
 import { MdxtsLogoLink } from 'mdxts/assets'
-import { css } from 'restyle'
+import { styled } from 'restyle'
 
 import Examples from './Examples.mdx'
 import { FeaturesGrid } from './FeaturesGrid'
 
 const exampleCode = `
-import { css } from 'restyle'
+import { styled } from 'restyle'
 
-export function Button({
-  children,
-  padding = '0.5rem 1rem',
-  borderRadius = '4px',
-  backgroundColor = 'dodgerblue',
-  color = 'white',
-  onClick,
-}) {
-  const [classNames, styles] = css({
-    border: 'none',
-    padding,
-    borderRadius,
-    backgroundColor,
-    color,
-  });
+const Button = styled('button', {
+  padding: '0.5rem 1rem',
+  borderRadius: '4px',
+  backgroundColor: 'blue',
+  color: 'white',
+})
 
+export default function Page() {
   return (
-    <button className={classNames} onClick={onClick}>
-      {children}
-      {styles}
-    </button>
-  );
+    <Button
+      css={{
+        paddingInline: '0.8rem',
+        backgroundColor: 'pink',
+      }}
+      onClick={() => alert()}
+    >
+      Click me!
+    </Button>
+  )
 }
 `
 
-function Button({
-  children,
-  padding = '0.5rem 1rem',
-  borderRadius = '4px',
-  backgroundColor = 'dodgerblue',
-  color = 'white',
-  onClick,
-}: {
-  children: React.ReactNode
-  padding?: string
-  borderRadius?: string
-  backgroundColor?: string
-  color?: string
-  onClick?: () => void
-}) {
-  const [classNames, styles] = css({
-    border: 'none',
-    padding,
-    borderRadius,
-    backgroundColor,
-    color,
-  })
-
-  return (
-    <>
-      <button className={classNames} onClick={onClick}>
-        {children}
-      </button>
-      {styles}
-    </>
-  )
-}
+const Button = styled('button', {
+  padding: '0.5rem 1rem',
+  borderRadius: '4px',
+  backgroundColor: 'blue',
+  color: 'white',
+})
 
 export default function Page() {
   return (
@@ -145,17 +116,22 @@ export default function Page() {
           <div className="grid grid-cols-1 md:grid-cols-2 py-20 gap-8">
             <div className="flex flex-col gap-4">
               <h3 className="text-2xl font-extrabold text-violet-400">Input</h3>
-              <CodeBlock
-                value={`${exampleCode}\nexport default function Example() {\nreturn <Button backgroundColor="tomato" onClick={() => alert()}>Click me!</Button>\n}`}
-                language="tsx"
-              />
+              <CodeBlock value={exampleCode} language="tsx" />
             </div>
             <div className="flex flex-col gap-4">
               <h3 className="text-2xl font-extrabold text-violet-400">
                 Output
               </h3>
               <RenderedHTML>
-                <Button backgroundColor="tomato">Click me!</Button>
+                <Button
+                  css={{
+                    paddingInline: '0.8rem',
+                    backgroundColor: 'pink',
+                  }}
+                  onClick={() => alert()}
+                >
+                  Click me!
+                </Button>
               </RenderedHTML>
             </div>
           </div>
