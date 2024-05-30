@@ -236,34 +236,36 @@ export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
   ] = parseStyles(styles)
 
   const lowPrecedenceKey = 'rsl'
+  const lowPrecedenceId =
+    lowPrecedenceRules.length > 0 ? hash(lowPrecedenceRules) : 'initial'
   const lowPrecedenceStyles = React.createElement('style', {
     nonce,
-    key: lowPrecedenceKey,
+    key: lowPrecedenceId,
     precedence: lowPrecedenceKey,
-    href: lowPrecedenceRules.length > 0 ? hash(lowPrecedenceRules) : 'initial',
+    href: lowPrecedenceId,
     children: lowPrecedenceRules,
   })
 
   const mediumPrecedenceKey = 'rsm'
+  const mediumPrecedenceId =
+    mediumPrecedenceRules.length > 0 ? hash(mediumPrecedenceRules) : 'initial'
   const mediumPrecedenceStyles = React.createElement('style', {
     nonce,
-    key: mediumPrecedenceKey,
+    key: mediumPrecedenceId,
     precedence: mediumPrecedenceKey,
-    href:
-      mediumPrecedenceRules.length > 0
-        ? hash(mediumPrecedenceRules)
-        : 'initial',
+    href: mediumPrecedenceId,
     children: mediumPrecedenceRules,
   })
 
   const highPrecedenceKey = 'rsh'
+  const highPrecedenceId = hash(highPrecedenceRules)
   const highPrecedenceStyles =
     highPrecedenceRules.length > 0
       ? React.createElement('style', {
           nonce,
-          key: highPrecedenceKey,
+          key: highPrecedenceId,
           precedence: highPrecedenceKey,
-          href: hash(highPrecedenceRules),
+          href: highPrecedenceId,
           children: highPrecedenceRules,
         })
       : null

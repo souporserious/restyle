@@ -1,3 +1,5 @@
+import { cloneElement } from 'react'
+
 import { css } from './index'
 
 const voidElements = new Set(['br', 'embed', 'hr', 'img', 'input'])
@@ -29,8 +31,13 @@ export function createRestyleProps(
   if (styleElement && props.children) {
     if (props.children.constructor === Array) {
       props.children = props.children.concat(styleElement)
-    } else {
+    } else if (typeof props.children === 'string') {
       props.children = [props.children, styleElement]
+    } else {
+      props.children = [
+        cloneElement(props.children, { key: 'rse' }),
+        styleElement,
+      ]
     }
   } else if (styleElement) {
     props.children = styleElement
