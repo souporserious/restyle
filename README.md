@@ -351,6 +351,8 @@ This project is inspired by and builds upon the ideas and work of several other 
 - [Emotion](https://emotion.sh/docs/introduction) for types and the modern JSX pragma
 - [CXS](https://github.com/jxnblk/cxs) for the atomic CSS generation
 
+Thank you to [WebReflection](https://github.com/WebReflection) for the `restyle` NPM package name.
+
 ## Development
 
 ```bash
