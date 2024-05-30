@@ -282,7 +282,7 @@ export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
  */
 export function styled<ComponentType extends React.ElementType>(
   Component: ComponentType,
-  styles: Styles
+  styles?: Styles
 ) {
   return ({
     css: cssProp,
