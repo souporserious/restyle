@@ -1,7 +1,7 @@
 /// <reference types="react/canary" />
 import * as React from 'react'
 
-import type { Styles, Style } from './types'
+import type { Styles, StyleValue } from './types'
 
 export type CSSProp = Styles
 
@@ -130,7 +130,7 @@ const unitlessProps = new Set([
 ])
 
 /** Parse a value. */
-function parseValue(prop: string, value: Style): Style {
+function parseValue(prop: string, value: StyleValue): StyleValue {
   if (prop.startsWith('--') || unitlessProps.has(prop)) {
     return value
   }
@@ -142,7 +142,7 @@ function createRule(
   name: string,
   selector: string,
   prop: string,
-  value: Style
+  value: StyleValue
 ): string {
   const className =
     selector === ''
@@ -182,7 +182,7 @@ function parseStyles(
           : `${selector} ${key}`
 
       const chainedResults = parseStyles(
-        value,
+        value as Styles,
         chainedSelector,
         atSelector || parentSelector
       )

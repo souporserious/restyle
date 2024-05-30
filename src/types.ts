@@ -1,6 +1,34 @@
-export type Styles = React.CSSProperties | { [key: string]: Styles }
+type AtRules =
+  | '@media'
+  | '@supports'
+  | '@layer'
+  | '@container'
+  | '@-moz-document'
 
-export type Style = Styles[keyof Styles]
+type AtRuleString = `${AtRules} ${string}`
+
+type Selectors = '&' | '#' | '.' | '[' | ':' | '::' | '>' | '+' | '~'
+
+type SelectorString = `${Selectors}${string}`
+
+type BadSelectorString = `${Selectors} ${string}`
+
+type CustomProperties = {
+  [key in `--${string}`]?: string | number
+}
+
+type CSSWithCustomProperties = React.CSSProperties & CustomProperties
+
+export type Styles = CSSWithCustomProperties & {
+  [Key in
+    | AtRuleString
+    | SelectorString
+    | BadSelectorString]?: Key extends BadSelectorString
+    ? never
+    : CSSWithCustomProperties | Styles
+}
+
+export type StyleValue = Styles[keyof Styles]
 
 export declare namespace RestyleJSX {
   export type Element = React.JSX.Element
