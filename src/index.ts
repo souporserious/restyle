@@ -131,7 +131,7 @@ const unitlessProps = new Set([
 
 /** Parse a value. */
 function parseValue(prop: string, value: Style): Style {
-  if (unitlessProps.has(prop)) {
+  if (prop.startsWith('--') || unitlessProps.has(prop)) {
     return value
   }
   return typeof value === 'number' ? `${value}px` : value
