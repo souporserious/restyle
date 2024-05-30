@@ -7,11 +7,11 @@ type AtRules =
 
 type AtRuleString = `${AtRules} ${string}`
 
-type Selectors = '&' | '#' | '.' | '[' | ':' | '::' | '>' | '+' | '~'
+type Selectors = '&' | '#' | '.' | '[' | ':' | '::' | '>' | '+' | '~' | '*'
+
+type HTMLTagNames = keyof JSX.IntrinsicElements
 
 type SelectorString = `${Selectors}${string}`
-
-type BadSelectorString = `${Selectors} ${string}`
 
 type CustomProperties = {
   [key in `--${string}`]?: string | number
@@ -20,12 +20,9 @@ type CustomProperties = {
 type CSSWithCustomProperties = React.CSSProperties & CustomProperties
 
 export type Styles = CSSWithCustomProperties & {
-  [Key in
-    | AtRuleString
-    | SelectorString
-    | BadSelectorString]?: Key extends BadSelectorString
-    ? never
-    : CSSWithCustomProperties | Styles
+  [Key in AtRuleString | SelectorString | HTMLTagNames]?:
+    | CSSWithCustomProperties
+    | Styles
 }
 
 export type StyleValue = Styles[keyof Styles]
