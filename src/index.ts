@@ -5,10 +5,10 @@ import type { Styles, StyleValue } from './types'
 
 export type CSSProp = Styles
 
-const serverCache = React.cache<() => { current: Set<string> | null }>(() => ({
-  current: null,
-}))
-let cache = null
+type Cache = { current: Set<string> | null }
+
+const serverCache = React.cache<() => Cache>(() => ({ current: null }))
+let cache: Cache | null = null
 
 function getCache(): Set<string> {
   try {
