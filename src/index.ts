@@ -228,52 +228,42 @@ function parseStyles(
  * elements for each precedence.
  */
 export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
-  const [
-    classNames,
-    lowPrecedenceRules,
-    mediumPrecedenceRules,
-    highPrecedenceRules,
-  ] = parseStyles(styles)
+  const [classNames, lowRules, mediumRules, highRules] = parseStyles(styles)
 
-  const lowPrecedenceKey = 'rsl'
-  const lowPrecedenceId =
-    lowPrecedenceRules.length > 0 ? hash(lowPrecedenceRules) : 'initial'
-  const lowPrecedenceStyles = React.createElement('style', {
+  const lowId = lowRules.length > 0 ? hash(lowRules) : 'rsli'
+  const lowPrecedence = 'rsl'
+  const lowStyles = React.createElement('style', {
     nonce,
-    key: lowPrecedenceId,
-    precedence: lowPrecedenceKey,
-    href: lowPrecedenceId,
-    children: lowPrecedenceRules,
+    key: lowId,
+    href: lowId,
+    precedence: lowPrecedence,
+    children: lowRules,
   })
 
-  const mediumPrecedenceKey = 'rsm'
-  const mediumPrecedenceId =
-    mediumPrecedenceRules.length > 0 ? hash(mediumPrecedenceRules) : 'initial'
-  const mediumPrecedenceStyles = React.createElement('style', {
+  const mediumId = mediumRules.length > 0 ? hash(mediumRules) : 'rsmi'
+  const mediumPrecedence = 'rsm'
+  const mediumStyles = React.createElement('style', {
     nonce,
-    key: mediumPrecedenceId,
-    precedence: mediumPrecedenceKey,
-    href: mediumPrecedenceId,
-    children: mediumPrecedenceRules,
+    key: mediumId,
+    href: mediumId,
+    precedence: mediumPrecedence,
+    children: mediumRules,
   })
 
-  const highPrecedenceKey = 'rsh'
-  const highPrecedenceId = hash(highPrecedenceRules)
-  const highPrecedenceStyles =
-    highPrecedenceRules.length > 0
+  const highId = highRules.length > 0 ? hash(highRules) : undefined
+  const highPrecedence = 'rsh'
+  const highStyles =
+    highRules.length > 0
       ? React.createElement('style', {
           nonce,
-          key: highPrecedenceId,
-          precedence: highPrecedenceKey,
-          href: highPrecedenceId,
-          children: highPrecedenceRules,
+          key: highId,
+          href: highId,
+          precedence: highPrecedence,
+          children: highRules,
         })
       : null
 
-  return [
-    classNames,
-    [lowPrecedenceStyles, mediumPrecedenceStyles, highPrecedenceStyles],
-  ]
+  return [classNames, [lowStyles, mediumStyles, highStyles]]
 }
 
 /**
