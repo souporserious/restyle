@@ -230,6 +230,18 @@ function parseStyles(
 export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
   const [classNames, lowRules, mediumRules, highRules] = parseStyles(styles)
 
+  /*
+   * Style elements are rendered in order of low, medium, and high precedence.
+   * This order is important to ensure atomic class names are applied correctly.
+   *
+   * The last rule wins in the case of conflicting keys where normal object merging occurs, but note
+   * the order of individual keys does not matter since rules are based on precedence.
+   *
+   * Note, precedence styles are ordered based on when they are first rendered so even if  low or
+   * medium precedence styles are not used, they will still be rendered the first time they are
+   * encountered.
+   */
+
   const lowId = lowRules.length > 0 ? hash(lowRules) : 'rsli'
   const lowPrecedence = 'rsl'
   const lowStyles = React.createElement('style', {
