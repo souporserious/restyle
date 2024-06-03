@@ -226,11 +226,32 @@ function parseStyles(
   ]
 }
 
+type CSSResult = [
+  string,
+  [React.ReactElement, React.ReactElement, React.ReactElement | null],
+]
+
 /**
  * Generates CSS from an object of styles and returns atomic class names for each rule and style
  * elements for each precedence.
  */
 export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
+  let ref: { current: CSSResult | null } = { current: null }
+
+  /*
+   * When rendering on the client, use a constant cache to prevent duplicate styles.
+   * This follows the rules of style tags not receiving updates after they have been rendered.
+   * https://react.dev/reference/react-dom/components/style#special-rendering-behavior
+   */
+  // @ts-ignore
+  if (React.useRef) {
+    ref = React.useRef<CSSResult | null>(null)
+
+    if (ref.current) {
+      return ref.current
+    }
+  }
+
   const [classNames, lowRules, mediumRules, highRules] = parseStyles(styles)
 
   /*
@@ -278,13 +299,9 @@ export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
         })
       : null
 
-  /* Use globalThis to share the server cache with the client. */
-  const cache = React.createElement(ClientCache, {
-    key: 'cache',
-    cache: currentCache!.current!,
-  })
+  ref.current = [classNames, [lowStyles, mediumStyles, highStyles]]
 
-  return [classNames, [lowStyles, mediumStyles, highStyles, cache]]
+  return ref.current
 }
 
 /**
