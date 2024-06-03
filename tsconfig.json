@@ -13,6 +13,7 @@
     "module": "NodeNext",
     "outDir": "dist",
     "declaration": true,
+    "jsx": "react-jsx",
     "lib": ["es2022", "dom", "dom.iterable"]
   },
   "include": ["src/*"]

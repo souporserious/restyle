@@ -44,3 +44,7 @@ export declare namespace RestyleJSX {
     }
   }
 }
+
+declare global {
+  var __RESTYLE_CACHE: Set<string> | undefined
+}

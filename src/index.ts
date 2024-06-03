@@ -1,27 +1,30 @@
 /// <reference types="react/canary" />
 import * as React from 'react'
 
+import ClientCache from './client-cache'
 import type { Styles, StyleValue } from './types'
 
 export type CSSProp = Styles
 
 type Cache = { current: Set<string> | null }
 
-const serverCache = React.cache<() => Cache>(() => ({ current: null }))
-let cache: Cache | null = null
+const serverCache = React.cache<() => Cache>(() => ({
+  current: globalThis.__RESTYLE_CACHE ?? null,
+}))
+let currentCache: Cache | null = null
 
 function getCache(): Set<string> {
   try {
-    cache = serverCache()
+    currentCache = serverCache()
   } catch {
-    cache = { current: null }
+    currentCache = { current: globalThis.__RESTYLE_CACHE ?? null }
   }
 
-  if (cache.current === null) {
-    cache.current = new Set()
+  if (currentCache.current === null) {
+    currentCache.current = new Set()
   }
 
-  return cache.current
+  return currentCache.current
 }
 
 /** Create a hash from a string. */
@@ -275,7 +278,13 @@ export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
         })
       : null
 
-  return [classNames, [lowStyles, mediumStyles, highStyles]]
+  /* Use globalThis to share the server cache with the client. */
+  const cache = React.createElement(ClientCache, {
+    key: 'cache',
+    cache: currentCache!.current!,
+  })
+
+  return [classNames, [lowStyles, mediumStyles, highStyles, cache]]
 }
 
 /**
