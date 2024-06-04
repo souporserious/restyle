@@ -2,7 +2,7 @@
 import * as React from 'react'
 
 import { ClientCache } from './client-cache'
-import type { AcceptsClassName, Styles, StyleValue } from './types'
+import type { AcceptsClassName, CSSResult, Styles, StyleValue } from './types'
 
 export type CSSProp = Styles
 
@@ -229,36 +229,7 @@ function parseStyles(
   ]
 }
 
-type CSSResult = [
-  string,
-  [
-    lowStyles: React.ReactElement,
-    mediumStyles: React.ReactElement,
-    highStyles: React.ReactElement | null,
-    cache: React.ReactElement | null,
-  ],
-]
-
-/**
- * Generates CSS from an object of styles and returns atomic class names for each rule and style
- * elements for each precedence.
- */
-export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
-  let ref: { current: CSSResult | null } = { current: null }
-
-  /*
-   * When rendering on the client, use a constant cache to prevent duplicate styles.
-   * This follows the rules of style tags not receiving updates after they have been rendered.
-   * https://react.dev/reference/react-dom/components/style#special-rendering-behavior
-   */
-  if (isClientComponent) {
-    ref = React.useRef<CSSResult | null>(null)
-
-    if (ref.current) {
-      return ref.current
-    }
-  }
-
+function parseCss(styles: Styles, nonce?: string): CSSResult {
   const [classNames, lowRules, mediumRules, highRules] = parseStyles(styles)
 
   /*
@@ -318,9 +289,30 @@ export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
     <ClientCache key="cache" cache={getCache()} />
   )
 
-  ref.current = [classNames, [lowStyles, mediumStyles, highStyles, clientCache]]
+  return [classNames, [lowStyles, mediumStyles, highStyles, clientCache]]
+}
 
-  return ref.current
+/**
+ * Generates CSS from an object of styles and returns atomic class names for each rule and style
+ * elements for each precedence.
+ */
+export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
+  /*
+   * When rendering on the client, use a constant cache to prevent duplicate styles.
+   * This follows the rules of style tags not receiving updates after they have been rendered.
+   * https://react.dev/reference/react-dom/components/style#special-rendering-behavior
+   */
+  if (isClientComponent) {
+    const ref = React.useRef<CSSResult | null>(null)
+
+    if (ref.current === null) {
+      ref.current = parseCss(styles, nonce)
+    }
+
+    return ref.current
+  }
+
+  return parseCss(styles, nonce)
 }
 
 /**
