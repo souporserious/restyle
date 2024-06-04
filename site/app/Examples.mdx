@@ -83,18 +83,15 @@ export default function CSSProp() {
 
 ### Styled Function
 
-The `styled` function is a higher-order function that returns a styled component that can accept a `css` prop. It takes an element tag name or a component and a style object:
+The `styled` function is a higher-order function that takes an HTML element tag name or a component that accepts a `className` prop and a initial styles object that returns a styled component that can accept a `css` prop:
 
 ```tsx
 import Link from 'next/link'
 import { styled } from 'restyle'
 
-const Box = styled(Link, {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: '1rem',
-  backgroundColor: 'peachpuff',
+const StyleLink = styled(Link, {
+  color: 'rebeccapurple',
+  textDecoration: 'none',
 })
 ```
 
