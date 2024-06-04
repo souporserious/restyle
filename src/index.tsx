@@ -10,20 +10,20 @@ type Cache = { current: Set<string> | null }
 
 const isClientComponent = Boolean(React.useRef)
 const serverCache = React.cache<() => Cache>(() => ({ current: null }))
-let currentCache: Cache | null = null
+let cache: Cache | null = null
 
 function getCache(): Set<string> {
   try {
-    currentCache = serverCache()
+    cache = serverCache()
   } catch {
-    currentCache = { current: null }
+    cache = { current: null }
   }
 
-  if (currentCache.current === null) {
-    currentCache.current = new Set()
+  if (cache.current === null) {
+    cache.current = new Set()
   }
 
-  return currentCache.current
+  return cache.current
 }
 
 /** Create a hash from a string. */
