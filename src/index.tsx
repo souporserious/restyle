@@ -1,12 +1,14 @@
 /// <reference types="react/canary" />
 import * as React from 'react'
 
+import { ClientCache } from './client-cache'
 import type { Styles, StyleValue } from './types'
 
 export type CSSProp = Styles
 
 type Cache = { current: Set<string> | null }
 
+const isClientComponent = Boolean(React.useRef)
 const serverCache = React.cache<() => Cache>(() => ({ current: null }))
 let cache: Cache | null = null
 
@@ -196,9 +198,13 @@ function parseStyles(
     }
 
     const cacheKey = hash(`${key}${value}${selector}${parentSelector}`)
-    const cache = getCache()
+    const fileCache = getCache()
+    const globalCache = isClientComponent
+      ? globalThis.__RESTYLE_CACHE
+      : undefined
+    const hasCache = fileCache.has(cacheKey) || globalCache?.has(cacheKey)
 
-    if (cache.has(cacheKey)) {
+    if (hasCache) {
       classNames += ` ${cacheKey}`
     } else {
       let rule = createRule(cacheKey, selector, key, value)
@@ -211,7 +217,7 @@ function parseStyles(
         highPrecedenceRules.push(rule)
       }
       classNames += ` ${cacheKey}`
-      cache.add(cacheKey)
+      fileCache.add(cacheKey)
     }
   }
 
@@ -223,11 +229,36 @@ function parseStyles(
   ]
 }
 
+type CSSResult = [
+  string,
+  [
+    lowStyles: React.ReactElement,
+    mediumStyles: React.ReactElement,
+    highStyles: React.ReactElement | null,
+    cache: React.ReactElement | null,
+  ],
+]
+
 /**
  * Generates CSS from an object of styles and returns atomic class names for each rule and style
  * elements for each precedence.
  */
 export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
+  let ref: { current: CSSResult | null } = { current: null }
+
+  /*
+   * When rendering on the client, use a constant cache to prevent duplicate styles.
+   * This follows the rules of style tags not receiving updates after they have been rendered.
+   * https://react.dev/reference/react-dom/components/style#special-rendering-behavior
+   */
+  if (isClientComponent) {
+    ref = React.useRef<CSSResult | null>(null)
+
+    if (ref.current) {
+      return ref.current
+    }
+  }
+
   const [classNames, lowRules, mediumRules, highRules] = parseStyles(styles)
 
   /*
@@ -244,38 +275,52 @@ export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
 
   const lowId = lowRules.length > 0 ? hash(lowRules) : 'rsli'
   const lowPrecedence = 'rsl'
-  const lowStyles = React.createElement('style', {
-    nonce,
-    key: lowId,
-    href: lowId,
-    precedence: lowPrecedence,
-    children: lowRules,
-  })
+  const lowStyles = (
+    <style
+      nonce={nonce}
+      key={lowId}
+      // @ts-expect-error
+      href={lowId}
+      precedence={lowPrecedence}
+      children={lowRules}
+    />
+  )
 
   const mediumId = mediumRules.length > 0 ? hash(mediumRules) : 'rsmi'
   const mediumPrecedence = 'rsm'
-  const mediumStyles = React.createElement('style', {
-    nonce,
-    key: mediumId,
-    href: mediumId,
-    precedence: mediumPrecedence,
-    children: mediumRules,
-  })
+  const mediumStyles = (
+    <style
+      nonce={nonce}
+      key={mediumId}
+      // @ts-expect-error
+      href={mediumId}
+      precedence={mediumPrecedence}
+      children={mediumRules}
+    />
+  )
 
   const highId = highRules.length > 0 ? hash(highRules) : undefined
   const highPrecedence = 'rsh'
   const highStyles =
-    highRules.length > 0
-      ? React.createElement('style', {
-          nonce,
-          key: highId,
-          href: highId,
-          precedence: highPrecedence,
-          children: highRules,
-        })
-      : null
+    highRules.length > 0 ? (
+      <style
+        nonce={nonce}
+        key={highId}
+        // @ts-expect-error
+        href={highId}
+        precedence={highPrecedence}
+        children={highRules}
+      />
+    ) : null
 
-  return [classNames, [lowStyles, mediumStyles, highStyles]]
+  /* Use globalThis to share the server cache with the client. */
+  const clientCache = isClientComponent ? null : (
+    <ClientCache key="cache" cache={getCache()} />
+  )
+
+  ref.current = [classNames, [lowStyles, mediumStyles, highStyles, clientCache]]
+
+  return ref.current
 }
 
 /**
@@ -294,17 +339,17 @@ export function styled<ComponentType extends React.ElementType>(
       ...styles,
       ...cssProp,
     })
-    return React.createElement(React.Fragment, {
-      children: [
-        React.createElement(Component, {
-          key: 'styled',
-          ...props,
-          className: props.className
-            ? `${props.className} ${classNames}`
-            : classNames,
-        }),
-        styleElements,
-      ],
-    })
+    return (
+      <>
+        {/* @ts-ignore */}
+        <Component
+          {...props}
+          className={
+            props.className ? `${props.className} ${classNames}` : classNames
+          }
+        />
+        {styleElements}
+      </>
+    )
   }
 }
