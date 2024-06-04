@@ -2,19 +2,21 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "target": "es2022",
+    "target": "ES2022",
     "allowJs": true,
     "resolveJsonModule": true,
     "moduleDetection": "force",
+    "moduleResolution": "Bundler",
     "isolatedModules": true,
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
-    "module": "NodeNext",
+    "module": "ESNext",
     "outDir": "dist",
     "declaration": true,
     "jsx": "react-jsx",
     "lib": ["es2022", "dom", "dom.iterable"]
   },
-  "include": ["src/*"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }
