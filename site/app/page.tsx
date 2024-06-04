@@ -5,15 +5,13 @@ import {
   GitProviderLink,
   GitProviderLogo,
   MDXComponents,
-  RenderedHTML,
 } from 'mdxts/components'
 import { MdxtsLogoLink } from 'mdxts/assets'
-import { styled } from 'restyle'
 
 import Examples from './Examples.mdx'
 import { FeaturesGrid } from './FeaturesGrid'
 
-const exampleCode = `
+const inputCode = `
 import { styled } from 'restyle'
 
 const Button = styled('button', {
@@ -38,12 +36,38 @@ export default function Page() {
 }
 `
 
-const Button = styled('button', {
-  padding: '0.5rem 1rem',
-  borderRadius: '4px',
-  backgroundColor: 'blue',
-  color: 'white',
-})
+const outputCode = `
+<html>
+  <head>
+    <style data-precedence="rsl" data-href="xwci5pk">
+      .x6vw34k {
+        padding: 0.5rem 1rem;
+      }
+      .x1xg4490 {
+        border-radius: 4px;
+      }
+    </style>
+    <style data-precedence="rsm" data-href="x1pc7fh0">
+      .x1f9e8ue {
+        padding-inline: 0.8rem;
+      }
+    </style>
+    <style data-precedence="rsh" data-href="xbg6jus">
+      .x1yju78o {
+        background-color: pink;
+      }
+      .xpzun7g {
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <button class="x6vw34k x1xg4490 x1yju78o xpzun7g x1f9e8ue">
+      Click me!
+    </button>
+  </body>
+</html>
+`
 
 export default function Page() {
   return (
@@ -116,23 +140,13 @@ export default function Page() {
           <div className="grid grid-cols-1 md:grid-cols-2 py-20 gap-8">
             <div className="flex flex-col gap-4">
               <h3 className="text-2xl font-extrabold text-violet-400">Input</h3>
-              <CodeBlock value={exampleCode} language="tsx" />
+              <CodeBlock value={inputCode} language="tsx" />
             </div>
             <div className="flex flex-col gap-4">
               <h3 className="text-2xl font-extrabold text-violet-400">
                 Output
               </h3>
-              <RenderedHTML>
-                <Button
-                  css={{
-                    paddingInline: '0.8rem',
-                    backgroundColor: 'pink',
-                  }}
-                  onClick={() => alert()}
-                >
-                  Click me!
-                </Button>
-              </RenderedHTML>
+              <CodeBlock value={outputCode} language="html" />
             </div>
           </div>
         </section>
