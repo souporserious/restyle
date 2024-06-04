@@ -1,8 +1,10 @@
 type AtRules =
-  | '@media'
-  | '@supports'
-  | '@layer'
   | '@container'
+  | '@layer'
+  | '@media'
+  | '@scope'
+  | '@starting-style'
+  | '@supports'
   | '@-moz-document'
 
 type AtRuleString = `${AtRules} ${string}`
