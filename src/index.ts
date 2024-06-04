@@ -8,16 +8,15 @@ export type CSSProp = Styles
 
 type Cache = { current: Set<string> | null }
 
-const serverCache = React.cache<() => Cache>(() => ({
-  current: globalThis.__RESTYLE_CACHE ?? null,
-}))
+const isClientComponent = Boolean(React.useRef)
+const serverCache = React.cache<() => Cache>(() => ({ current: null }))
 let currentCache: Cache | null = null
 
 function getCache(): Set<string> {
   try {
     currentCache = serverCache()
   } catch {
-    currentCache = { current: globalThis.__RESTYLE_CACHE ?? null }
+    currentCache = { current: null }
   }
 
   if (currentCache.current === null) {
@@ -199,9 +198,13 @@ function parseStyles(
     }
 
     const cacheKey = hash(`${key}${value}${selector}${parentSelector}`)
-    const cache = getCache()
+    const fileCache = getCache()
+    const globalCache = isClientComponent
+      ? globalThis.__RESTYLE_CACHE
+      : undefined
+    const hasCache = fileCache.has(cacheKey) || globalCache?.has(cacheKey)
 
-    if (cache.has(cacheKey)) {
+    if (hasCache) {
       classNames += ` ${cacheKey}`
     } else {
       let rule = createRule(cacheKey, selector, key, value)
@@ -214,7 +217,7 @@ function parseStyles(
         highPrecedenceRules.push(rule)
       }
       classNames += ` ${cacheKey}`
-      cache.add(cacheKey)
+      fileCache.add(cacheKey)
     }
   }
 
@@ -228,7 +231,12 @@ function parseStyles(
 
 type CSSResult = [
   string,
-  [React.ReactElement, React.ReactElement, React.ReactElement | null],
+  [
+    lowStyles: React.ReactElement,
+    mediumStyles: React.ReactElement,
+    highStyles: React.ReactElement | null,
+    cache: React.ReactElement | null,
+  ],
 ]
 
 /**
@@ -243,8 +251,7 @@ export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
    * This follows the rules of style tags not receiving updates after they have been rendered.
    * https://react.dev/reference/react-dom/components/style#special-rendering-behavior
    */
-  // @ts-ignore
-  if (React.useRef) {
+  if (isClientComponent) {
     ref = React.useRef<CSSResult | null>(null)
 
     if (ref.current) {
@@ -299,7 +306,15 @@ export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
         })
       : null
 
-  ref.current = [classNames, [lowStyles, mediumStyles, highStyles]]
+  /* Use globalThis to share the server cache with the client. */
+  const clientCache = isClientComponent
+    ? null
+    : React.createElement(ClientCache, {
+        key: 'cache',
+        cache: getCache(),
+      })
+
+  ref.current = [classNames, [lowStyles, mediumStyles, highStyles, clientCache]]
 
   return ref.current
 }
