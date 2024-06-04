@@ -27,6 +27,18 @@ export type Styles = CSSWithCustomProperties & {
 
 export type StyleValue = Styles[keyof Styles]
 
+type ClassNameMessage = 'Component must accept a className prop'
+
+export type AcceptsClassName<T> = T extends keyof JSX.IntrinsicElements
+  ? 'className' extends keyof JSX.IntrinsicElements[T]
+    ? T
+    : ClassNameMessage
+  : T extends React.ComponentType<infer P>
+    ? 'className' extends keyof P
+      ? T
+      : ClassNameMessage
+    : ClassNameMessage
+
 export declare namespace RestyleJSX {
   export type Element = React.JSX.Element
   export type ElementType = React.JSX.ElementType

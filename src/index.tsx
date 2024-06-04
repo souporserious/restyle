@@ -2,7 +2,7 @@
 import * as React from 'react'
 
 import { ClientCache } from './client-cache'
-import type { Styles, StyleValue } from './types'
+import type { AcceptsClassName, Styles, StyleValue } from './types'
 
 export type CSSProp = Styles
 
@@ -328,7 +328,7 @@ export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
  * based on the `css` styles merged into the initial `styles`.
  */
 export function styled<ComponentType extends React.ElementType>(
-  Component: ComponentType,
+  Component: AcceptsClassName<ComponentType>,
   styles?: Styles
 ) {
   return ({
