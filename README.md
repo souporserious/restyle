@@ -28,7 +28,7 @@
 
 - Zero-runtime CSS in JS when statically rendered
 - Generates atomic class names
-- De-duplicates styles across environments
+- Deduplicates styles across environments
 - Works in Server and Client Components
 - Compatible with Suspense and streaming
 - Encourages encapsulation
