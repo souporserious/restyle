@@ -1,5 +1,7 @@
 import { css, styled, type CSSProp } from 'restyle'
 
+import { ClientComponent } from './ClientComponent'
+
 export default function Page() {
   return (
     <>
@@ -8,6 +10,9 @@ export default function Page() {
 
       <h2>Precedence</h2>
       <PrecedenceExample />
+
+      <h2>Client Component</h2>
+      <ClientComponent />
     </>
   )
 }
