@@ -8,45 +8,6 @@ export type CSSProp = Styles
 
 type Cache = { current: Set<string> | null }
 
-const isClientComponent = Boolean(React.useRef)
-const serverCache = React.cache<() => Cache>(() => ({ current: null }))
-let cache: Cache | null = null
-
-function getCache(): Set<string> {
-  try {
-    cache = serverCache()
-  } catch {
-    cache = { current: null }
-  }
-
-  if (cache.current === null) {
-    cache.current = new Set()
-  }
-
-  return cache.current
-}
-
-/** Create a hash from a string. */
-function hash(str: string): string {
-  // FNV-1a Hash Function
-  let h = 0 ^ 0x811c9dc5
-  for (let index = 0; index < str.length; index++) {
-    h ^= str.charCodeAt(index)
-    h = (h * 0x01000193) >>> 0
-  }
-
-  // Base36 Encoding Function
-  const letters = 'abcdefghijklmnopqrstuvwxyz'
-  const base36 = '0123456789' + letters
-  let result = ''
-  do {
-    result = base36[h % 36] + result
-    h = Math.floor(h / 36)
-  } while (h > 0)
-
-  return `x${result}`
-}
-
 const lowPrecedenceProps = new Set([
   'all',
   'animation',
@@ -131,7 +92,61 @@ const unitlessProps = new Set([
   'zIndex',
 ])
 
-/** Parse a value. */
+const isClientComponent = Boolean(React.useRef)
+const serverCache = React.cache<() => Cache>(() => ({ current: null }))
+let cache: Cache | null = null
+
+function getCache(): Set<string> {
+  try {
+    cache = serverCache()
+  } catch {
+    cache = { current: null }
+  }
+
+  if (cache.current === null) {
+    cache.current = new Set()
+  }
+
+  return cache.current
+}
+
+function hash(str: string): string {
+  // FNV-1a Hash Function
+  let h = 0 ^ 0x811c9dc5
+  for (let index = 0; index < str.length; index++) {
+    h ^= str.charCodeAt(index)
+    h = (h * 0x01000193) >>> 0
+  }
+
+  // Base36 Encoding Function
+  const letters = 'abcdefghijklmnopqrstuvwxyz'
+  const base36 = '0123456789' + letters
+  let result = ''
+  do {
+    result = base36[h % 36] + result
+    h = Math.floor(h / 36)
+  } while (h > 0)
+
+  return `x${result}`
+}
+
+function isEqual(a: Record<string, any>, b: Record<string, any>): boolean {
+  const aKeys = Object.keys(a)
+  const bKeys = Object.keys(b)
+
+  if (aKeys.length !== bKeys.length) return false
+
+  for (let key of aKeys) {
+    if (typeof a[key] === 'object' && typeof b[key] === 'object') {
+      if (!isEqual(a[key], b[key])) return false
+    } else if (a[key] !== b[key]) {
+      return false
+    }
+  }
+
+  return true
+}
+
 function parseValue(prop: string, value: StyleValue): StyleValue {
   if (prop.startsWith('--') || unitlessProps.has(prop)) {
     return value
@@ -139,7 +154,6 @@ function parseValue(prop: string, value: StyleValue): StyleValue {
   return typeof value === 'number' ? `${value}px` : value
 }
 
-/** Create a CSS rule. */
 function createRule(
   name: string,
   selector: string,
@@ -297,19 +311,19 @@ function parseCss(styles: Styles, nonce?: string): CSSResult {
  * elements for each precedence.
  */
 export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
-  /*
-   * When rendering on the client, use a constant cache to prevent duplicate styles.
-   * This follows the rules of style tags not receiving updates after they have been rendered.
-   * https://react.dev/reference/react-dom/components/style#special-rendering-behavior
-   */
   if (isClientComponent) {
-    const ref = React.useRef<CSSResult | null>(null)
+    const previousStyles = React.useRef<Styles | null>(null)
+    const previousResult = React.useRef<CSSResult | null>(null)
 
-    if (ref.current === null) {
-      ref.current = parseCss(styles, nonce)
+    if (
+      previousResult.current === null ||
+      !isEqual(previousStyles.current!, styles)
+    ) {
+      previousStyles.current = styles
+      previousResult.current = parseCss(styles, nonce)
     }
 
-    return ref.current
+    return previousResult.current
   }
 
   return parseCss(styles, nonce)
