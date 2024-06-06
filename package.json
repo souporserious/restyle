@@ -23,6 +23,7 @@
   ],
   "scripts": {
     "build": "tsc",
+    "dev": "npm run build -- --watch",
     "build:site": "npm run build --workspaces"
   },
   "peerDependencies": {

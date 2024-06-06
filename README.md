@@ -354,8 +354,17 @@ Thank you to [WebReflection](https://github.com/WebReflection) for the `restyle`
 
 ## Development
 
+In one terminal, run the following command to build the library and watch for changes:
+
 ```bash
-cd example
+npm install
+npm run dev
+```
+
+In another terminal, run the following command to start the development server for the site:
+
+```bash
+cd site
 npm install
 npm run dev
 ```
