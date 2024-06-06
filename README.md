@@ -341,12 +341,14 @@ export default function ChildSelectors() {
 
 ## Acknowledgments
 
-This project is inspired by and builds upon the ideas and work of several other projects in the CSS-in-JS ecosystem from over the years:
+This project is inspired by and builds upon the ideas and work of several other projects in the CSS-in-JS ecosystem:
 
-- [Glamor](https://github.com/threepointone/glamor) for the original `css` prop implementation
-- The [styled-components](https://styled-components.com/) team for the `styled` function
+- The React team for the [style hoisting feature](https://react.dev/reference/react-dom/components/style#rendering-an-inline-css-stylesheet) which makes this library possible
+- [Glamor](https://github.com/threepointone/glamor) for introducing the `css` prop
+- [Styled-Components](https://styled-components.com/) for introducing the `styled` function
 - [Emotion](https://emotion.sh/docs/introduction) for types and the modern JSX pragma
-- [CXS](https://github.com/jxnblk/cxs) for the atomic CSS generation
+- [CXS](https://github.com/jxnblk/cxs) for atomic CSS generation
+- [Fela](https://fela.js.org/) for their approach to deterministic atomic class name ordering
 
 Thank you to [WebReflection](https://github.com/WebReflection) for the `restyle` NPM package name.
 
