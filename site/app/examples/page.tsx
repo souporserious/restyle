@@ -1,6 +1,7 @@
 import { css, styled, type CSSProp } from 'restyle'
 
 import { ClientComponent } from './ClientComponent'
+import { CodeBlock } from './components/CodeBlock'
 
 export default function Page() {
   return (
@@ -13,6 +14,20 @@ export default function Page() {
 
       <h2>Client Component</h2>
       <ClientComponent />
+
+      <h2>Mixed Server and Client Components</h2>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100%',
+          maxWidth: 400,
+          gap: '1rem',
+        }}
+      >
+        <CodeBlock value="const a = 'a';" />
+        <CodeBlock value="const b = 2;" />
+      </div>
     </>
   )
 }

@@ -8,15 +8,20 @@ const Button = styled('button', {
 })
 
 export function ClientComponent() {
-  const [on, setOn] = useState(false)
+  const [hover, setHover] = useState(false)
+  const [active, setActive] = useState(false)
+
   return (
     <Button
       css={{
-        color: on ? 'green' : 'red',
+        backgroundColor: hover ? 'lightblue' : 'white',
+        color: active ? 'green' : 'red',
       }}
-      onClick={() => setOn(!on)}
+      onPointerOver={() => setHover(true)}
+      onPointerOut={() => setHover(false)}
+      onClick={() => setActive(!active)}
     >
-      {on ? 'On' : 'Off'}
+      {active ? 'On' : 'Off'}
     </Button>
   )
 }
