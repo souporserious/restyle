@@ -151,13 +151,27 @@ export default function MyComponent() {
 
 ## Examples
 
+- [Styled Function](#styled-function)
 - [CSS Function](#css-function)
 - [CSS Prop](#css-prop)
-- [Styled Function](#styled-function)
 - [Box Component](#box-component)
 - [Psuedoclasses](#psuedoclasses)
 - [Media Queries](#media-queries)
 - [Child Selectors](#child-selectors)
+
+### Styled Function
+
+The `styled` function is a higher-order function that takes an HTML element tag name or a component that accepts a `className` prop and a initial styles object that returns a styled component that can accept a `css` prop:
+
+```tsx
+import Link from 'next/link'
+import { styled } from 'restyle'
+
+const StyleLink = styled(Link, {
+  color: 'rebeccapurple',
+  textDecoration: 'none',
+})
+```
 
 ### CSS Function
 
@@ -181,6 +195,36 @@ export default function BasicUsage() {
   )
 }
 ```
+
+Note, the styles should always be rendered, even if the component doesn't return anything.
+
+```tsx
+'use client'
+import React from 'react'
+import { css, type CSSProp } from 'restyle'
+
+export default function BasicUsage({ css: cssProp }: { css: CSSProp }) {
+  const isAncestorHovered = React.useContext(AncestorHoveredContext)
+  const [classNames, styles] = css(cssProp)
+
+  if (!isAncestorHovered) {
+    // 🚫 Prevents subsequent styles from rendering properly
+    return null
+
+    // ✅ Always rendering styles ensures they are injected properly
+    return styles
+  }
+
+  return (
+    <>
+      <div className={classNames}>Hello World</div>
+      {styles}
+    </>
+  )
+}
+```
+
+Prefer the `styled` function to avoid this issue.
 
 ### CSS Prop
 
@@ -230,20 +274,6 @@ export default function CSSProp() {
     </div>
   )
 }
-```
-
-### Styled Function
-
-The `styled` function is a higher-order function that takes an HTML element tag name or a component that accepts a `className` prop and a initial styles object that returns a styled component that can accept a `css` prop:
-
-```tsx
-import Link from 'next/link'
-import { styled } from 'restyle'
-
-const StyleLink = styled(Link, {
-  color: 'rebeccapurple',
-  textDecoration: 'none',
-})
 ```
 
 ### Box Component
