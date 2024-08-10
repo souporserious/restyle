@@ -171,7 +171,7 @@ function createRule(
   return `${className.trim()}{${hyphenProp}:${parseValue(prop, value)}}`
 }
 
-/** Parse styles into class names and rules. */
+/** Parse CSS styles into class names and rule sets. */
 function parseStyles(
   styles: Styles,
   selector = '',
@@ -250,12 +250,12 @@ function parseCss(styles: Styles, nonce?: string): CSSResult {
    * Style elements are rendered in order of low, medium, and high precedence.
    * This order is important to ensure atomic class names are applied correctly.
    *
-   * The last rule wins in the case of conflicting keys where normal object merging occurs, but note
-   * the order of individual keys does not matter since rules are based on precedence.
+   * The last rule wins in the case of conflicting keys where normal object merging occurs.
+   * However, the insertion order of unique keys does not matter since rules are based on precedence.
    *
-   * Note, precedence styles are ordered based on when they are first rendered so even if  low or
-   * medium precedence styles are not used, they will still be rendered the first time they are
-   * encountered.
+   * React style precedence is ordered based on when the style elements are first rendered
+   * so even if low or medium precedence styles are not used, they will still be rendered
+   * the first time they are encountered.
    */
 
   const lowId = lowRules.length > 0 ? hash(lowRules) : 'rsli'
@@ -307,8 +307,10 @@ function parseCss(styles: Styles, nonce?: string): CSSResult {
 }
 
 /**
- * Generates CSS from an object of styles and returns atomic class names for each rule and style
- * elements for each precedence.
+ * Generates CSS from an object of styles. Note, this is an isomorphic function
+ * that acts as a utility function on the server and a hook on the client.
+ *
+ * @returns Atomic class names for each rule and style elements for each precedence.
  */
 export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
   if (isClientComponent) {
@@ -330,8 +332,11 @@ export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
 }
 
 /**
- * Creates a JSX component that adds a `css` prop and forwards a `className` prop to the component
- * based on the `css` styles merged into the initial `styles`.
+ * Creates a JSX component that forwards a `className` prop with the generated
+ * atomic class names to the provided `Component`. Additionally, a `css` prop can
+ * be provided to override the initial `styles`.
+ *
+ * Note, the provided component must accept a `className` prop.
  */
 export function styled<ComponentType extends React.ElementType>(
   Component: AcceptsClassName<ComponentType>,
