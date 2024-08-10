@@ -21,13 +21,13 @@ type CustomProperties = {
 
 type CSSWithCustomProperties = React.CSSProperties & CustomProperties
 
-export type Styles = CSSWithCustomProperties & {
+export type CSSObject = CSSWithCustomProperties & {
   [Key in AtRuleString | SelectorString | HTMLTagNames]?:
     | CSSWithCustomProperties
-    | Styles
+    | CSSObject
 }
 
-export type StyleValue = Styles[keyof Styles]
+export type CSSValue = CSSObject[keyof CSSObject]
 
 type ClassNameMessage = 'Component must accept a className prop'
 
@@ -64,7 +64,7 @@ export declare namespace RestyleJSX {
     React.JSX.IntrinsicClassAttributes<T>
   export type IntrinsicElements = {
     [K in keyof JSX.IntrinsicElements]: React.JSX.IntrinsicElements[K] & {
-      css?: Styles
+      css?: CSSObject
     }
   }
 }

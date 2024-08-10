@@ -2,9 +2,9 @@
 import * as React from 'react'
 
 import { ClientCache } from './client-cache'
-import type { AcceptsClassName, CSSResult, Styles, StyleValue } from './types'
+import type { AcceptsClassName, CSSResult, CSSObject, CSSValue } from './types'
 
-export type CSSProp = Styles
+export type CSSProp = CSSObject
 
 type Cache = { current: Set<string> | null }
 
@@ -147,7 +147,7 @@ function isEqual(a: Record<string, any>, b: Record<string, any>): boolean {
   return true
 }
 
-function parseValue(prop: string, value: StyleValue): StyleValue {
+function parseValue(prop: string, value: CSSValue): CSSValue {
   if (prop.startsWith('--') || unitlessProps.has(prop)) {
     return value
   }
@@ -158,7 +158,7 @@ function createRule(
   name: string,
   selector: string,
   prop: string,
-  value: StyleValue
+  value: CSSValue
 ): string {
   const className =
     selector === ''
@@ -173,7 +173,7 @@ function createRule(
 
 /** Parse CSS styles into class names and rule sets. */
 function parseStyles(
-  styles: Styles,
+  styles: CSSObject,
   selector = '',
   parentSelector = ''
 ): [string, string, string, string] {
@@ -183,7 +183,7 @@ function parseStyles(
   let highPrecedenceRules = []
 
   for (const key in styles) {
-    const value = styles[key as keyof Styles]
+    const value = styles[key as keyof CSSObject]
 
     if (value === undefined || value === null) {
       continue
@@ -198,7 +198,7 @@ function parseStyles(
           : `${selector} ${key}`
 
       const chainedResults = parseStyles(
-        value as Styles,
+        value as CSSObject,
         chainedSelector,
         atSelector || parentSelector
       )
@@ -243,7 +243,7 @@ function parseStyles(
   ]
 }
 
-function parseCss(styles: Styles, nonce?: string): CSSResult {
+function parseCss(styles: CSSObject, nonce?: string): CSSResult {
   const [classNames, lowRules, mediumRules, highRules] = parseStyles(styles)
 
   /*
@@ -312,9 +312,12 @@ function parseCss(styles: Styles, nonce?: string): CSSResult {
  *
  * @returns Atomic class names for each rule and style elements for each precedence.
  */
-export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
+export function css(
+  styles: CSSObject,
+  nonce?: string
+): [string, React.ReactNode] {
   if (isClientComponent) {
-    const previousStyles = React.useRef<Styles | null>(null)
+    const previousStyles = React.useRef<CSSObject | null>(null)
     const previousResult = React.useRef<CSSResult | null>(null)
 
     if (
@@ -340,12 +343,12 @@ export function css(styles: Styles, nonce?: string): [string, React.ReactNode] {
  */
 export function styled<ComponentType extends React.ElementType>(
   Component: AcceptsClassName<ComponentType>,
-  styles?: Styles
+  styles?: CSSObject
 ) {
   return ({
     css: cssProp,
     ...props
-  }: React.ComponentProps<ComponentType> & { css?: Styles }) => {
+  }: React.ComponentProps<ComponentType> & { css?: CSSObject }) => {
     const [classNames, styleElements] = css({
       ...styles,
       ...cssProp,
