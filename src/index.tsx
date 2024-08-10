@@ -171,8 +171,8 @@ function createRule(
   return `${className.trim()}{${hyphenProp}:${parseValue(prop, value)}}`
 }
 
-/** Parse CSS styles into class names and rule sets. */
-function parseStyles(
+/** Parse a CSS styles object into class names and rule sets for each precedence. */
+function parseCSSObject(
   styles: CSSObject,
   selector = '',
   parentSelector = ''
@@ -196,17 +196,16 @@ function parseStyles(
         : key.startsWith(':')
           ? `${selector}${key}`
           : `${selector} ${key}`
-
-      const chainedResults = parseStyles(
+      const chainedResults = parseCSSObject(
         value as CSSObject,
         chainedSelector,
         atSelector || parentSelector
       )
 
-      classNames += ` ${chainedResults[0]}`
-      lowPrecedenceRules.push(...chainedResults[1])
-      mediumPrecedenceRules.push(...chainedResults[2])
-      highPrecedenceRules.push(...chainedResults[3])
+      classNames += ' ' + chainedResults[0]
+      lowPrecedenceRules.push(chainedResults[1])
+      mediumPrecedenceRules.push(chainedResults[2])
+      highPrecedenceRules.push(chainedResults[3])
 
       continue
     }
@@ -243,8 +242,8 @@ function parseStyles(
   ]
 }
 
-function parseCss(styles: CSSObject, nonce?: string): CSSResult {
-  const [classNames, lowRules, mediumRules, highRules] = parseStyles(styles)
+function parseCSS(styles: CSSObject, nonce?: string): CSSResult {
+  const [classNames, lowRules, mediumRules, highRules] = parseCSSObject(styles)
 
   /*
    * Style elements are rendered in order of low, medium, and high precedence.
@@ -325,13 +324,13 @@ export function css(
       !isEqual(previousStyles.current!, styles)
     ) {
       previousStyles.current = styles
-      previousResult.current = parseCss(styles, nonce)
+      previousResult.current = parseCSS(styles, nonce)
     }
 
     return previousResult.current
   }
 
-  return parseCss(styles, nonce)
+  return parseCSS(styles, nonce)
 }
 
 /**
