@@ -235,14 +235,17 @@ export default function BasicUsage() {
 }
 ```
 
-Note, the styles should always be rendered, even if the component doesn't return anything.
+> [!IMPORTANT]
+> The style elements should always be rendered after they've been created, even if the component doesn't return anything.
 
 ```tsx
 'use client'
 import React from 'react'
 import { css, type CSSProp } from 'restyle'
 
-export default function BasicUsage({ css: cssProp }: { css: CSSProp }) {
+import { AncestorHoveredContext } from './contexts'
+
+export function BasicUsage({ css: cssProp }: { css: CSSProp }) {
   const isAncestorHovered = React.useContext(AncestorHoveredContext)
   const [classNames, styles] = css(cssProp)
 
@@ -263,7 +266,7 @@ export default function BasicUsage({ css: cssProp }: { css: CSSProp }) {
 }
 ```
 
-Prefer the `styled` function to avoid this issue.
+Prefer the `styled` function to prevent this issue.
 
 ### CSS Prop
 
