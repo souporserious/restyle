@@ -14,9 +14,10 @@
 - [Installation](#installation)
 - [How it Works](#how-it-works)
 - [Examples](#examples)
+  - [Styled Function](#styled-function)
+  - [Style Props](#style-props)
   - [CSS Function](#css-function)
   - [CSS Prop](#css-prop)
-  - [Styled Function](#styled-function)
   - [Box Component](#box-component)
   - [Psuedoclasses](#psuedoclasses)
   - [Media Queries](#media-queries)
@@ -159,6 +160,7 @@ export default function MyComponent() {
 ## Examples
 
 - [Styled Function](#styled-function)
+- [Style Props](#style-props)
 - [CSS Function](#css-function)
 - [CSS Prop](#css-prop)
 - [Box Component](#box-component)
@@ -180,7 +182,7 @@ const StyleLink = styled(Link, {
 })
 ```
 
-## Style Props
+### Style Props
 
 The second argument to the `styled` function also accepts a function that returns a styles object based on the props passed to the component:
 
