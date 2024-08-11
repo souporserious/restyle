@@ -173,6 +173,35 @@ const StyleLink = styled(Link, {
 })
 ```
 
+## Style Props
+
+The second argument to the `styled` function also accepts a function that returns a styles object based on the props passed to the component:
+
+```tsx
+import { styled } from 'restyle'
+
+type GridProps = {
+  gridTemplateColumns: string
+}
+
+const Grid = styled('div', (props: GridProps) => ({
+  display: 'grid',
+  gridTemplateColumns: props.gridTemplateColumns,
+}))
+```
+
+Now you can use these props to style the component:
+
+```tsx
+<Grid gridTemplateColumns="repeat(3, 1fr)">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</Grid>
+```
+
+Note, style props must be accessed in the function to properly be filtered out from the props passed to the component.
+
 ### CSS Function
 
 The `css` function returns a tuple of class names and the style tags to render. You can use the class names to apply styles to an element and the style tag to inject the styles into the head of the document:

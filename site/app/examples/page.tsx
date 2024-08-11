@@ -3,9 +3,25 @@ import { css, styled, type CSSProp } from 'restyle'
 import { ClientComponent } from './ClientComponent'
 import { CodeBlock } from './components/CodeBlock'
 
+type GridProps = {
+  gridTemplateColumns: string
+}
+
+const Grid = styled('div', (props: GridProps) => ({
+  display: 'grid',
+  gridTemplateColumns: props.gridTemplateColumns,
+}))
+
 export default function Page() {
   return (
     <>
+      <h2>Prop function styles</h2>
+      <Grid gridTemplateColumns="repeat(3, 1fr)">
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+      </Grid>
+
       <h2>Overriding css prop styles</h2>
       <OverridingCssPropStyles />
 

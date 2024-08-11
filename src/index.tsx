@@ -340,27 +340,55 @@ export function css(
  *
  * Note, the provided component must accept a `className` prop.
  */
-export function styled<ComponentType extends React.ElementType>(
+export function styled<
+  ComponentType extends React.ElementType,
+  StyleProps extends Record<string, unknown>,
+>(
   Component: AcceptsClassName<ComponentType>,
-  styles?: CSSObject
+  styles?: CSSObject | ((props: StyleProps) => CSSObject)
 ) {
   return ({
+    className: classNameProp,
     css: cssProp,
     ...props
-  }: React.ComponentProps<ComponentType> & { css?: CSSObject }) => {
+  }: React.ComponentProps<ComponentType> &
+    StyleProps & {
+      className?: string
+      css?: CSSObject
+    }) => {
+    let parsedStyles: CSSObject
+
+    if (typeof styles === 'function') {
+      const accessedProps = new Set<keyof StyleProps>()
+      const proxyProps = new Proxy(props as unknown as StyleProps, {
+        get(target, prop: string) {
+          accessedProps.add(prop)
+          return target[prop]
+        },
+      })
+
+      parsedStyles = styles(proxyProps)
+
+      // Filter out accessed props from the original props
+      accessedProps.forEach((prop) => {
+        delete (props as unknown as StyleProps)[prop]
+      })
+    } else {
+      parsedStyles = styles || {}
+    }
+
     const [classNames, styleElements] = css({
-      ...styles,
+      ...parsedStyles,
       ...cssProp,
     })
+    const className = classNameProp
+      ? `${classNameProp} ${classNames}`
+      : classNames
+
     return (
       <>
-        {/* @ts-ignore */}
-        <Component
-          {...props}
-          className={
-            props.className ? `${props.className} ${classNames}` : classNames
-          }
-        />
+        {/* @ts-expect-error */}
+        <Component className={className} {...props} />
         {styleElements}
       </>
     )
