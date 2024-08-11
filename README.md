@@ -57,7 +57,12 @@ export const Box = styled('div', {
 
 ## How it Works
 
-Restyle leverages React's new ability to [hoist `style` elements](https://react.dev/reference/react-dom/components/style#rendering-an-inline-css-stylesheet) by generating atomic CSS on-demand to provide a flexible and efficient styling solution for React components. Here's a high-level overview of how it operates:
+Restyle leverages React's new ability to [hoist `style` elements](https://react.dev/reference/react-dom/components/style#rendering-an-inline-css-stylesheet) by generating atomic CSS on-demand to provide a flexible and efficient styling solution for React components.
+
+<details>
+  <summary>Read more</summary>
+
+Here's a high-level overview of how it works:
 
 1. **Styles Parsing**: Restyle takes a styles object of CSS and parses it, generating atomic class names for each unique style property and value pair:
 
@@ -148,6 +153,8 @@ export default function MyComponent() {
   )
 }
 ```
+
+</details>
 
 ## Examples
 
