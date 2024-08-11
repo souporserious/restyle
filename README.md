@@ -207,7 +207,8 @@ Now you can use these props to style the component:
 </Grid>
 ```
 
-Note, style props must be accessed in the function to properly be filtered out from the props passed to the component.
+> [!IMPORTANT]
+> A proxy is used to differentiate between style props and those passed directly to the component. Therefore, only style props should be accessed within the function to ensure proper filtering.
 
 ### CSS Function
 
