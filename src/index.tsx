@@ -306,8 +306,11 @@ function parseCSS(styles: CSSObject, nonce?: string): CSSResult {
 }
 
 /**
- * Generates CSS from an object of styles. Note, this is an isomorphic function
- * that acts as a utility function on the server and a hook on the client.
+ * Generates CSS from an object of styles.
+ *
+ * **Note** this is an isomorphic function that acts as a utility function on
+ * the server and a hook on the client so it must respect the rules of hooks when
+ * used on the client.
  *
  * @returns Atomic class names for each rule and style elements for each precedence.
  */
