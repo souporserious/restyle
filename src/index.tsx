@@ -167,6 +167,7 @@ function parseValue(prop: string, value: CSSValue): CSSValue {
 
 function createRule(
   name: string,
+  parentSelector: string,
   selector: string,
   prop: string,
   value: CSSValue
@@ -178,8 +179,9 @@ function createRule(
         ? selector.replace('&', `.${name}`)
         : `.${name}${selector}`
   const hyphenProp = prop.replace(/[A-Z]|^ms/g, '-$&').toLowerCase()
+  const rule = `${className.trim()}{${hyphenProp}:${parseValue(prop, value)}}`
 
-  return `${className.trim()}{${hyphenProp}:${parseValue(prop, value)}}`
+  return parentSelector === '' ? rule : `${parentSelector}{${rule}}`
 }
 
 /** Parse a CSS styles object into class names and rule sets for each precedence. */
@@ -231,8 +233,7 @@ function parseCSSObject(
     if (hasCache) {
       classNames += ` ${cacheKey}`
     } else {
-      let rule = createRule(cacheKey, selector, key, value)
-      rule = parentSelector === '' ? rule : `${parentSelector}{${rule}}`
+      const rule = createRule(cacheKey, parentSelector, selector, key, value)
       if (lowPrecedenceProps.has(key)) {
         lowPrecedenceRules.push(rule)
       } else if (mediumPrecedenceProps.has(key)) {
