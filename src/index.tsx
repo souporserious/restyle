@@ -223,17 +223,18 @@ function parseCSSObject(
       continue
     }
 
-    const cacheKey = hash(`${key}${value}${selector}${parentSelector}`)
+    const className = hash(`${key}${value}${selector}${parentSelector}`)
+
+    classNames += ' ' + className
+
     const fileCache = getCache()
     const globalCache = isClientComponent
       ? globalThis.__RESTYLE_CACHE
       : undefined
-    const hasCache = fileCache.has(cacheKey) || globalCache?.has(cacheKey)
+    const hasCache = fileCache.has(className) || globalCache?.has(className)
 
-    if (hasCache) {
-      classNames += ` ${cacheKey}`
-    } else {
-      const rule = createRule(cacheKey, parentSelector, selector, key, value)
+    if (!hasCache) {
+      const rule = createRule(className, parentSelector, selector, key, value)
       if (lowPrecedenceProps.has(key)) {
         lowPrecedenceRules.push(rule)
       } else if (mediumPrecedenceProps.has(key)) {
@@ -241,8 +242,7 @@ function parseCSSObject(
       } else {
         highPrecedenceRules.push(rule)
       }
-      classNames += ` ${cacheKey}`
-      fileCache.add(cacheKey)
+      fileCache.add(className)
     }
   }
 
