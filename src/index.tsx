@@ -158,13 +158,6 @@ function isEqual(a: any, b: any): boolean {
   return false
 }
 
-function parseValue(prop: string, value: CSSValue): CSSValue {
-  if (prop.startsWith('--') || unitlessProps.has(prop)) {
-    return value
-  }
-  return typeof value === 'number' ? `${value}px` : value
-}
-
 function createRule(
   name: string,
   parentSelector: string,
@@ -172,16 +165,28 @@ function createRule(
   prop: string,
   value: CSSValue
 ): string {
-  const className =
-    selector === ''
-      ? `.${name}`
-      : selector.includes('&')
-        ? selector.replace('&', `.${name}`)
-        : `.${name}${selector}`
-  const hyphenProp = prop.replace(/[A-Z]|^ms/g, '-$&').toLowerCase()
-  const rule = `${className.trim()}{${hyphenProp}:${parseValue(prop, value)}}`
+  let className = ''
 
-  return parentSelector === '' ? rule : `${parentSelector}{${rule}}`
+  if (selector === '') {
+    className = '.' + name
+  } else if (selector.includes('&')) {
+    className = selector.replace('&', '.' + name)
+  } else {
+    className = '.' + name + selector
+  }
+
+  const hyphenProp = prop.replace(/[A-Z]|^ms/g, '-$&').toLowerCase()
+  let parsedValue: CSSValue
+
+  if (prop.startsWith('--') || unitlessProps.has(prop)) {
+    parsedValue = value
+  } else {
+    parsedValue = typeof value === 'number' ? value + 'px' : value
+  }
+
+  const rule = className.trim() + '{' + hyphenProp + ':' + parsedValue + '}'
+
+  return parentSelector === '' ? rule : parentSelector + '{' + rule + '}'
 }
 
 /** Parse a CSS styles object into class names and rule sets for each precedence. */
