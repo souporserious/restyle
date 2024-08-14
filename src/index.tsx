@@ -130,21 +130,32 @@ function hash(str: string): string {
   return `x${result}`
 }
 
-function isEqual(a: Record<string, any>, b: Record<string, any>): boolean {
-  const aKeys = Object.keys(a)
-  const bKeys = Object.keys(b)
+function isEqual(a: any, b: any): boolean {
+  if (a === b) return true
 
-  if (aKeys.length !== bKeys.length) return false
+  if (typeof a === 'object' && typeof b === 'object') {
+    let aCount = 0
+    let bCount = 0
 
-  for (let key of aKeys) {
-    if (typeof a[key] === 'object' && typeof b[key] === 'object') {
-      if (!isEqual(a[key], b[key])) return false
-    } else if (a[key] !== b[key]) {
-      return false
+    for (let key in a) {
+      if (a.hasOwnProperty(key)) {
+        aCount++
+        if (!(key in b) || !isEqual(a[key], b[key])) {
+          return false
+        }
+      }
     }
+
+    for (let key in b) {
+      if (b.hasOwnProperty(key)) {
+        bCount++
+      }
+    }
+
+    return aCount === bCount
   }
 
-  return true
+  return false
 }
 
 function parseValue(prop: string, value: CSSValue): CSSValue {
