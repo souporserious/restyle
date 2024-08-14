@@ -127,7 +127,7 @@ function hash(str: string): string {
     h = Math.floor(h / 36)
   } while (h > 0)
 
-  return `x${result}`
+  return 'x' + result
 }
 
 function isEqual(a: any, b: any): boolean {
@@ -212,8 +212,8 @@ function parseCSSObject(
       const chainedSelector = atSelector
         ? selector
         : key.startsWith(':')
-          ? `${selector}${key}`
-          : `${selector} ${key}`
+          ? selector + key
+          : selector + ' ' + key
       const chainedResults = parseCSSObject(
         value as CSSObject,
         chainedSelector,
@@ -228,7 +228,7 @@ function parseCSSObject(
       continue
     }
 
-    const className = hash(`${key}${value}${selector}${parentSelector}`)
+    const className = hash(key + value + selector + parentSelector)
 
     classNames += ' ' + className
 
@@ -276,36 +276,30 @@ function parseCSS(styles: CSSObject, nonce?: string): CSSResult {
    */
 
   function Styles() {
-    const lowId = lowRules.length > 0 ? hash(lowRules) : 'rsli'
     const lowStyles = (
       <style
         nonce={nonce}
-        key={lowId}
         // @ts-expect-error
-        href={lowId}
+        href={lowRules.length > 0 ? hash(lowRules) : 'rsli'}
         precedence="rsl"
         children={lowRules}
       />
     )
 
-    const mediumId = mediumRules.length > 0 ? hash(mediumRules) : 'rsmi'
     const mediumStyles = (
       <style
         nonce={nonce}
-        key={mediumId}
         // @ts-expect-error
-        href={mediumId}
+        href={mediumRules.length > 0 ? hash(mediumRules) : 'rsmi'}
         precedence="rsm"
         children={mediumRules}
       />
     )
 
-    const highId = highRules.length > 0 ? hash(highRules) : undefined
     const highStyles =
       highRules.length > 0 ? (
         <style
           nonce={nonce}
-          key={highId}
           // @ts-expect-error
           href={hash(highRules)}
           precedence="rsh"
@@ -315,7 +309,7 @@ function parseCSS(styles: CSSObject, nonce?: string): CSSResult {
 
     /* Use globalThis to share the server cache with the client. */
     const clientCache = isClientComponent ? null : (
-      <ClientCache key="cache" cache={getCache()} />
+      <ClientCache cache={getCache()} />
     )
 
     return (
@@ -411,7 +405,7 @@ export function styled<
       ...cssProp,
     })
     const className = classNameProp
-      ? `${classNameProp} ${classNames}`
+      ? classNameProp + ' ' + classNames
       : classNames
 
     return (
