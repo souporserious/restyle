@@ -160,8 +160,8 @@ function isEqual(a: any, b: any): boolean {
 
 function createRule(
   name: string,
-  parentSelector: string,
   selector: string,
+  parentSelector: string,
   prop: string,
   value: CSSValue
 ): string {
@@ -239,7 +239,7 @@ function parseCSSObject(
     const hasCache = fileCache.has(className) || globalCache?.has(className)
 
     if (!hasCache) {
-      const rule = createRule(className, parentSelector, selector, key, value)
+      const rule = createRule(className, selector, parentSelector, key, value)
       if (lowPrecedenceProps.has(key)) {
         lowPrecedenceRules.push(rule)
       } else if (mediumPrecedenceProps.has(key)) {
@@ -276,48 +276,38 @@ function parseCSS(styles: CSSObject, nonce?: string): CSSResult {
    */
 
   function Styles() {
-    const lowStyles = (
-      <style
-        nonce={nonce}
-        // @ts-expect-error
-        href={lowRules.length > 0 ? hash(lowRules) : 'rsli'}
-        precedence="rsl"
-        children={lowRules}
-      />
-    )
-
-    const mediumStyles = (
-      <style
-        nonce={nonce}
-        // @ts-expect-error
-        href={mediumRules.length > 0 ? hash(mediumRules) : 'rsmi'}
-        precedence="rsm"
-        children={mediumRules}
-      />
-    )
-
-    const highStyles =
-      highRules.length > 0 ? (
+    return (
+      <>
         <style
           nonce={nonce}
           // @ts-expect-error
-          href={hash(highRules)}
-          precedence="rsh"
-          children={highRules}
+          href={lowRules.length > 0 ? hash(lowRules) : 'rsli'}
+          precedence="rsl"
+          children={lowRules}
         />
-      ) : null
 
-    /* Use globalThis to share the server cache with the client. */
-    const clientCache = isClientComponent ? null : (
-      <ClientCache cache={getCache()} />
-    )
+        <style
+          nonce={nonce}
+          // @ts-expect-error
+          href={mediumRules.length > 0 ? hash(mediumRules) : 'rsmi'}
+          precedence="rsm"
+          children={mediumRules}
+        />
 
-    return (
-      <>
-        {lowStyles}
-        {mediumStyles}
-        {highStyles}
-        {clientCache}
+        {highRules.length > 0 ? (
+          <style
+            nonce={nonce}
+            // @ts-expect-error
+            href={hash(highRules)}
+            precedence="rsh"
+            children={highRules}
+          />
+        ) : null}
+
+        {
+          /* Use globalThis to share the server cache with the client. */
+          isClientComponent ? null : <ClientCache cache={getCache()} />
+        }
       </>
     )
   }
