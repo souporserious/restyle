@@ -61,7 +61,7 @@ import React from 'react'
 import { css } from 'restyle'
 
 export default function BasicUsage() {
-  const [classNames, styles] = css({
+  const [classNames, Styles] = css({
     padding: '1rem',
     backgroundColor: 'peachpuff',
   })
@@ -69,35 +69,7 @@ export default function BasicUsage() {
   return (
     <>
       <div className={classNames}>Hello World</div>
-      {styles}
-    </>
-  )
-}
-```
-
-**Note**, the style elements should always be rendered after they've been created, even if the component doesn't return anything.
-
-```tsx
-'use client'
-import React from 'react'
-import { css, type CSSProp } from 'restyle'
-
-export default function BasicUsage({ css: cssProp }: { css: CSSProp }) {
-  const isAncestorHovered = React.useContext(AncestorHoveredContext)
-  const [classNames, styles] = css(cssProp)
-
-  if (!isAncestorHovered) {
-    // 🚫 Prevents subsequent styles from rendering properly
-    return null
-
-    // ✅ Always rendering styles ensures they are injected properly
-    return styles
-  }
-
-  return (
-    <>
-      <div className={classNames}>Hello World</div>
-      {styles}
+      <Styles />
     </>
   )
 }
@@ -167,7 +139,7 @@ export function Box({
   padding,
   backgroundColor,
 }) {
-  const [classNames, styles] = css({
+  const [classNames, Styles] = css({
     display,
     alignItems,
     justifyContent,
@@ -177,7 +149,7 @@ export function Box({
   return (
     <div className={classNames}>
       {children}
-      {styles}
+      <Styles />
     </div>
   )
 }

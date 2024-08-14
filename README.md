@@ -70,13 +70,13 @@ Here's a high-level overview of how it works:
 ```ts
 import { css } from 'restyle'
 
-const [classNames, styleElement] = css({
+const [classNames, Styles] = css({
   padding: '1rem',
   backgroundColor: 'peachpuff',
 })
 
 // classNames: 'x1y2 x3z4'
-// styleElement: <style>.x1y2{padding:1rem}.x3z4{background-color:peachpuff}</style>
+// Styles: <style>.x1y2{padding:1rem}.x3z4{background-color:peachpuff}</style>
 ```
 
 2. **Class Names Generation and Deduplication**: Atomic class names are generated using a hashing function to ensure uniqueness and prevent collisions. Class names are cached per request, optimizing performance and reducing the overall size of the generated CSS:
@@ -102,7 +102,7 @@ const styles = {
   backgroundColor: 'rebeccapurple',
 }
 
-const [classNames, styleElement] = css(styles)
+const [classNames, Styles] = css(styles)
 
 // classNames: 'x1y2 x4z1'
 // Reuse class names for other elements
@@ -111,7 +111,7 @@ const buttonStyles = {
   border: '1px solid black',
 }
 
-const [buttonClassNames, buttonStyleElement] = css(buttonStyles)
+const [buttonClassNames, ButtonStyles] = css(buttonStyles)
 
 // buttonClassNames: 'x1y2 x4z1 x5a6'
 ```
@@ -122,7 +122,7 @@ const [buttonClassNames, buttonStyleElement] = css(buttonStyles)
 import { css } from 'restyle'
 
 export default function OnDemandStyles() {
-  const [classNames, styleElement] = css({
+  const [classNames, Styles] = css({
     padding: '1rem',
     backgroundColor: 'papayawhip',
   })
@@ -130,7 +130,7 @@ export default function OnDemandStyles() {
   return (
     <>
       <div className={classNames}>Hello World</div>
-      {styleElement}
+      <Styles />
     </>
   )
 }
@@ -221,7 +221,7 @@ import React from 'react'
 import { css } from 'restyle'
 
 export default function BasicUsage() {
-  const [classNames, styles] = css({
+  const [classNames, Styles] = css({
     padding: '1rem',
     backgroundColor: 'peachpuff',
   })
@@ -229,44 +229,11 @@ export default function BasicUsage() {
   return (
     <>
       <div className={classNames}>Hello World</div>
-      {styles}
+      <Styles />
     </>
   )
 }
 ```
-
-> [!IMPORTANT]
-> The style elements should always be rendered after they've been created, even if the component doesn't return anything.
-
-```tsx
-'use client'
-import React from 'react'
-import { css, type CSSProp } from 'restyle'
-
-import { AncestorHoveredContext } from './contexts'
-
-export function BasicUsage({ css: cssProp }: { css: CSSProp }) {
-  const isAncestorHovered = React.useContext(AncestorHoveredContext)
-  const [classNames, styles] = css(cssProp)
-
-  if (!isAncestorHovered) {
-    // 🚫 Prevents subsequent styles from rendering properly
-    return null
-
-    // ✅ Always rendering styles ensures they are injected properly
-    return styles
-  }
-
-  return (
-    <>
-      <div className={classNames}>Hello World</div>
-      {styles}
-    </>
-  )
-}
-```
-
-Prefer the `styled` function to prevent this issue.
 
 ### CSS Prop
 
@@ -332,7 +299,7 @@ export function Box({
   padding,
   backgroundColor,
 }) {
-  const [classNames, styles] = css({
+  const [classNames, Styles] = css({
     display,
     alignItems,
     justifyContent,
@@ -342,7 +309,7 @@ export function Box({
   return (
     <div className={classNames}>
       {children}
-      {styles}
+      <Styles />
     </div>
   )
 }

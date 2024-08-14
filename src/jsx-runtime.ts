@@ -7,14 +7,23 @@ export type { RestyleJSX as JSX } from './types'
 
 export const Fragment = ReactJSXRuntime.Fragment
 
-export function jsx(type: any, props: Record<string, any>, key: string) {
-  if (props.css) {
-    const [parsedProps, styleElement] = createRestyleProps(type, props)
+export function jsx(
+  type: React.ElementType,
+  props: Record<string, any>,
+  key: string
+) {
+  if (typeof type === 'string' && props.css) {
+    const [parsedProps, Styles] = createRestyleProps(type, props)
 
-    if (styleElement) {
+    if (Styles) {
       return ReactJSXRuntime.jsx(
         Fragment,
-        { children: [React.createElement(type, parsedProps), styleElement] },
+        {
+          children: [
+            React.createElement(type, parsedProps),
+            React.createElement(Styles),
+          ],
+        },
         key
       )
     }
@@ -27,12 +36,17 @@ export function jsx(type: any, props: Record<string, any>, key: string) {
 
 export function jsxs(type: any, props: Record<string, any>, key: string) {
   if (props.css) {
-    const [parsedProps, styleElement] = createRestyleProps(type, props)
+    const [parsedProps, Styles] = createRestyleProps(type, props)
 
-    if (styleElement) {
+    if (Styles) {
       return ReactJSXRuntime.jsxs(
         Fragment,
-        { children: [React.createElement(type, parsedProps), styleElement] },
+        {
+          children: [
+            React.createElement(type, parsedProps),
+            React.createElement(Styles),
+          ],
+        },
         key
       )
     }

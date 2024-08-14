@@ -15,7 +15,7 @@ export const CopyButton = ({
 }) => {
   const active = useContext(PreActiveContext)
   const [copied, setCopied] = useState(false)
-  const [classNames, styleElements] = css({
+  const [classNames, Styles] = css({
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -31,7 +31,7 @@ export const CopyButton = ({
   })
 
   if (active === false) {
-    return styleElements
+    return null
   }
 
   return (
@@ -44,7 +44,7 @@ export const CopyButton = ({
       }}
     >
       {copied ? 'Copied!' : 'Copy'}
-      {styleElements}
+      <Styles />
     </button>
   )
 }

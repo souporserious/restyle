@@ -7,20 +7,25 @@ export const Fragment = ReactJSXRuntimeDev.Fragment
 
 /** Create a JSX element that accepts a `css` prop to generate atomic class names. */
 export function jsxDEV(
-  type: any,
+  type: React.ElementType,
   props: Record<string, any>,
   key: string,
   isStaticChildren: boolean,
   source: any,
   self: any
 ): React.JSX.Element {
-  if (props.css) {
-    const [parsedProps, styleElement] = createRestyleProps(type, props)
+  if (typeof type === 'string' && props.css) {
+    const [parsedProps, Styles] = createRestyleProps(type, props)
 
-    if (styleElement) {
+    if (Styles) {
       return ReactJSXRuntimeDev.jsxDEV(
         Fragment,
-        { children: [React.createElement(type, parsedProps), styleElement] },
+        {
+          children: [
+            React.createElement(type, parsedProps),
+            React.createElement(Styles),
+          ],
+        },
         key,
         isStaticChildren,
         source,

@@ -47,7 +47,7 @@ function Button({
   children: React.ReactNode
   css?: CSSProp
 }) {
-  const [classNames, styles] = css({
+  const [classNames, Styles] = css({
     padding: '0.5rem 1rem',
     border: 'none',
     backgroundColor: 'dodgerblue',
@@ -60,7 +60,7 @@ function Button({
   return (
     <>
       <button className={classNames}>{children}</button>
-      {styles}
+      <Styles />
     </>
   )
 }
@@ -83,11 +83,11 @@ function OverridingCssPropStyles() {
 
 // Don't do this
 // function OverridingCssStyles() {
-//   const [classNames, styles] = css({ backgroundColor: 'tomato' })
+//   const [classNames, Styles] = css({ backgroundColor: 'tomato' })
 //   return (
 //     <>
 //       <Button className={classNames}>Click me</Button>
-//       {styles}
+//       <Styles />
 //     </>
 //   )
 // }

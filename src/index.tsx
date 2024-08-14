@@ -254,6 +254,7 @@ function parseCSSObject(
   ]
 }
 
+/** Parse a CSS styles object into atomic class names and style elements. */
 function parseCSS(styles: CSSObject, nonce?: string): CSSResult {
   const [classNames, lowRules, mediumRules, highRules] = parseCSSObject(styles)
 
@@ -269,52 +270,60 @@ function parseCSS(styles: CSSObject, nonce?: string): CSSResult {
    * the first time they are encountered.
    */
 
-  const lowId = lowRules.length > 0 ? hash(lowRules) : 'rsli'
-  const lowPrecedence = 'rsl'
-  const lowStyles = (
-    <style
-      nonce={nonce}
-      key={lowId}
-      // @ts-expect-error
-      href={lowId}
-      precedence={lowPrecedence}
-      children={lowRules}
-    />
-  )
-
-  const mediumId = mediumRules.length > 0 ? hash(mediumRules) : 'rsmi'
-  const mediumPrecedence = 'rsm'
-  const mediumStyles = (
-    <style
-      nonce={nonce}
-      key={mediumId}
-      // @ts-expect-error
-      href={mediumId}
-      precedence={mediumPrecedence}
-      children={mediumRules}
-    />
-  )
-
-  const highId = highRules.length > 0 ? hash(highRules) : undefined
-  const highPrecedence = 'rsh'
-  const highStyles =
-    highRules.length > 0 ? (
+  function Styles() {
+    const lowId = lowRules.length > 0 ? hash(lowRules) : 'rsli'
+    const lowStyles = (
       <style
         nonce={nonce}
-        key={highId}
+        key={lowId}
         // @ts-expect-error
-        href={highId}
-        precedence={highPrecedence}
-        children={highRules}
+        href={lowId}
+        precedence="rsl"
+        children={lowRules}
       />
-    ) : null
+    )
 
-  /* Use globalThis to share the server cache with the client. */
-  const clientCache = isClientComponent ? null : (
-    <ClientCache key="cache" cache={getCache()} />
-  )
+    const mediumId = mediumRules.length > 0 ? hash(mediumRules) : 'rsmi'
+    const mediumStyles = (
+      <style
+        nonce={nonce}
+        key={mediumId}
+        // @ts-expect-error
+        href={mediumId}
+        precedence="rsm"
+        children={mediumRules}
+      />
+    )
 
-  return [classNames, [lowStyles, mediumStyles, highStyles, clientCache]]
+    const highId = highRules.length > 0 ? hash(highRules) : undefined
+    const highStyles =
+      highRules.length > 0 ? (
+        <style
+          nonce={nonce}
+          key={highId}
+          // @ts-expect-error
+          href={hash(highRules)}
+          precedence="rsh"
+          children={highRules}
+        />
+      ) : null
+
+    /* Use globalThis to share the server cache with the client. */
+    const clientCache = isClientComponent ? null : (
+      <ClientCache key="cache" cache={getCache()} />
+    )
+
+    return (
+      <>
+        {lowStyles}
+        {mediumStyles}
+        {highStyles}
+        {clientCache}
+      </>
+    )
+  }
+
+  return [classNames, Styles]
 }
 
 /**
@@ -329,7 +338,7 @@ function parseCSS(styles: CSSObject, nonce?: string): CSSResult {
 export function css(
   styles: CSSObject,
   nonce?: string
-): [string, React.ReactNode] {
+): [string, () => React.ReactNode] {
   if (isClientComponent) {
     const previousStyles = React.useRef<CSSObject | null>(null)
     const previousResult = React.useRef<CSSResult | null>(null)
@@ -392,7 +401,7 @@ export function styled<
       parsedStyles = styles || {}
     }
 
-    const [classNames, styleElements] = css({
+    const [classNames, Styles] = css({
       ...parsedStyles,
       ...cssProp,
     })
@@ -404,7 +413,7 @@ export function styled<
       <>
         {/* @ts-expect-error */}
         <Component className={className} {...props} />
-        {styleElements}
+        <Styles />
       </>
     )
   }
