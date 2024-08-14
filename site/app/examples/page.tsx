@@ -1,7 +1,7 @@
 import { css, styled, type CSSProp } from 'restyle'
 
 import { ClientComponent } from './ClientComponent'
-import { CodeBlock } from './components/CodeBlock'
+import Link from 'next/link'
 
 type GridProps = {
   gridTemplateColumns: string
@@ -12,7 +12,9 @@ const Grid = styled('div', (props: GridProps) => ({
   gridTemplateColumns: props.gridTemplateColumns,
 }))
 
-export default function Page() {
+export default async function Page() {
+  const { CodeBlockExamples } = await import('./code-block/CodeBlockExamples')
+
   return (
     <>
       <h2>Prop function styles</h2>
@@ -32,18 +34,8 @@ export default function Page() {
       <ClientComponent />
 
       <h2>Mixed Server and Client Components</h2>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          width: '100%',
-          maxWidth: 400,
-          gap: '1rem',
-        }}
-      >
-        <CodeBlock value="const a = 'a';" />
-        <CodeBlock value="const b = 2;" />
-      </div>
+      <CodeBlockExamples />
+      <Link href="/examples/code-block">Code Block</Link>
     </>
   )
 }
