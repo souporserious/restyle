@@ -1,5 +1,0 @@
-{
-  "main": "../dist/jsx-runtime.js",
-  "types": "../dist/jsx-runtime.d.ts",
-  "sideEffects": false
-}

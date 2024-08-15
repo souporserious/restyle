@@ -4,11 +4,37 @@
   "description": "The simplest way to add CSS to your React components.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./css": {
+      "types": "./dist/css.d.ts",
+      "import": "./dist/css.js",
+      "default": "./dist/css.js"
+    },
+    "./styled": {
+      "types": "./dist/styled.d.ts",
+      "import": "./dist/styled.js",
+      "default": "./dist/styled.js"
+    },
+    "./jsx-runtime": {
+      "types": "./dist/jsx-runtime.d.ts",
+      "import": "./dist/jsx-runtime.js",
+      "default": "./dist/jsx-runtime.js"
+    },
+    "./jsx-dev-runtime": {
+      "types": "./dist/jsx-dev-runtime.d.ts",
+      "import": "./dist/jsx-dev-runtime.js",
+      "default": "./dist/jsx-dev-runtime.js"
+    }
+  },
   "files": [
-    "dist",
-    "jsx-runtime",
-    "jsx-dev-runtime"
+    "dist"
   ],
+  "sideEffects": false,
   "author": "Travis Arnold (http://souporserious.com)",
   "license": "MIT",
   "bugs": {
@@ -19,6 +45,7 @@
     "react",
     "css",
     "css-in-js",
+    "styled",
     "styling"
   ],
   "scripts": {
