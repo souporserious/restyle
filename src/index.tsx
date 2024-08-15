@@ -2,11 +2,9 @@
 import * as React from 'react'
 
 import { ClientCache } from './client-cache'
-import type { AcceptsClassName, CSSResult, CSSObject, CSSValue } from './types'
+import type { AcceptsClassName, CSSObject, CSSValue } from './types'
 
 export type CSSProp = CSSObject
-
-type Cache = { current: Set<string> | null }
 
 const lowPrecedenceProps = new Set([
   'all',
@@ -92,24 +90,6 @@ const unitlessProps = new Set([
   'zIndex',
 ])
 
-const isClientComponent = Boolean(React.useRef)
-const serverCache = React.cache<() => Cache>(() => ({ current: null }))
-let cache: Cache | null = null
-
-function getCache(): Set<string> {
-  try {
-    cache = serverCache()
-  } catch {
-    cache = { current: null }
-  }
-
-  if (cache.current === null) {
-    cache.current = new Set()
-  }
-
-  return cache.current
-}
-
 function hash(str: string): string {
   // FNV-1a Hash Function
   let h = 0 ^ 0x811c9dc5
@@ -127,35 +107,7 @@ function hash(str: string): string {
     h = Math.floor(h / 36)
   } while (h > 0)
 
-  return 'x' + result
-}
-
-function isEqual(a: any, b: any): boolean {
-  if (a === b) return true
-
-  if (typeof a === 'object' && typeof b === 'object') {
-    let aCount = 0
-    let bCount = 0
-
-    for (let key in a) {
-      if (a.hasOwnProperty(key)) {
-        aCount++
-        if (!(key in b) || !isEqual(a[key], b[key])) {
-          return false
-        }
-      }
-    }
-
-    for (let key in b) {
-      if (b.hasOwnProperty(key)) {
-        bCount++
-      }
-    }
-
-    return aCount === bCount
-  }
-
-  return false
+  return result
 }
 
 function createRule(
@@ -189,16 +141,15 @@ function createRule(
   return parentSelector === '' ? rule : parentSelector + '{' + rule + '}'
 }
 
-/** Parse a CSS styles object into class names and rule sets for each precedence. */
-function parseCSSObject(
+const cssRulesMap = new Map<string, string>()
+
+/** Parse a CSS styles object into class names and store rule data in a global map. */
+function createClassNames(
   styles: CSSObject,
   selector = '',
   parentSelector = ''
-): [string, string, string, string] {
+): string {
   let classNames = ''
-  let lowPrecedenceRules = []
-  let mediumPrecedenceRules = []
-  let highPrecedenceRules = []
 
   for (const key in styles) {
     const value = styles[key as keyof CSSObject]
@@ -208,60 +159,80 @@ function parseCSSObject(
     }
 
     if (typeof value === 'object') {
-      const atSelector = /^@/.test(key) ? key : null
+      const atSelector = /^@/.test(key) ? key : undefined
       const chainedSelector = atSelector
         ? selector
         : key.startsWith(':')
           ? selector + key
           : selector + ' ' + key
-      const chainedResults = parseCSSObject(
+      const chainedClassNames = createClassNames(
         value as CSSObject,
         chainedSelector,
         atSelector || parentSelector
       )
 
-      classNames += ' ' + chainedResults[0]
-      lowPrecedenceRules.push(chainedResults[1])
-      mediumPrecedenceRules.push(chainedResults[2])
-      highPrecedenceRules.push(chainedResults[3])
-
+      classNames += ' ' + chainedClassNames
       continue
     }
 
-    const className = hash(key + value + selector + parentSelector)
+    const precedence = lowPrecedenceProps.has(key)
+      ? 'l'
+      : mediumPrecedenceProps.has(key)
+        ? 'm'
+        : 'h'
+    const className = precedence + hash(key + value + selector + parentSelector)
 
     classNames += ' ' + className
 
-    const fileCache = getCache()
-    const globalCache = isClientComponent
-      ? globalThis.__RESTYLE_CACHE
-      : undefined
-    const hasCache = fileCache.has(className) || globalCache?.has(className)
-
-    if (!hasCache) {
-      const rule = createRule(className, selector, parentSelector, key, value)
-      if (lowPrecedenceProps.has(key)) {
-        lowPrecedenceRules.push(rule)
-      } else if (mediumPrecedenceProps.has(key)) {
-        mediumPrecedenceRules.push(rule)
-      } else {
-        highPrecedenceRules.push(rule)
-      }
-      fileCache.add(className)
+    if (!cssRulesMap.has(className)) {
+      cssRulesMap.set(
+        className,
+        createRule(
+          className,
+          selector.trim(),
+          parentSelector.trim(),
+          key,
+          value
+        )
+      )
     }
   }
 
-  return [
-    classNames.trim(),
-    lowPrecedenceRules.join(''),
-    mediumPrecedenceRules.join(''),
-    highPrecedenceRules.join(''),
-  ]
+  return classNames.trim()
 }
 
-/** Parse a CSS styles object into atomic class names and style elements. */
-function parseCSS(styles: CSSObject, nonce?: string): CSSResult {
-  const [classNames, lowRules, mediumRules, highRules] = parseCSSObject(styles)
+type Cache = { current: Set<string> | null }
+
+const isClientComponent = Boolean(React.useRef)
+const serverCache = React.cache<() => Cache>(() => ({ current: null }))
+let cache: Cache = { current: null }
+
+function getLocalCache(): Set<string> {
+  if (!isClientComponent) {
+    cache = serverCache()
+  }
+
+  if (cache.current === null) {
+    cache.current = new Set()
+  }
+
+  return cache.current
+}
+
+/**
+ * Generates CSS from an object of styles.
+ *
+ * **Note** this is an isomorphic function that acts as a utility function on
+ * the server and a hook on the client so it must respect the rules of hooks when
+ * used on the client.
+ *
+ * @returns Atomic class names for each rule and style elements for each precedence.
+ */
+export function css(
+  styles: CSSObject,
+  nonce?: string
+): [string, () => React.ReactNode] {
+  const classNames = createClassNames(styles)
 
   /*
    * Style elements are rendered in order of low, medium, and high precedence.
@@ -276,6 +247,56 @@ function parseCSS(styles: CSSObject, nonce?: string): CSSResult {
    */
 
   function Styles() {
+    const localCache = getLocalCache()
+    const globalCache = isClientComponent
+      ? globalThis.__RESTYLE_CACHE
+      : undefined
+    const classNamesArray = classNames.split(' ')
+    const classNamesCount = classNamesArray.length
+    let lowRules = ''
+    let mediumRules = ''
+    let highRules = ''
+
+    for (let index = 0; index < classNamesCount; index++) {
+      const className = classNamesArray[index]!
+      const rule = cssRulesMap.get(className)
+
+      if (rule === undefined) {
+        continue
+      }
+
+      const hasCache = localCache.has(rule) || globalCache?.has(rule)
+
+      if (hasCache) {
+        continue
+      }
+
+      if (!isClientComponent) {
+        localCache.add(rule)
+      }
+
+      const precedence = className[0]
+
+      if (precedence === 'l') {
+        lowRules += rule
+      } else if (precedence === 'm') {
+        mediumRules += rule
+      } else {
+        highRules += rule
+      }
+    }
+
+    // Only cache on the client once styles have actually rendered
+    if (isClientComponent) {
+      React.useLayoutEffect(() => {
+        for (let index = 0; index < classNamesCount; index++) {
+          const className = classNamesArray[index]!
+          const rule = cssRulesMap.get(className)!
+          localCache.add(rule)
+        }
+      }, [])
+    }
+
     return (
       <>
         <style
@@ -298,52 +319,18 @@ function parseCSS(styles: CSSObject, nonce?: string): CSSResult {
           <style
             nonce={nonce}
             // @ts-expect-error
-            href={hash(highRules)}
+            href={highRules.length > 0 ? hash(highRules) : undefined}
             precedence="rsh"
             children={highRules}
           />
         ) : null}
 
-        {
-          /* Use globalThis to share the server cache with the client. */
-          isClientComponent ? null : <ClientCache cache={getCache()} />
-        }
+        {isClientComponent ? null : <ClientCache cache={localCache} />}
       </>
     )
   }
 
   return [classNames, Styles]
-}
-
-/**
- * Generates CSS from an object of styles.
- *
- * **Note** this is an isomorphic function that acts as a utility function on
- * the server and a hook on the client so it must respect the rules of hooks when
- * used on the client.
- *
- * @returns Atomic class names for each rule and style elements for each precedence.
- */
-export function css(
-  styles: CSSObject,
-  nonce?: string
-): [string, () => React.ReactNode] {
-  if (isClientComponent) {
-    const previousStyles = React.useRef<CSSObject | null>(null)
-    const previousResult = React.useRef<CSSResult | null>(null)
-
-    if (
-      previousResult.current === null ||
-      !isEqual(previousStyles.current!, styles)
-    ) {
-      previousStyles.current = styles
-      previousResult.current = parseCSS(styles, nonce)
-    }
-
-    return previousResult.current
-  }
-
-  return parseCSS(styles, nonce)
 }
 
 /**

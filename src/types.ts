@@ -41,8 +41,6 @@ export type AcceptsClassName<T> = T extends keyof JSX.IntrinsicElements
       : ClassNameMessage
     : ClassNameMessage
 
-export type CSSResult = [string, () => React.ReactNode]
-
 export declare namespace RestyleJSX {
   export type Element = React.JSX.Element
   export type ElementType = React.JSX.ElementType
