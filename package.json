@@ -2,6 +2,26 @@
   "name": "restyle",
   "version": "1.5.0",
   "description": "The simplest way to add CSS to your React components.",
+  "author": "Travis Arnold (http://souporserious.com)",
+  "license": "MIT",
+  "homepage": "https://www.restyle.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/souporserious/restyle.git"
+  },
+  "bugs": {
+    "url": "https://github.com/souporserious/restyle/issues"
+  },
+  "sponsor": {
+    "url": "https://github.com/sponsors/souporserious"
+  },
+  "keywords": [
+    "react",
+    "css",
+    "css-in-js",
+    "styled",
+    "styling"
+  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
@@ -35,19 +55,6 @@
     "dist"
   ],
   "sideEffects": false,
-  "author": "Travis Arnold (http://souporserious.com)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/souporserious/restyle/issues"
-  },
-  "homepage": "https://github.com/souporserious/restyle",
-  "keywords": [
-    "react",
-    "css",
-    "css-in-js",
-    "styled",
-    "styling"
-  ],
   "scripts": {
     "build": "tsc",
     "dev": "npm run build -- --watch",
