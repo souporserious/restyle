@@ -3,7 +3,7 @@ import { CodeBlock } from '../components/CodeBlock'
 export function CodeBlockExamples() {
   return (
     <div
-      style={{
+      css={{
         display: 'flex',
         flexDirection: 'column',
         width: '100%',

@@ -1,6 +1,6 @@
 'use client'
 import { useState, useContext } from 'react'
-import { css, type CSSProp } from 'restyle'
+import { css, type CSSObject } from 'restyle'
 
 import { PreActiveContext } from './Pre'
 
@@ -11,7 +11,7 @@ export const CopyButton = ({
 }: {
   value: string
   className?: string
-  css?: CSSProp
+  css?: CSSObject
 }) => {
   const active = useContext(PreActiveContext)
   const [copied, setCopied] = useState(false)
@@ -19,11 +19,9 @@ export const CopyButton = ({
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '1lh',
-    height: '1lh',
     fontSize: 'inherit',
     lineHeight: 'inherit',
-    padding: 0,
+    padding: '0 0.2rem',
     border: 0,
     backgroundColor: 'transparent',
     cursor: 'pointer',

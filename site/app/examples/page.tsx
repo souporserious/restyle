@@ -1,4 +1,4 @@
-import { css, styled, type CSSProp } from 'restyle'
+import { css, styled, type CSSObject } from 'restyle'
 
 import { ClientComponent } from './ClientComponent'
 import Link from 'next/link'
@@ -45,7 +45,7 @@ function Button({
   css: cssProp,
 }: {
   children: React.ReactNode
-  css?: CSSProp
+  css?: CSSObject
 }) {
   const [classNames, Styles] = css({
     padding: '0.5rem 1rem',

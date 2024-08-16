@@ -6,7 +6,6 @@ export const PreActiveContext = createContext<boolean | null>(null)
 export function Pre({
   children,
   className,
-  style,
   ...props
 }: React.ComponentProps<'pre'>) {
   const [active, setActive] = useState(false)
@@ -28,13 +27,12 @@ export function Pre({
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       className={className}
-      style={{
+      css={{
         position: 'relative',
         whiteSpace: 'pre-wrap',
         padding: '1rem',
         backgroundColor: 'rgba(0,0,0,0.05)',
         overflowX: 'auto',
-        ...style,
       }}
       {...props}
     >
