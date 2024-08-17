@@ -29,6 +29,8 @@ export type CSSObject = CSSWithCustomProperties & {
 
 export type CSSValue = CSSObject[keyof CSSObject]
 
+export type CSSRule = [className: string, rule: string]
+
 type ClassNameMessage = 'Component must accept a className prop'
 
 export type AcceptsClassName<T> = T extends keyof JSX.IntrinsicElements

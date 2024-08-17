@@ -1,8 +1,9 @@
 /// <reference types="react/canary" />
 import * as React from 'react'
 
-import { ClientCache } from './client-cache'
-import type { CSSObject, CSSValue } from './types'
+import { ClientStyles } from './client-styles'
+import { hash } from './hash'
+import type { CSSObject, CSSValue, CSSRule } from './types'
 
 export type { CSSObject, CSSValue }
 
@@ -90,26 +91,6 @@ const unitlessProps = new Set([
   'zIndex',
 ])
 
-function hash(str: string): string {
-  // FNV-1a Hash Function
-  let h = 0 ^ 0x811c9dc5
-  for (let index = 0; index < str.length; index++) {
-    h ^= str.charCodeAt(index)
-    h = (h * 0x01000193) >>> 0
-  }
-
-  // Base36 Encoding Function
-  const letters = 'abcdefghijklmnopqrstuvwxyz'
-  const base36 = '0123456789' + letters
-  let result = ''
-  do {
-    result = base36[h % 36] + result
-    h = Math.floor(h / 36)
-  } while (h > 0)
-
-  return result
-}
-
 function createRule(
   name: string,
   selector: string,
@@ -141,15 +122,12 @@ function createRule(
   return parentSelector === '' ? rule : parentSelector + '{' + rule + '}'
 }
 
-const cssRulesMap = new Map<string, string>()
-
-/** Parse a CSS styles object into class names and store rule data in a global map. */
-function createClassNames(
+function createRules(
   styles: CSSObject,
   selector = '',
   parentSelector = ''
-): string {
-  let classNames = ''
+): CSSRule[] {
+  const rules: CSSRule[] = []
 
   for (const key in styles) {
     const value = styles[key as keyof CSSObject]
@@ -165,13 +143,13 @@ function createClassNames(
         : key.startsWith(':')
           ? selector + key
           : selector + ' ' + key
-      const chainedClassNames = createClassNames(
+      const nestedRules = createRules(
         value as CSSObject,
         chainedSelector,
         atSelector || parentSelector
       )
 
-      classNames += ' ' + chainedClassNames
+      rules.push(...nestedRules)
       continue
     }
 
@@ -182,41 +160,18 @@ function createClassNames(
         : 'h'
     const className = precedence + hash(key + value + selector + parentSelector)
 
-    classNames += ' ' + className
+    const rule = createRule(
+      className,
+      selector.trim(),
+      parentSelector.trim(),
+      key,
+      value
+    )
 
-    if (!cssRulesMap.has(className)) {
-      cssRulesMap.set(
-        className,
-        createRule(
-          className,
-          selector.trim(),
-          parentSelector.trim(),
-          key,
-          value
-        )
-      )
-    }
+    rules.push([className, rule])
   }
 
-  return classNames.trim()
-}
-
-type Cache = { current: Set<string> | null }
-
-const isClientComponent = Boolean(React.useRef)
-const serverCache = React.cache<() => Cache>(() => ({ current: null }))
-let cache: Cache = { current: null }
-
-function getLocalCache(): Set<string> {
-  if (!isClientComponent) {
-    cache = serverCache()
-  }
-
-  if (cache.current === null) {
-    cache.current = new Set()
-  }
-
-  return cache.current
+  return rules
 }
 
 /**
@@ -232,102 +187,11 @@ export function css(
   styles: CSSObject,
   nonce?: string
 ): [string, () => React.ReactNode] {
-  const classNames = createClassNames(styles)
-
-  /*
-   * Style elements are rendered in order of low, medium, and high precedence.
-   * This order is important to ensure atomic class names are applied correctly.
-   *
-   * The last rule wins in the case of conflicting keys where normal object merging occurs.
-   * However, the insertion order of unique keys does not matter since rules are based on precedence.
-   *
-   * React style precedence is ordered based on when the style elements are first rendered
-   * so even if low or medium precedence styles are not used, they will still be rendered
-   * the first time they are encountered.
-   */
+  const rules = createRules(styles)
+  const classNames = rules.map(([className]) => className).join(' ')
 
   function Styles() {
-    const localCache = getLocalCache()
-    const globalCache = isClientComponent
-      ? globalThis.__RESTYLE_CACHE
-      : undefined
-    const classNamesArray = classNames.split(' ')
-    const classNamesCount = classNamesArray.length
-    let lowRules = ''
-    let mediumRules = ''
-    let highRules = ''
-
-    for (let index = 0; index < classNamesCount; index++) {
-      const className = classNamesArray[index]!
-      const rule = cssRulesMap.get(className)
-
-      if (rule === undefined) {
-        continue
-      }
-
-      const hasCache = localCache.has(rule) || globalCache?.has(rule)
-
-      if (hasCache) {
-        continue
-      }
-
-      if (!isClientComponent) {
-        localCache.add(rule)
-      }
-
-      const precedence = className[0]
-
-      if (precedence === 'l') {
-        lowRules += rule
-      } else if (precedence === 'm') {
-        mediumRules += rule
-      } else {
-        highRules += rule
-      }
-    }
-
-    // Only cache on the client once styles have actually rendered
-    if (isClientComponent) {
-      React.useLayoutEffect(() => {
-        for (let index = 0; index < classNamesCount; index++) {
-          const className = classNamesArray[index]!
-          const rule = cssRulesMap.get(className)!
-          localCache.add(rule)
-        }
-      }, [])
-    }
-
-    return (
-      <>
-        <style
-          nonce={nonce}
-          // @ts-expect-error
-          href={lowRules.length > 0 ? hash(lowRules) : 'rsli'}
-          precedence="rsl"
-          children={lowRules}
-        />
-
-        <style
-          nonce={nonce}
-          // @ts-expect-error
-          href={mediumRules.length > 0 ? hash(mediumRules) : 'rsmi'}
-          precedence="rsm"
-          children={mediumRules}
-        />
-
-        {highRules.length > 0 ? (
-          <style
-            nonce={nonce}
-            // @ts-expect-error
-            href={highRules.length > 0 ? hash(highRules) : undefined}
-            precedence="rsh"
-            children={highRules}
-          />
-        ) : null}
-
-        {isClientComponent ? null : <ClientCache cache={localCache} />}
-      </>
-    )
+    return <ClientStyles rules={rules} nonce={nonce} />
   }
 
   return [classNames, Styles]
