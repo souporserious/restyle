@@ -1,5 +1,11 @@
 # restyle
 
+## 2.0.1
+
+### Patch Changes
+
+- Add specific `jsx-runtime` and `jsx-dev-runtime` packages
+
 ## 2.0.0
 
 ### Breaking Changes
