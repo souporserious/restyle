@@ -91,6 +91,9 @@ const unitlessProps = new Set([
   'zIndex',
 ])
 
+const isServerComponent = React.useRef === undefined
+const serverCache = React.cache(() => new Set<string>())
+
 function createRule(
   name: string,
   selector: string,
@@ -159,6 +162,17 @@ function createRules(
         ? 'm'
         : 'h'
     const className = precedence + hash(key + value + selector + parentSelector)
+
+    if (isServerComponent) {
+      const cache = serverCache()
+
+      if (cache.has(className)) {
+        rules.push([className])
+        continue
+      }
+
+      cache.add(className)
+    }
 
     const rule = createRule(
       className,
