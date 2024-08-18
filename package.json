@@ -1,6 +1,6 @@
 {
   "name": "restyle",
-  "version": "1.5.0",
+  "version": "2.0.0",
   "description": "The simplest way to add CSS to your React components.",
   "author": "Travis Arnold (http://souporserious.com)",
   "license": "MIT",
