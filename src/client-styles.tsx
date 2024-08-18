@@ -1,4 +1,5 @@
 'use client'
+import { useLayoutEffect } from 'react'
 
 import { hash } from './hash'
 import type { CSSRule } from './types'
@@ -93,6 +94,8 @@ if (typeof window !== 'undefined') {
   observer.observe(document.head, { childList: true })
 }
 
+let hasRenderedInitialStyles = false
+
 export function ClientStyles({
   rules,
   nonce,
@@ -100,18 +103,6 @@ export function ClientStyles({
   rules: CSSRule[]
   nonce?: string
 }) {
-  /*
-   * Style elements are rendered in order of low, medium, and high precedence.
-   * This order is important to ensure atomic class names are applied correctly.
-   *
-   * The last rule wins in the case of conflicting keys where normal object merging occurs.
-   * However, the insertion order of unique keys does not matter since rules are based on precedence.
-   *
-   * React style precedence is ordered based on when the style elements are first rendered
-   * so even if low or medium precedence styles are not used, they will still be rendered
-   * the first time they are encountered.
-   */
-
   const rulesLength = rules.length
   let lowRules = ''
   let mediumRules = ''
@@ -138,23 +129,31 @@ export function ClientStyles({
   /* Don't send undefined nonce to reduce serialization size */
   const sharedProps = nonce ? { nonce } : {}
 
+  useLayoutEffect(() => {
+    hasRenderedInitialStyles = true
+  }, [])
+
   return (
     <>
-      <style
-        // @ts-expect-error
-        href={lowRules.length > 0 ? hash(lowRules) : 'rsli'}
-        precedence="rsl"
-        dangerouslySetInnerHTML={{ __html: lowRules }}
-        {...sharedProps}
-      />
+      {lowRules.length === 0 && hasRenderedInitialStyles ? null : (
+        <style
+          // @ts-expect-error
+          href={lowRules.length > 0 ? hash(lowRules) : 'rsli'}
+          precedence="rsl"
+          dangerouslySetInnerHTML={{ __html: lowRules }}
+          {...sharedProps}
+        />
+      )}
 
-      <style
-        // @ts-expect-error
-        href={mediumRules.length > 0 ? hash(mediumRules) : 'rsmi'}
-        precedence="rsm"
-        dangerouslySetInnerHTML={{ __html: mediumRules }}
-        {...sharedProps}
-      />
+      {mediumRules.length === 0 && hasRenderedInitialStyles ? null : (
+        <style
+          // @ts-expect-error
+          href={mediumRules.length > 0 ? hash(mediumRules) : 'rsmi'}
+          precedence="rsm"
+          dangerouslySetInnerHTML={{ __html: mediumRules }}
+          {...sharedProps}
+        />
+      )}
 
       {highRules.length > 0 ? (
         <style

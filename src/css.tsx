@@ -2,6 +2,7 @@
 import * as React from 'react'
 
 import { ClientStyles } from './client-styles'
+import { ServerStyles } from './server-styles'
 import { hash } from './hash'
 import type { CSSObject, CSSValue, CSSRule } from './types'
 
@@ -92,7 +93,7 @@ const unitlessProps = new Set([
 ])
 
 const isServerComponent = React.useRef === undefined
-const serverCache = React.cache(() => new Set<string>())
+const getServerCache = React.cache(() => new Set<string>())
 
 function createRule(
   name: string,
@@ -164,7 +165,7 @@ function createRules(
     const className = precedence + hash(key + value + selector + parentSelector)
 
     if (isServerComponent) {
-      const cache = serverCache()
+      const cache = getServerCache()
 
       if (cache.has(className)) {
         rules.push([className])
@@ -204,8 +205,23 @@ export function css(
   const rules = createRules(styles)
   const classNames = rules.map(([className]) => className).join(' ')
 
+  /*
+   * Style elements are rendered in order of low, medium, and high precedence.
+   * This order is important to ensure atomic class names are applied correctly.
+   *
+   * The last rule wins in the case of conflicting keys where normal object merging occurs.
+   * However, the insertion order of unique keys does not matter since rules are based on precedence.
+   *
+   * React style precedence is ordered based on when the style elements are first rendered
+   * so even if low or medium precedence styles are not used, they will still be rendered
+   * the first time they are encountered.
+   */
   function Styles() {
-    return <ClientStyles rules={rules} nonce={nonce} />
+    return isServerComponent ? (
+      <ServerStyles rules={rules} nonce={nonce} />
+    ) : (
+      <ClientStyles rules={rules} nonce={nonce} />
+    )
   }
 
   return [classNames, Styles]
