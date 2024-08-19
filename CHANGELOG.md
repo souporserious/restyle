@@ -1,5 +1,10 @@
 # restyle
 
+## 2.0.4
+
+- Implement shared cache between server and client
+- Always render server style elements for correct precedence ordering
+
 ## 2.0.3
 
 - Move back to `children` instead of `dangerouslySetInnerHTML` for style elements, see https://github.com/facebook/react/issues/30738 for more information.
