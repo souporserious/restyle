@@ -213,7 +213,7 @@ export function css(
    */
   function Styles() {
     return isServerComponent ? (
-      <ServerStyles rules={rules} nonce={nonce} />
+      <ServerStyles rules={rules} nonce={nonce} cache={getServerCache()} />
     ) : (
       <ClientStyles rules={rules} nonce={nonce} />
     )

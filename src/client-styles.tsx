@@ -111,7 +111,11 @@ export function ClientStyles({
   for (let index = 0; index < rulesLength; index++) {
     const [className, rule] = rules[index]!
 
-    if (cache.has(className) || rule === undefined) {
+    if (
+      cache.has(className) ||
+      globalThis.__RESTYLE_CACHE?.has(className) ||
+      rule === undefined
+    ) {
       continue
     }
 

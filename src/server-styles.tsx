@@ -1,12 +1,15 @@
+import { ClientCache } from './client-cache'
 import { hash } from './hash'
 import type { CSSRule } from './types'
 
 export function ServerStyles({
   rules,
   nonce,
+  cache,
 }: {
   rules: CSSRule[]
   nonce?: string
+  cache: Set<string>
 }) {
   const rulesLength = rules.length
   let lowRules = ''
@@ -64,6 +67,8 @@ export function ServerStyles({
           {highRules}
         </style>
       ) : null}
+
+      <ClientCache cache={cache} />
     </>
   )
 }
