@@ -1,5 +1,11 @@
 # restyle
 
+## 2.0.2
+
+### Patch Changes
+
+- Add `jsx-runtime` and `jsx-dev-runtime` to `files` field in package.json
+
 ## 2.0.1
 
 ### Patch Changes
