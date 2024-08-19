@@ -43,9 +43,10 @@ export function ServerStyles({
           // @ts-expect-error
           href={lowRules.length > 0 ? hash(lowRules) : 'rsli'}
           precedence="rsl"
-          dangerouslySetInnerHTML={{ __html: lowRules }}
           {...sharedProps}
-        />
+        >
+          {lowRules}
+        </style>
       )}
 
       {mediumRules.length === 0 && hasRenderedInitialStyles ? null : (
@@ -53,9 +54,10 @@ export function ServerStyles({
           // @ts-expect-error
           href={mediumRules.length > 0 ? hash(mediumRules) : 'rsmi'}
           precedence="rsm"
-          dangerouslySetInnerHTML={{ __html: mediumRules }}
           {...sharedProps}
-        />
+        >
+          {mediumRules}
+        </style>
       )}
 
       {highRules.length > 0 ? (
@@ -63,9 +65,10 @@ export function ServerStyles({
           // @ts-expect-error
           href={hash(highRules)}
           precedence="rsh"
-          dangerouslySetInnerHTML={{ __html: highRules }}
           {...sharedProps}
-        />
+        >
+          {highRules}
+        </style>
       ) : null}
 
       {(hasRenderedInitialStyles = true)}

@@ -1,5 +1,9 @@
 # restyle
 
+## 2.0.3
+
+- Move back to `children` instead of `dangerouslySetInnerHTML` for style elements, see https://github.com/facebook/react/issues/30738 for more information.
+
 ## 2.0.2
 
 ### Patch Changes
