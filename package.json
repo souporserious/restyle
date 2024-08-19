@@ -4,7 +4,7 @@
   "description": "The simplest way to add CSS to your React components.",
   "author": "Travis Arnold (http://souporserious.com)",
   "license": "MIT",
-  "homepage": "https://www.restyle.dev",
+  "homepage": "https://restyle.dev",
   "repository": {
     "type": "git",
     "url": "https://github.com/souporserious/restyle.git"
