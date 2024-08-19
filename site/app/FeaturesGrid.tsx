@@ -1,7 +1,7 @@
 const features = [
   {
     title: 'Zero runtime',
-    description: 'No runtime when statically rendered.',
+    description: 'No client runtime when server rendered.',
     color: 'text-indigo-500',
   },
   {
@@ -46,8 +46,7 @@ const features = [
   {
     title: (
       <>
-        <code className="px-1 rounded bg-pink-50">1.7kb</code> minified &
-        gzipped
+        <code className="px-1 rounded bg-pink-50">2kb</code> minified & gzipped
       </>
     ),
     description: `Tiny core size for optimal performance.`,

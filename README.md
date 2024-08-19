@@ -27,16 +27,16 @@
 
 ## Features
 
-- Zero-runtime CSS in JS when statically rendered
 - Generates atomic class names
-- Deduplicates styles across environments
+- Zero client runtime when server rendered
 - Works in Server and Client Components
 - Compatible with Suspense and streaming
+- Deduplicates styles across environments
 - Encourages encapsulation
 - Supports `css` prop with JSX pragma
 - Loads styles on demand
 - Allows shipping CSS in NPM packages
-- `1.7kb` minified and gzipped
+- `2kb` minified and gzipped
 
 ## Installation
 
