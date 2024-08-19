@@ -1,8 +1,6 @@
 import { hash } from './hash'
 import type { CSSRule } from './types'
 
-let hasRenderedInitialStyles = false
-
 export function ServerStyles({
   rules,
   nonce,
@@ -38,27 +36,23 @@ export function ServerStyles({
 
   return (
     <>
-      {lowRules.length === 0 && hasRenderedInitialStyles ? null : (
-        <style
-          // @ts-expect-error
-          href={lowRules.length > 0 ? hash(lowRules) : 'rsli'}
-          precedence="rsl"
-          {...sharedProps}
-        >
-          {lowRules}
-        </style>
-      )}
+      <style
+        // @ts-expect-error
+        href={lowRules.length > 0 ? hash(lowRules) : 'rsli'}
+        precedence="rsl"
+        {...sharedProps}
+      >
+        {lowRules}
+      </style>
 
-      {mediumRules.length === 0 && hasRenderedInitialStyles ? null : (
-        <style
-          // @ts-expect-error
-          href={mediumRules.length > 0 ? hash(mediumRules) : 'rsmi'}
-          precedence="rsm"
-          {...sharedProps}
-        >
-          {mediumRules}
-        </style>
-      )}
+      <style
+        // @ts-expect-error
+        href={mediumRules.length > 0 ? hash(mediumRules) : 'rsmi'}
+        precedence="rsm"
+        {...sharedProps}
+      >
+        {mediumRules}
+      </style>
 
       {highRules.length > 0 ? (
         <style
@@ -70,8 +64,6 @@ export function ServerStyles({
           {highRules}
         </style>
       ) : null}
-
-      {(hasRenderedInitialStyles = true)}
     </>
   )
 }
