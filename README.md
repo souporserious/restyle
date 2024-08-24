@@ -176,7 +176,7 @@ The `styled` function is a higher-order function that takes an HTML element tag 
 import Link from 'next/link'
 import { styled } from 'restyle'
 
-const StyleLink = styled(Link, {
+const StyledLink = styled(Link, {
   color: 'rebeccapurple',
   textDecoration: 'none',
 })
