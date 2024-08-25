@@ -1,5 +1,9 @@
 # restyle
 
+## 2.1.0
+
+- Moves all style rendering to a client component to ensure a consistent cache
+
 ## 2.0.4
 
 - Implement shared cache between server and client
