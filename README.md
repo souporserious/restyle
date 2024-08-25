@@ -28,7 +28,6 @@
 ## Features
 
 - Generates atomic class names
-- Zero client runtime when server rendered
 - Works in Server and Client Components
 - Compatible with Suspense and streaming
 - Deduplicates styles across environments

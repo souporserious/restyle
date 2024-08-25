@@ -1,12 +1,12 @@
 const features = [
   {
-    title: 'Zero runtime',
-    description: 'No client runtime when server rendered.',
+    title: 'Atomic class names',
+    description: 'Optimized for minimal CSS generation.',
     color: 'text-indigo-500',
   },
   {
-    title: 'Atomic class names',
-    description: 'Optimized for minimal CSS generation.',
+    title: 'Style props',
+    description: 'Control styles using props.',
     color: 'text-green-600',
   },
   {

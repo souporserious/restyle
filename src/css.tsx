@@ -2,7 +2,6 @@
 import * as React from 'react'
 
 import { ClientStyles } from './client-styles'
-import { ServerStyles } from './server-styles'
 import { hash } from './hash'
 import type { CSSObject, CSSValue, CSSRule } from './types'
 
@@ -92,9 +91,6 @@ const unitlessProps = new Set([
   'zIndex',
 ])
 
-const isServerComponent = React.useRef === undefined
-const getServerCache = React.cache(() => new Set<string>())
-
 function createRule(
   name: string,
   selector: string,
@@ -163,18 +159,6 @@ function createRules(
         ? 'm'
         : 'h'
     const className = precedence + hash(key + value + selector + parentSelector)
-
-    if (isServerComponent) {
-      const cache = getServerCache()
-
-      if (cache.has(className)) {
-        rules.push([className])
-        continue
-      }
-
-      cache.add(className)
-    }
-
     const rule = createRule(
       className,
       selector.trim(),
@@ -212,11 +196,7 @@ export function css(
    * the first time they are encountered.
    */
   function Styles() {
-    return isServerComponent ? (
-      <ServerStyles rules={rules} nonce={nonce} cache={getServerCache()} />
-    ) : (
-      <ClientStyles rules={rules} nonce={nonce} />
-    )
+    return <ClientStyles rules={rules} nonce={nonce} />
   }
 
   return [classNames, Styles]
