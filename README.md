@@ -19,7 +19,7 @@
   - [CSS Function](#css-function)
   - [CSS Prop](#css-prop)
   - [Box Component](#box-component)
-  - [Psuedoclasses](#psuedoclasses)
+  - [Pseudo-classes](#pseudo-classes)
   - [Media Queries](#media-queries)
   - [Child Selectors](#child-selectors)
 - [Acknowledgments](#acknowledgments)
@@ -163,7 +163,7 @@ export default function MyComponent() {
 - [CSS Function](#css-function)
 - [CSS Prop](#css-prop)
 - [Box Component](#box-component)
-- [Psuedoclasses](#psuedoclasses)
+- [Pseudo-classes](#pseudo-classes)
 - [Media Queries](#media-queries)
 - [Child Selectors](#child-selectors)
 
@@ -314,7 +314,7 @@ export function Box({
 }
 ```
 
-### Psuedoclasses
+### Pseudo-classes
 
 ```tsx
 /** @jsxImportSource restyle */
