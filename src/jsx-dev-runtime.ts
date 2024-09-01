@@ -23,7 +23,7 @@ export function jsxDEV(
         {
           children: [
             React.createElement(type, parsedProps),
-            React.createElement(Styles),
+            React.createElement(Styles, { key: 'rss' }),
           ],
         },
         key,

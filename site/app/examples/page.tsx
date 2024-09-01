@@ -36,6 +36,15 @@ export default async function Page() {
       <h2>Mixed Server and Client Components</h2>
       <CodeBlockExamples />
       <Link href="/examples/code-block">Code Block</Link>
+
+      <h2>Void Elements</h2>
+      <input
+        css={{
+          padding: '0.5rem',
+          border: '1px solid #ccc',
+          borderRadius: '0.25rem',
+        }}
+      />
     </>
   )
 }
