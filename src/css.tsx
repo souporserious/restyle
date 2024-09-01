@@ -7,7 +7,8 @@ import type { CSSObject, CSSValue, CSSRule } from './types'
 
 export type { CSSObject, CSSValue }
 
-const lowPrecedenceProps = new Set([
+/** Low precedence CSS styles. */
+const l = new Set([
   'all',
   'animation',
   'background',
@@ -50,7 +51,8 @@ const lowPrecedenceProps = new Set([
   'viewTimeline',
 ])
 
-const mediumPrecedenceProps = new Set([
+/** Medium precedence CSS styles. */
+const m = new Set([
   'borderBlockStart',
   'borderBlockEnd',
   'borderBlock',
@@ -70,7 +72,8 @@ const mediumPrecedenceProps = new Set([
   'paddingInline',
 ])
 
-const unitlessProps = new Set([
+/** Unitless CSS styles. */
+const u = new Set([
   'animationIterationCount',
   'borderImageSlice',
   'columnCount',
@@ -111,7 +114,7 @@ function createRule(
   const hyphenProp = prop.replace(/[A-Z]|^ms/g, '-$&').toLowerCase()
   let parsedValue: CSSValue
 
-  if (prop.startsWith('--') || unitlessProps.has(prop)) {
+  if (prop.startsWith('--') || u.has(prop)) {
     parsedValue = value
   } else {
     parsedValue = typeof value === 'number' ? value + 'px' : value
@@ -153,11 +156,7 @@ function createRules(
       continue
     }
 
-    const precedence = lowPrecedenceProps.has(key)
-      ? 'l'
-      : mediumPrecedenceProps.has(key)
-        ? 'm'
-        : 'h'
+    const precedence = l.has(key) ? 'l' : m.has(key) ? 'm' : 'h'
     const className = precedence + hash(key + value + selector + parentSelector)
     const rule = createRule(
       className,
