@@ -182,7 +182,12 @@ export function css(
   nonce?: string
 ): [string, () => React.ReactNode] {
   const rules = createRules(styles)
-  const classNames = rules.map(([className]) => className).join(' ')
+  let classNames = ''
+
+  for (let index = rules.length - 1; index >= 0; index--) {
+    const className = rules[index]![0]
+    classNames = className + (index < rules.length - 1 ? ' ' : '') + classNames
+  }
 
   /*
    * Style elements are rendered in order of low, medium, and high precedence.
