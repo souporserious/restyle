@@ -1,7 +1,7 @@
 import { css, styled, type CSSObject } from 'restyle'
+import Link from 'next/link'
 
 import { ClientComponent } from './ClientComponent'
-import Link from 'next/link'
 
 type GridProps = {
   gridTemplateColumns: string
