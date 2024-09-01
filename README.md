@@ -19,9 +19,9 @@
   - [CSS Function](#css-function)
   - [CSS Prop](#css-prop)
   - [Box Component](#box-component)
-  - [Psuedoclasses](#psuedoclasses)
-  - [Media Queries](#media-queries)
+  - [Pseudo Selectors](#pseudo-selectors)
   - [Child Selectors](#child-selectors)
+  - [Media Queries](#media-queries)
 - [Acknowledgments](#acknowledgments)
 - [Development](#development)
 
@@ -127,10 +127,10 @@ export default function OnDemandStyles() {
   })
 
   return (
-    <>
-      <div className={classNames}>Hello World</div>
+    <div className={classNames}>
+      Hello World
       <Styles />
-    </>
+    </div>
   )
 }
 ```
@@ -163,9 +163,9 @@ export default function MyComponent() {
 - [CSS Function](#css-function)
 - [CSS Prop](#css-prop)
 - [Box Component](#box-component)
-- [Psuedoclasses](#psuedoclasses)
-- [Media Queries](#media-queries)
+- [Pseudo Selectors](#pseudo-selectors)
 - [Child Selectors](#child-selectors)
+- [Media Queries](#media-queries)
 
 ### Styled Function
 
@@ -314,7 +314,7 @@ export function Box({
 }
 ```
 
-### Psuedoclasses
+### Pseudo Selectors
 
 ```tsx
 /** @jsxImportSource restyle */
@@ -330,27 +330,6 @@ export default function Hover() {
     >
       Hover me
     </div>
-  )
-}
-```
-
-### Media Queries
-
-```tsx
-/** @jsxImportSource restyle */
-
-export default function MediaQueries() {
-  return (
-    <h1
-      css={{
-        fontSize: '2rem',
-        '@media screen and (min-width: 40em)': {
-          fontSize: '3.5rem',
-        },
-      }}
-    >
-      Resize the window
-    </h1>
   )
 }
 ```
@@ -373,6 +352,27 @@ export default function ChildSelectors() {
       Parent
       <a href="#">Link</a>
     </div>
+  )
+}
+```
+
+### Media Queries
+
+```tsx
+/** @jsxImportSource restyle */
+
+export default function MediaQueries() {
+  return (
+    <h1
+      css={{
+        fontSize: '2rem',
+        '@media screen and (min-width: 40em)': {
+          fontSize: '3.5rem',
+        },
+      }}
+    >
+      Resize the window
+    </h1>
   )
 }
 ```
