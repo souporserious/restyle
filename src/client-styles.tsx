@@ -7,6 +7,17 @@ import type { CSSRule } from './types'
 const cache = new Set<string>()
 let hasRenderedInitialStyles = false
 
+/**
+ * Renders style elements in order of low, medium, and high precedence.
+ * This order is important to ensure atomic class names are applied correctly.
+ *
+ * The last rule wins in the case of conflicting keys where normal object merging occurs.
+ * However, the insertion order of unique keys does not matter since rules are based on precedence.
+ *
+ * React style precedence is ordered based on when the style elements are first rendered
+ * so even if low or medium precedence styles are not used, they will still be rendered
+ * the first time they are encountered.
+ */
 export function ClientStyles({
   rules,
   nonce,
