@@ -1,5 +1,11 @@
 # restyle
 
+## 2.1.1
+
+- Fix key warning for void elements
+- Use for loop to concatenate class names for better performance
+- Only call layout effect until initial styles set
+
 ## 2.1.0
 
 - Moves all style rendering to a client component to ensure a consistent cache
