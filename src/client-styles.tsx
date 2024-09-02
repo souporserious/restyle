@@ -52,9 +52,11 @@ export function ClientStyles({
   const sharedProps = nonce ? { nonce } : {}
 
   /* Only render the initial styles once to establish precedence order */
-  useLayoutEffect(() => {
-    hasRenderedInitialStyles = true
-  }, [])
+  if (hasRenderedInitialStyles === false) {
+    useLayoutEffect(() => {
+      hasRenderedInitialStyles = true
+    }, [])
+  }
 
   return (
     <>
