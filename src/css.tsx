@@ -129,8 +129,9 @@ function createRules(
   styles: CSSObject,
   selector = '',
   parentSelector = ''
-): CSSRule[] {
+): [string, CSSRule[]] {
   const rules: CSSRule[] = []
+  let classNames = ''
 
   for (const key in styles) {
     const value = styles[key as keyof CSSObject]
@@ -152,7 +153,8 @@ function createRules(
         atSelector || parentSelector
       )
 
-      rules.push(...nestedRules)
+      classNames += nestedRules[0] + ' '
+      rules.push(...nestedRules[1])
       continue
     }
 
@@ -166,10 +168,11 @@ function createRules(
       value
     )
 
+    classNames += className + ' '
     rules.push([className, rule])
   }
 
-  return rules
+  return [classNames.trim(), rules]
 }
 
 /**
@@ -180,13 +183,7 @@ export function css(
   styles: CSSObject,
   nonce?: string
 ): [string, () => React.ReactNode] {
-  const rules = createRules(styles)
-  let classNames = ''
-
-  for (let index = rules.length - 1; index >= 0; index--) {
-    const className = rules[index]![0]
-    classNames = className + (index < rules.length - 1 ? ' ' : '') + classNames
-  }
+  const [classNames, rules] = createRules(styles)
 
   function Styles() {
     return <ClientStyles rules={rules} nonce={nonce} />
