@@ -6,14 +6,19 @@ import { LazyChildren } from './LazyChildren'
 export default function Page() {
   return (
     <div style={{ height: '100vh', background: 'black', color: 'white' }}>
-      {/* <Suspense fallback="Loading...">
+      <Suspense fallback={<div>Loading...</div>}>
+        {/* @ts-expect-error - async JSX type error */}
         <SuspenseChildren>
-          <h1 css={{ fontSize: '1rem', fontWeight: 'bold' }}>Lazy Children</h1>
+          <h1 css={{ fontWeight: 'bold', color: 'orange' }}>
+            Suspense Children
+          </h1>
         </SuspenseChildren>
-      </Suspense> */}
+      </Suspense>
+
       <LazyChildren>
-        <h1 css={{ fontSize: '2rem', fontWeight: 'bold' }}>Lazy Children</h1>
+        <h1 css={{ fontWeight: 'bold', color: 'orange' }}>Lazy Children</h1>
       </LazyChildren>
+
       <h1 css={{ fontWeight: 'bold' }}>Immediate Children</h1>
     </div>
   )
