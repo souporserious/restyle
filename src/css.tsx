@@ -129,8 +129,10 @@ function createRules(
   styles: CSSObject,
   selector = '',
   parentSelector = ''
-): [string, CSSRule[]] {
-  const rules: CSSRule[] = []
+): [string, CSSRule[], CSSRule[], CSSRule[]] {
+  const lowRules: CSSRule[] = []
+  const mediumRules: CSSRule[] = []
+  const highRules: CSSRule[] = []
   let classNames = ''
 
   for (const key in styles) {
@@ -154,7 +156,9 @@ function createRules(
       )
 
       classNames += nestedRules[0] + ' '
-      rules.push(...nestedRules[1])
+      lowRules.push(...nestedRules[1])
+      mediumRules.push(...nestedRules[2])
+      highRules.push(...nestedRules[3])
       continue
     }
 
@@ -169,10 +173,16 @@ function createRules(
     )
 
     classNames += className + ' '
-    rules.push([className, rule])
+    if (precedence === 'l') {
+      lowRules.push([className, rule])
+    } else if (precedence === 'm') {
+      mediumRules.push([className, rule])
+    } else {
+      highRules.push([className, rule])
+    }
   }
 
-  return [classNames.trim(), rules]
+  return [classNames.trim(), lowRules, mediumRules, highRules]
 }
 
 /**
@@ -183,10 +193,10 @@ export function css(
   styles: CSSObject,
   nonce?: string
 ): [string, () => React.ReactNode] {
-  const [classNames, rules] = createRules(styles)
+  const [classNames, lowRules, mediumRules, highRules] = createRules(styles)
 
   function Styles() {
-    return <ClientStyles rules={rules} nonce={nonce} />
+    return <ClientStyles r={[lowRules, mediumRules, highRules]} n={nonce} />
   }
 
   return [classNames, Styles]
