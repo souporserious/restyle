@@ -1,5 +1,9 @@
 # restyle
 
+## 2.2.0
+
+- Fixes deduplication of styles by rendering style elements for each CSS rule
+
 ## 2.1.1
 
 - Fix key warning for void elements
