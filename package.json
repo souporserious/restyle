@@ -56,7 +56,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "npm run build -- --watch",
-    "build:site": "npm run build --workspaces"
+    "build:site": "npm run build --workspaces",
+    "prepare": "npm run build"
   },
   "peerDependencies": {
     "react": "^18.0.0"
