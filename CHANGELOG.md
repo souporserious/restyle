@@ -1,5 +1,9 @@
 # restyle
 
+## 2.2.1
+
+- Fixes incorrectly interpreting unitless values as pixel values
+
 ## 2.2.0
 
 - Fixes deduplication of styles by rendering style elements for each CSS rule
