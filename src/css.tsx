@@ -73,26 +73,8 @@ const m = new Set([
 ])
 
 /** Unitless CSS styles. */
-const u = new Set([
-  'animationIterationCount',
-  'borderImageSlice',
-  'columnCount',
-  'flexGrow',
-  'flexShrink',
-  'fontWeight',
-  'gridColumn',
-  'gridColumnEnd',
-  'gridColumnStart',
-  'gridRow',
-  'gridRowEnd',
-  'gridRowStart',
-  'lineHeight',
-  'opacity',
-  'orphans',
-  'tabSize',
-  'widows',
-  'zIndex',
-])
+const u =
+  /^(-|f[lo].*[^se]$|g.{5,}[^ps]$|z|o[pr]|(W.{5})?[lL]i.*(t|mp)$|an|(bo|s).{4}Im|sca|m.{6}[ds]|ta|c.*[st]$|wido|ini)/
 
 function createRule(
   name: string,
@@ -114,7 +96,7 @@ function createRule(
   const hyphenProp = prop.replace(/[A-Z]|^ms/g, '-$&').toLowerCase()
   let parsedValue: CSSValue
 
-  if (prop.startsWith('--') || u.has(prop)) {
+  if (prop.startsWith('--') || u.test(prop)) {
     parsedValue = value
   } else {
     parsedValue = typeof value === 'number' ? value + 'px' : value

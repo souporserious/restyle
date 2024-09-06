@@ -45,6 +45,16 @@ export default async function Page() {
           borderRadius: '0.25rem',
         }}
       />
+
+      <h2>Unitless Values</h2>
+      <div
+        css={{
+          padding: 16,
+          lineHeight: 1.5,
+        }}
+      >
+        Hello World
+      </div>
     </>
   )
 }

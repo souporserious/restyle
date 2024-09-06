@@ -387,6 +387,7 @@ This project is inspired by and builds upon the ideas and work of several other 
 - [Emotion](https://emotion.sh/docs/introduction) for types and the modern JSX pragma
 - [CXS](https://github.com/jxnblk/cxs) for atomic CSS generation
 - [Fela](https://fela.js.org/) for their approach to deterministic atomic class name ordering
+- [Otion](https://github.com/kripod/otion) for the regex to parse unitless CSS properties
 
 Thank you to [WebReflection](https://github.com/WebReflection) for the `restyle` NPM package name.
 
