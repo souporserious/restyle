@@ -1,3 +1,5 @@
+import { media } from 'restyle'
+
 const features = [
   {
     title: 'Atomic class names',
@@ -67,7 +69,7 @@ export function FeaturesGrid() {
           position: `absolute`,
           inset: '-50%',
           zIndex: -1,
-          '@media (color-gamut: p3)': {
+          [media({ colorGamut: 'p3' })]: {
             filter: `blur(12rem)`,
             backgroundImage: `linear-gradient(305deg, color(display-p3 1 0 0), color(display-p3 1 0.5 0), color(display-p3 1 1 0), color(display-p3 0 1 0), color(display-p3 0 0 1), color(display-p3 0.294 0 0.51), color(display-p3 0.545 0 0.85))`,
           },

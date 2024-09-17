@@ -1,5 +1,9 @@
 # restyle
 
+## 2.3.0
+
+- Adds a `media` utility to help with creating media query keys from objects.
+
 ## 2.2.1
 
 - Fixes incorrectly interpreting unitless values as pixel values

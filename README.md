@@ -377,6 +377,28 @@ export default function MediaQueries() {
 }
 ```
 
+An additional `media` utility is available to help with creating typed media query keys from objects:
+
+```tsx
+/** @jsxImportSource restyle */
+import { media } from 'restyle'
+
+export default function MediaQueries() {
+  return (
+    <h1
+      css={{
+        fontSize: '2rem',
+        [media({ screen: true, minWidth: '40em' })]: {
+          fontSize: '3.5rem',
+        },
+      }}
+    >
+      Resize the window
+    </h1>
+  )
+}
+```
+
 ## Acknowledgments
 
 This project is inspired by and builds upon the ideas and work of several other projects in the CSS-in-JS ecosystem:
