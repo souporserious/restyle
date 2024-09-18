@@ -22,6 +22,7 @@
   - [Pseudo Selectors](#pseudo-selectors)
   - [Child Selectors](#child-selectors)
   - [Media Queries](#media-queries)
+  - [Global Styles](#global-styles)
 - [Acknowledgments](#acknowledgments)
 - [Development](#development)
 
@@ -166,6 +167,7 @@ export default function MyComponent() {
 - [Pseudo Selectors](#pseudo-selectors)
 - [Child Selectors](#child-selectors)
 - [Media Queries](#media-queries)
+- [Global Styles](#global-styles)
 
 ### Styled Function
 
@@ -395,6 +397,28 @@ export default function MediaQueries() {
     >
       Resize the window
     </h1>
+  )
+}
+```
+
+### Global Styles
+
+Use the `GlobalStyles` component to inject global styles into the document. This is useful for setting default styles for the body, headings, etc. This component accepts an object of styles and injects them into the head of the document based on their order in the object as well as when they are rendered in the react tree. **Note, Styles may not be removed when the component is unmounted. React makes no guarantees about when styles are removed from the document.**
+
+```tsx
+import { GlobalStyles } from 'restyle'
+
+export default function Page() {
+  return (
+    <GlobalStyles>
+      {{
+        body: {
+          margin: 0,
+          padding: 0,
+          fontFamily: 'sans-serif',
+        },
+      }}
+    </GlobalStyles>
   )
 }
 ```

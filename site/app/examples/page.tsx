@@ -17,6 +17,9 @@ export default async function Page() {
 
   return (
     <>
+      <h1>Global Styles</h1>
+      <Link href="/examples/global">Global Styles</Link>
+
       <h2>Prop function styles</h2>
       <Grid gridTemplateColumns="repeat(3, 1fr)">
         <div>1</div>

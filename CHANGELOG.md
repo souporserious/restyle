@@ -3,6 +3,7 @@
 ## 2.3.0
 
 - Adds a `media` utility to help with creating media query keys from objects.
+- Adds a `GlobalStyles` component to help with rendering global object styles.
 
 ## 2.2.1
 

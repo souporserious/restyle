@@ -11,7 +11,9 @@ type AtRuleString = `${AtRules} ${string}`
 
 type Selectors = '&' | '#' | '.' | '[' | ':' | '::' | '>' | '+' | '~' | '*'
 
-type HTMLTagNames = keyof JSX.IntrinsicElements
+type HTMLTagNames =
+  | keyof JSX.IntrinsicElements
+  | `${keyof JSX.IntrinsicElements}:${string}`
 
 type SelectorString = `${Selectors}${string}`
 

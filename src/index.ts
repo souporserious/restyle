@@ -1,4 +1,5 @@
 export { css } from './css'
+export { GlobalStyles } from './global-styles'
 export { media } from './media'
 export { styled } from './styled'
 export type { CSSObject, CSSValue } from './types'
