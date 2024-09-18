@@ -48,7 +48,7 @@ const features = [
   {
     title: (
       <>
-        <code className="px-1 rounded bg-pink-50">1.5kb</code> minified &
+        <code className="px-1 rounded bg-pink-50">2.1kb</code> minified &
         gzipped
       </>
     ),
