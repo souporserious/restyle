@@ -22,6 +22,7 @@
   - [Pseudo Selectors](#pseudo-selectors)
   - [Child Selectors](#child-selectors)
   - [Media Queries](#media-queries)
+  - [Keyframes](#keyframes)
   - [Global Styles](#global-styles)
 - [Acknowledgments](#acknowledgments)
 - [Development](#development)
@@ -167,6 +168,7 @@ export default function MyComponent() {
 - [Pseudo Selectors](#pseudo-selectors)
 - [Child Selectors](#child-selectors)
 - [Media Queries](#media-queries)
+- [Keyframes](#keyframes)
 - [Global Styles](#global-styles)
 
 ### Styled Function
