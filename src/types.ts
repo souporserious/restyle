@@ -1,32 +1,5 @@
-type AtRules =
-  | '@container'
-  | '@layer'
-  | '@media'
-  | '@scope'
-  | '@starting-style'
-  | '@supports'
-  | '@-moz-document'
-
-type AtRuleString = `${AtRules} ${string}`
-
-type Selectors = '&' | '#' | '.' | '[' | ':' | '::' | '>' | '+' | '~' | '*'
-
-type HTMLTagNames =
-  | keyof JSX.IntrinsicElements
-  | `${keyof JSX.IntrinsicElements}:${string}`
-
-type SelectorString = `${Selectors}${string}`
-
-type CustomProperties = {
-  [key in `--${string}`]?: string | number
-}
-
-type CSSWithCustomProperties = React.CSSProperties & CustomProperties
-
-export type CSSObject = CSSWithCustomProperties & {
-  [Key in AtRuleString | SelectorString | HTMLTagNames]?:
-    | CSSWithCustomProperties
-    | CSSObject
+export type CSSObject = React.CSSProperties & {
+  [Key: string]: React.CSSProperties | CSSObject | string | number
 }
 
 export type CSSValue = CSSObject[keyof CSSObject]

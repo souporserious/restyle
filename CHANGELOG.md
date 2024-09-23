@@ -1,5 +1,9 @@
 # restyle
 
+## 2.3.1
+
+- Simplifies `CSSObject` type to `string` since strongly typed object keys aren't reliable.
+
 ## 2.3.0
 
 - Adds a `media` utility to help with creating media query keys from objects.
