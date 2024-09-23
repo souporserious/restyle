@@ -1,5 +1,9 @@
+export type CustomProperties = {
+  [key in `--${string}`]?: string | number
+}
+
 export type CSSObject = React.CSSProperties & {
-  [Key: string]: React.CSSProperties | CSSObject | string | number
+  [Key: string]: React.CSSProperties | CSSObject | string | number | undefined
 }
 
 export type CSSValue = CSSObject[keyof CSSObject]

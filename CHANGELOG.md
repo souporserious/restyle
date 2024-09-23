@@ -1,5 +1,9 @@
 # restyle
 
+## 2.4.0
+
+- Adds a `keyframes` utility to help with creating keyframes for animations.
+
 ## 2.3.1
 
 - Simplifies `CSSObject` type to `string` since strongly typed object keys aren't reliable.

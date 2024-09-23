@@ -31,6 +31,21 @@
       "import": "./dist/css.js",
       "default": "./dist/css.js"
     },
+    "./global-styles": {
+      "types": "./dist/global-styles.d.ts",
+      "import": "./dist/global-styles.js",
+      "default": "./dist/global-styles.js"
+    },
+    "./keyframes": {
+      "types": "./dist/keyframes.d.ts",
+      "import": "./dist/keyframes.js",
+      "default": "./dist/keyframes.js"
+    },
+    "./media": {
+      "types": "./dist/media.d.ts",
+      "import": "./dist/media.js",
+      "default": "./dist/media.js"
+    },
     "./styled": {
       "types": "./dist/styled.d.ts",
       "import": "./dist/styled.js",

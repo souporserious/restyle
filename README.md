@@ -401,6 +401,32 @@ export default function MediaQueries() {
 }
 ```
 
+### Keyframes
+
+Use the `keyframes` utility to easily create CSS animations:
+
+```tsx
+import { keyframes, styled } from 'restyle'
+
+const FadeInKeyframes = keyframes({
+  from: { opacity: 0 },
+  to: { opacity: 1 },
+})
+
+const FadeIn = styled('div', {
+  animation: `${FadeInKeyframes} 1s ease-in-out`,
+})
+
+export default function FadeInComponent() {
+  return (
+    <>
+      <FadeInKeyframes />
+      <FadeIn>Hello World</FadeIn>
+    </>
+  )
+}
+```
+
 ### Global Styles
 
 Use the `GlobalStyles` component to inject global styles into the document. This is useful for setting default styles for the body, headings, etc. This component accepts an object of styles and injects them into the head of the document based on their order in the object as well as when they are rendered in the react tree. **Note, styles will not be removed when the component is unmounted. React makes no guarantees about when styles are removed from the document.**

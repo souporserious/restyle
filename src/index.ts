@@ -1,5 +1,6 @@
 export { css } from './css'
 export { GlobalStyles } from './global-styles'
+export { keyframes } from './keyframes'
 export { media } from './media'
 export { styled } from './styled'
 export type { CSSObject, CSSValue } from './types'
