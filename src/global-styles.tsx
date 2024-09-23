@@ -1,8 +1,7 @@
 import React from 'react'
 
-import { hash } from './hash'
 import type { CSSObject } from './types'
-import { createStyles } from './utils'
+import { createStyles, hash } from './utils'
 
 /** Generates styles from an object of styles. */
 export function GlobalStyles({
