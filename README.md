@@ -19,6 +19,7 @@
   - [CSS Function](#css-function)
   - [CSS Prop](#css-prop)
   - [Box Component](#box-component)
+  - [Variants](#variants)
   - [Pseudo Selectors](#pseudo-selectors)
   - [Child Selectors](#child-selectors)
   - [Media Queries](#media-queries)
@@ -165,6 +166,7 @@ export default function MyComponent() {
 - [CSS Function](#css-function)
 - [CSS Prop](#css-prop)
 - [Box Component](#box-component)
+- [Variants](#variants)
 - [Pseudo Selectors](#pseudo-selectors)
 - [Child Selectors](#child-selectors)
 - [Media Queries](#media-queries)
@@ -316,6 +318,40 @@ export function Box({
     </div>
   )
 }
+```
+
+### Variants
+
+Variants can be achieved by using the style props pattern. For example, you can create an `Alert` component that accepts a `variant` prop that applies different styles based on the variant:
+
+```tsx
+import { styled, type CSSObject } from 'restyle'
+
+type AlertVariant = 'note' | 'success' | 'warning'
+
+const variantStyles = {
+  note: {
+    backgroundColor: '#1b487d',
+    borderLeftColor: '#82aaff',
+  },
+  success: {
+    backgroundColor: '#2b7b3d',
+    borderLeftColor: '#5bc873',
+  },
+  warning: {
+    backgroundColor: '#b36b00',
+    borderLeftColor: '#ffb830',
+  },
+} satisfies Record<AlertVariant, CSSObject>
+
+export const Alert = styled('div', (props: { variant: AlertVariant }) => {
+  return {
+    padding: '1.5rem 2rem',
+    borderRadius: '0.5rem',
+    color: 'white',
+    ...variantStyles[props.variant],
+  }
+})
 ```
 
 ### Pseudo Selectors
