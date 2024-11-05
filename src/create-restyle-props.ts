@@ -26,19 +26,15 @@ export function createRestyleProps(
   if (Styles) {
     const stylesToRender = React.createElement(Styles, { key: 'rss' })
 
-    if (props.children) {
-      if (props.children.constructor === Array) {
-        props.children = props.children.concat(stylesToRender)
-      } else if (typeof props.children === 'object' && 'type' in props.children) {
-        props.children = [
-          React.cloneElement(props.children, { key: 'rse' }),
-          stylesToRender,
-        ]
-      } else {
-        props.children = [props.children, stylesToRender]
-      }
+    if (Array.isArray(props.children)) {
+      props.children = props.children.concat(stylesToRender)
+    } else if (props.children && typeof props.children === 'object' && 'type' in props.children) {
+      props.children = [
+        React.cloneElement(props.children, { key: 'rse' }),
+        stylesToRender,
+      ]
     } else {
-      props.children = stylesToRender
+      props.children = [props.children, stylesToRender]
     }
   }
 
