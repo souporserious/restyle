@@ -29,13 +29,13 @@ export function createRestyleProps(
     if (props.children) {
       if (props.children.constructor === Array) {
         props.children = props.children.concat(stylesToRender)
-      } else if (typeof props.children === 'string') {
-        props.children = [props.children, stylesToRender]
-      } else {
+      } else if (typeof props.children === 'object' && 'type' in props.children) {
         props.children = [
           React.cloneElement(props.children, { key: 'rse' }),
           stylesToRender,
         ]
+      } else {
+        props.children = [props.children, stylesToRender]
       }
     } else {
       props.children = stylesToRender
