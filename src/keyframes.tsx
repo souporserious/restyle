@@ -17,12 +17,7 @@ export function keyframes(steps: KeyframesObject, nonce?: string) {
 
   function KeyframesComponent() {
     return (
-      <style
-        // @ts-expect-error
-        href={keyframesName}
-        precedence="rsk"
-        nonce={nonce}
-      >
+      <style href={keyframesName} precedence="rsk" nonce={nonce}>
         {keyframesCSS}
       </style>
     )

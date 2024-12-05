@@ -15,12 +15,7 @@ export function GlobalStyles({
   const id = hash(rules)
 
   return (
-    <style
-      // @ts-expect-error
-      href={id}
-      precedence="rsg"
-      nonce={nonce}
-    >
+    <style href={id} precedence="rsg" nonce={nonce}>
       {rules}
     </style>
   )

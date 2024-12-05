@@ -39,22 +39,11 @@ export function ClientStyles({
     <>
       {lowRules.length === 0 ? (
         hasRenderedInitialStyles ? null : (
-          <style
-            // @ts-expect-error
-            href="rsli"
-            precedence="rsl"
-            {...sharedProps}
-          />
+          <style href="rsli" precedence="rsl" {...sharedProps} />
         )
       ) : (
         lowRules.map(([className, rule], index) => (
-          <style
-            // @ts-expect-error
-            href={className}
-            precedence="rsl"
-            key={index}
-            {...sharedProps}
-          >
+          <style href={className} precedence="rsl" key={index} {...sharedProps}>
             {rule}
           </style>
         ))
@@ -62,22 +51,11 @@ export function ClientStyles({
 
       {mediumRules.length === 0 ? (
         hasRenderedInitialStyles ? null : (
-          <style
-            // @ts-expect-error
-            href="rsmi"
-            precedence="rsm"
-            {...sharedProps}
-          />
+          <style href="rsmi" precedence="rsm" {...sharedProps} />
         )
       ) : (
         mediumRules.map(([className, rule], index) => (
-          <style
-            // @ts-expect-error
-            href={className}
-            precedence="rsm"
-            key={index}
-            {...sharedProps}
-          >
+          <style href={className} precedence="rsm" key={index} {...sharedProps}>
             {rule}
           </style>
         ))
@@ -86,7 +64,6 @@ export function ClientStyles({
       {highRules.length > 0
         ? highRules.map(([className, rule], index) => (
             <style
-              // @ts-expect-error
               href={className}
               precedence="rsh"
               key={index}
