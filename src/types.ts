@@ -1,3 +1,5 @@
+import * as React from 'react'
+
 export type CustomProperties = {
   [key in `--${string}`]?: string | number
 }
@@ -12,8 +14,8 @@ export type CSSRule = [className: string, rule?: string]
 
 type ClassNameMessage = 'Component must accept a className prop'
 
-export type AcceptsClassName<T> = T extends keyof JSX.IntrinsicElements
-  ? 'className' extends keyof JSX.IntrinsicElements[T]
+export type AcceptsClassName<T> = T extends keyof React.JSX.IntrinsicElements
+  ? 'className' extends keyof React.JSX.IntrinsicElements[T]
     ? T
     : ClassNameMessage
   : T extends React.ComponentType<infer P>
@@ -34,7 +36,7 @@ export declare namespace RestyleJSX {
   export type IntrinsicClassAttributes<T> =
     React.JSX.IntrinsicClassAttributes<T>
   export type IntrinsicElements = {
-    [K in keyof JSX.IntrinsicElements]: React.JSX.IntrinsicElements[K] & {
+    [K in keyof React.JSX.IntrinsicElements]: React.JSX.IntrinsicElements[K] & {
       css?: CSSObject
     }
   }
