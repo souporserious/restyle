@@ -163,10 +163,9 @@ export default function Page() {
       >
         <div css={{ display: 'flex', alignItems: 'baseline', gap: '0.5ch' }}>
           <span className="text-sky-800">Built with</span>{' '}
-          <MdxtsLogoLink
-            className="text-violet-500"
-            style={{ height: '0.8rem' }}
-          />
+          <a href="https://renoun.dev" className="text-violet-500">
+            Renoun
+          </a>
         </div>
         <span
           className="text-sky-800"
