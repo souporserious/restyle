@@ -72,30 +72,6 @@ const outputCode = `
 export default function Page() {
   return (
     <>
-      <header className="flex items-center justify-center px-2 py-4 bg-yellow-100">
-        <p className="text-yellow-800 text-center">
-          This library requires a{' '}
-          <a
-            className="font-bold"
-            href="https://react.dev/community/versioning-policy#all-release-channels"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <strong>React Canary</strong>
-          </a>{' '}
-          version since it utilizes the new{' '}
-          <a
-            className="font-bold"
-            href="https://react.dev/reference/react-dom/components/style#rendering-an-inline-css-stylesheet"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            style hoisting feature
-          </a>
-          .
-        </p>
-      </header>
-
       <main>
         <section className="px-4 sm:px-12 pt-12 sm:pt-32 pb-24 bg-indigo-50">
           <div className="flex flex-col max-w-screen-md mx-auto text-center">

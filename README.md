@@ -55,9 +55,6 @@ export const Box = styled('div', {
 })
 ```
 
-> [!IMPORTANT]
-> This library requires a React Canary version since it utilizes the new [style hoisting feature](https://react.dev/reference/react-dom/components/style).
-
 ## How it Works
 
 Restyle leverages React's new ability to [hoist `style` elements](https://react.dev/reference/react-dom/components/style#rendering-an-inline-css-stylesheet) by generating atomic CSS on-demand to provide a flexible and efficient styling solution for React components.
