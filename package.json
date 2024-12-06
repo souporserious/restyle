@@ -70,21 +70,25 @@
   "sideEffects": false,
   "scripts": {
     "build": "tsc",
-    "dev": "npm run build -- --watch",
-    "build:site": "npm run build --workspaces",
+    "dev": "pnpm build -- --watch",
+    "build:site": "pnpm -F example build",
     "test": "vitest",
-    "prepare": "npm run test -- run && npm run build"
+    "prepare": "pnpm test -- run && pnpm run build"
   },
   "peerDependencies": {
     "react": ">=19.0.0"
   },
   "devDependencies": {
+    "@types/mdx": "^2.0.13",
+    "@types/node": "^20",
     "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "prettier": "^3.4.2",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
   },
-  "workspaces": [
-    ".",
-    "site"
-  ]
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "packageManager": "pnpm@9.9.0"
 }

@@ -11,8 +11,8 @@ export function CodeBlockExamples() {
         gap: '1rem',
       }}
     >
-      <CodeBlock value="const a = 'a';" />
-      <CodeBlock value="const b = 2;" />
+      {/* <CodeBlock value="const a = 'a';" /> */}
+      {/* <CodeBlock value="const b = 2;" /> */}
     </div>
   )
 }

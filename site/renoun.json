@@ -1,0 +1,8 @@
+{
+  "$schema": "https://renoun.dev/schema.json",
+  "theme": "houston",
+  "git": {
+    "source": "https://github.com/souporserious/restyle"
+  },
+  "siteUrl": "https://restyle.dev"
+}

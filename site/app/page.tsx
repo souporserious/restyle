@@ -5,8 +5,7 @@ import {
   GitProviderLink,
   GitProviderLogo,
   MDXComponents,
-} from 'mdxts/components'
-import { MdxtsLogoLink } from 'mdxts/assets'
+} from 'renoun/components'
 
 import Examples from './Examples.mdx'
 import { FeaturesGrid } from './FeaturesGrid'
@@ -145,7 +144,6 @@ export default function Page() {
                     className="text-2xl font-semibold text-cyan-600"
                   />
                 ),
-                pre: (props) => <MDXComponents.pre allowErrors {...props} />,
               } satisfies MDXComponents as any
             }
           />

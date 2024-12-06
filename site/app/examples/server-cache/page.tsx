@@ -7,7 +7,6 @@ export default function Page() {
   return (
     <div style={{ height: '100vh', background: 'black', color: 'white' }}>
       <Suspense fallback={<div>Loading...</div>}>
-        {/* @ts-expect-error - async JSX type error */}
         <SuspenseChildren>
           <h1 css={{ fontWeight: 'bold', color: 'orange' }}>
             Suspense Children
