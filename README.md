@@ -18,13 +18,13 @@
   - [Style Props](#style-props)
   - [CSS Function](#css-function)
   - [CSS Prop](#css-prop)
-  - [Box Component](#box-component)
-  - [Variants](#variants)
-  - [Pseudo Selectors](#pseudo-selectors)
-  - [Child Selectors](#child-selectors)
   - [Media Queries](#media-queries)
   - [Keyframes](#keyframes)
   - [Global Styles](#global-styles)
+  - [Theming](#theming)
+  - [Variants](#variants)
+  - [Pseudo Selectors](#pseudo-selectors)
+  - [Child Selectors](#child-selectors)
 - [Acknowledgments](#acknowledgments)
 - [Development](#development)
 
@@ -162,13 +162,13 @@ export default function MyComponent() {
 - [Style Props](#style-props)
 - [CSS Function](#css-function)
 - [CSS Prop](#css-prop)
-- [Box Component](#box-component)
-- [Variants](#variants)
-- [Pseudo Selectors](#pseudo-selectors)
-- [Child Selectors](#child-selectors)
 - [Media Queries](#media-queries)
 - [Keyframes](#keyframes)
 - [Global Styles](#global-styles)
+- [Theming](#theming)
+- [Variants](#variants)
+- [Pseudo Selectors](#pseudo-selectors)
+- [Child Selectors](#child-selectors)
 
 ### Styled Function
 
@@ -287,112 +287,6 @@ export default function CSSProp() {
 }
 ```
 
-### Box Component
-
-```tsx
-import React from 'react'
-import { css } from 'restyle'
-
-export function Box({
-  children,
-  display = 'flex',
-  alignItems,
-  justifyContent,
-  padding,
-  backgroundColor,
-}) {
-  const [classNames, Styles] = css({
-    display,
-    alignItems,
-    justifyContent,
-    padding,
-    backgroundColor,
-  })
-  return (
-    <div className={classNames}>
-      {children}
-      <Styles />
-    </div>
-  )
-}
-```
-
-### Variants
-
-Variants can be achieved by using the style props pattern. For example, you can create an `Alert` component that accepts a `variant` prop that applies different styles based on the variant:
-
-```tsx
-import { styled, type CSSObject } from 'restyle'
-
-type AlertVariant = 'note' | 'success' | 'warning'
-
-const variantStyles = {
-  note: {
-    backgroundColor: '#1b487d',
-    borderLeftColor: '#82aaff',
-  },
-  success: {
-    backgroundColor: '#2b7b3d',
-    borderLeftColor: '#5bc873',
-  },
-  warning: {
-    backgroundColor: '#b36b00',
-    borderLeftColor: '#ffb830',
-  },
-} satisfies Record<AlertVariant, CSSObject>
-
-export const Alert = styled('div', (props: { variant: AlertVariant }) => {
-  return {
-    padding: '1.5rem 2rem',
-    borderRadius: '0.5rem',
-    color: 'white',
-    ...variantStyles[props.variant],
-  }
-})
-```
-
-### Pseudo Selectors
-
-```tsx
-/** @jsxImportSource restyle */
-
-export default function Hover() {
-  return (
-    <div
-      css={{
-        ':hover': {
-          opacity: 0.8,
-        },
-      }}
-    >
-      Hover me
-    </div>
-  )
-}
-```
-
-### Child Selectors
-
-```tsx
-/** @jsxImportSource restyle */
-
-export default function ChildSelectors() {
-  return (
-    <div
-      css={{
-        color: 'black',
-        '> a': {
-          color: 'tomato',
-        },
-      }}
-    >
-      Parent
-      <a href="#">Link</a>
-    </div>
-  )
-}
-```
-
 ### Media Queries
 
 ```tsx
@@ -483,6 +377,135 @@ export default function Layout({ children }) {
       </GlobalStyles>
       {children}
     </>
+  )
+}
+```
+
+### Theming
+
+The `GlobalStyles` component can be used to define CSS variable themes that can be used throughout your application:
+
+```tsx
+import { GlobalStyles, styled } from 'restyle'
+
+const Container = styled('div', {
+  backgroundColor: 'var(--background)',
+  color: 'var(--foreground)',
+  minHeight: '100vh',
+  display: 'grid',
+  placeItems: 'center',
+})
+
+const Button = styled('button', {
+  padding: '0.5rem 1rem',
+  borderRadius: '0.1rem',
+  backgroundColor: 'var(--button-background)',
+  color: 'var(--button-foreground)',
+  border: 'none',
+  cursor: 'pointer',
+})
+
+export default function App() {
+  return (
+    <>
+      <GlobalStyles>
+        {{
+          ':root': {
+            '--background': '#ffffff',
+            '--foreground': '#000000',
+            '--button-background': '#007bff',
+            '--button-foreground': '#ffffff',
+          },
+          '@media (prefers-color-scheme: dark)': {
+            ':root': {
+              '--background': '#000000',
+              '--foreground': '#ffffff',
+              '--button-background': '#1a73e8',
+              '--button-foreground': '#ffffff',
+            },
+          },
+        }}
+      </GlobalStyles>
+      <Container>
+        <Button>Themed Button</Button>
+      </Container>
+    </>
+  )
+}
+```
+
+### Variants
+
+Variants can be achieved by using the style props pattern. For example, you can create an `Alert` component that accepts a `variant` prop that applies different styles based on the variant:
+
+```tsx
+import { styled, type CSSObject } from 'restyle'
+
+type AlertVariant = 'note' | 'success' | 'warning'
+
+const variantStyles = {
+  note: {
+    backgroundColor: '#1b487d',
+    borderLeftColor: '#82aaff',
+  },
+  success: {
+    backgroundColor: '#2b7b3d',
+    borderLeftColor: '#5bc873',
+  },
+  warning: {
+    backgroundColor: '#b36b00',
+    borderLeftColor: '#ffb830',
+  },
+} satisfies Record<AlertVariant, CSSObject>
+
+export const Alert = styled('div', (props: { variant: AlertVariant }) => {
+  return {
+    padding: '1.5rem 2rem',
+    borderRadius: '0.5rem',
+    color: 'white',
+    ...variantStyles[props.variant],
+  }
+})
+```
+
+### Pseudo Selectors
+
+```tsx
+/** @jsxImportSource restyle */
+
+export default function Hover() {
+  return (
+    <div
+      css={{
+        ':hover': {
+          opacity: 0.8,
+        },
+      }}
+    >
+      Hover me
+    </div>
+  )
+}
+```
+
+### Child Selectors
+
+```tsx
+/** @jsxImportSource restyle */
+
+export default function ChildSelectors() {
+  return (
+    <div
+      css={{
+        color: 'black',
+        '> a': {
+          color: 'tomato',
+        },
+      }}
+    >
+      Parent
+      <a href="#">Link</a>
+    </div>
   )
 }
 ```
