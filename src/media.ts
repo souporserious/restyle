@@ -186,5 +186,5 @@ export function media(...queries: (MediaQueryObject | string)[]) {
     }
   }
 
-  return ('@media ' + result) as any
+  return '@media ' + result
 }
