@@ -71,7 +71,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "pnpm build -- --watch",
-    "build:site": "pnpm -F example build",
+    "build:site": "pnpm -F site build",
     "test": "vitest",
     "prepare": "pnpm test -- run && pnpm run build"
   },
