@@ -122,15 +122,19 @@ export function createRule(
   return parentSelector === '' ? rule : parentSelector + '{' + rule + '}'
 }
 
+type NestedRules = [CSSRule[], CSSRule[], CSSRule[], NestedRules[]]
+type RuleList = [string, CSSRule[], CSSRule[], CSSRule[], NestedRules[]]
+
 /** Create a string of CSS class names and rules ordered by precedence from a CSS object. */
 export function createRules(
   styles: CSSObject,
   selector = '',
   parentSelector = ''
-): [string, CSSRule[], CSSRule[], CSSRule[]] {
+): RuleList {
   const lowRules: CSSRule[] = []
   const mediumRules: CSSRule[] = []
   const highRules: CSSRule[] = []
+  const nested: NestedRules[] = []
   let classNames = ''
 
   for (const key in styles) {
@@ -147,16 +151,15 @@ export function createRules(
         : key.startsWith(':')
           ? selector + key
           : selector + ' ' + key
-      const nestedRules = createRules(
+
+      const [nestedClass, ...nestedRules] = createRules(
         value as CSSObject,
         chainedSelector,
         atSelector || parentSelector
       )
 
-      classNames += nestedRules[0] + ' '
-      lowRules.push(...nestedRules[1])
-      mediumRules.push(...nestedRules[2])
-      highRules.push(...nestedRules[3])
+      classNames += nestedClass + ' '
+      nested.push(nestedRules)
       continue
     }
 
@@ -180,7 +183,7 @@ export function createRules(
     }
   }
 
-  return [classNames.trim(), lowRules, mediumRules, highRules]
+  return [classNames.trim(), lowRules, mediumRules, highRules, nested]
 }
 
 /** Convert a CSS object into a string of global CSS styles. */
