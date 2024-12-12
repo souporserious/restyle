@@ -3,7 +3,7 @@ import { useLayoutEffect } from 'react'
 
 import type { CSSRule } from './types'
 
-let hasRenderedInitialStyles = false
+let hasRenderedInitialStylesToDepth = -1
 type NestedRules = [CSSRule[], CSSRule[], CSSRule[], NestedRules[]]
 
 /**
@@ -28,12 +28,14 @@ export function ClientStyles({
 }) {
   const [lowRules, mediumRules, highRules, nested] = rules
 
-  /* Only render the initial styles once to establish precedence order */
-  if (hasRenderedInitialStyles === false) {
-    useLayoutEffect(() => {
-      hasRenderedInitialStyles = true
-    }, [])
-  }
+  /* Only render the initial styles for each depth once to establish precedence order */
+  const hasRenderedThisDepth = hasRenderedInitialStylesToDepth >= depth
+  useLayoutEffect(() => {
+    hasRenderedInitialStylesToDepth = Math.max(
+      depth,
+      hasRenderedInitialStylesToDepth
+    )
+  }, [depth])
 
   /* Don't send undefined nonce to reduce serialization size */
   const sharedProps = nonce ? { nonce } : {}
@@ -48,7 +50,7 @@ export function ClientStyles({
   return (
     <>
       {lowRules.length === 0 ? (
-        hasRenderedInitialStyles ? null : (
+        hasRenderedThisDepth ? null : (
           <style
             href={`${levels.low}i`}
             precedence={levels.low}
@@ -69,7 +71,7 @@ export function ClientStyles({
       )}
 
       {mediumRules.length === 0 ? (
-        hasRenderedInitialStyles ? null : (
+        hasRenderedThisDepth ? null : (
           <style
             href={`${levels.med}i`}
             precedence={levels.med}
@@ -90,7 +92,7 @@ export function ClientStyles({
       )}
 
       {highRules.length === 0 ? (
-        hasRenderedInitialStyles ? null : (
+        hasRenderedThisDepth ? null : (
           <style
             href={`${levels.high}i`}
             precedence={levels.high}
