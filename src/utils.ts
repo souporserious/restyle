@@ -105,7 +105,7 @@ export function createRule(
   } else if (selector.includes('&')) {
     className = selector.replace('&', '.' + name)
   } else {
-    className = '.' + name + (selector.startsWith(":") ? selector: ' ' + selector)
+    className = '.' + name + (selector.startsWith(":") ? selector : ' ' + selector)
   }
 
   const hyphenProp = prop.replace(/[A-Z]|^ms/g, '-$&').toLowerCase()
