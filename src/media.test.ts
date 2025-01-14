@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 
-import { media } from './media'
+import { media } from './media.js'
 
 describe('media', () => {
   it('converts simple media query object to a string', () => {

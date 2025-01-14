@@ -1,4 +1,4 @@
-import type { CSSObject, CSSValue, CSSRule } from './types'
+import type { CSSObject, CSSValue, CSSRule } from './types.js'
 
 /** Low precedence CSS styles. */
 const l = new Set([

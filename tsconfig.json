@@ -1,20 +1,31 @@
 {
+  /* see https://www.totaltypescript.com/tsconfig-cheat-sheet */
   "compilerOptions": {
+    /* Base Options: */
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "target": "ES2022",
+    "target": "es2022",
     "allowJs": true,
     "resolveJsonModule": true,
     "moduleDetection": "force",
-    "moduleResolution": "Bundler",
     "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "jsx": "react-jsx",
+
+    /* Strictness */
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
-    "module": "ESNext",
+
+    /* If transpiling with TypeScript: */
+    "module": "NodeNext",
     "outDir": "dist",
+    "sourceMap": true,
+
+    /* AND if you're building for a library: */
     "declaration": true,
-    "jsx": "react-jsx",
+
+    /* If your code runs in the DOM: */
     "lib": ["es2022", "dom", "dom.iterable"]
   },
   "include": ["src/**/*.ts"],

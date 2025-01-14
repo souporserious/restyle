@@ -1,7 +1,7 @@
 import React from 'react'
 
-import type { CustomProperties } from './types'
-import { createStyles, hash } from './utils'
+import type { CustomProperties } from './types.js'
+import { createStyles, hash } from './utils.js'
 
 export type KeyframeSteps = 'from' | 'to' | `${number}%`
 

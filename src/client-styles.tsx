@@ -1,7 +1,7 @@
 'use client'
 import { useLayoutEffect } from 'react'
 
-import type { CSSRule } from './types'
+import type { CSSRule } from './types.js'
 
 let hasRenderedInitialStyles = false
 

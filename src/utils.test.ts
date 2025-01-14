@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 
-import { createStyles } from './utils'
+import { createStyles } from './utils.js'
 
 describe('createStyles', () => {
   it('should convert simple style objects into CSS strings', () => {

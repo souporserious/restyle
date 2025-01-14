@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { css } from './index'
+import { css } from './index.js'
 
 const voidElements = new Set(['br', 'embed', 'hr', 'img', 'input'])
 
