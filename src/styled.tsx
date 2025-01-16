@@ -1,7 +1,7 @@
 import * as React from 'react'
 
-import { css } from './css'
-import type { AcceptsClassName, CSSObject } from './types'
+import { css } from './css.js'
+import type { AcceptsClassName, CSSObject } from './types.js'
 
 /**
  * Creates a JSX component that forwards a `className` prop with the generated

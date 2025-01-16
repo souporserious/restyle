@@ -1,7 +1,7 @@
 import * as React from 'react'
 import ReactJSXRuntimeDev from 'react/jsx-dev-runtime'
 
-import { createRestyleProps } from './create-restyle-props'
+import { createRestyleProps } from './create-restyle-props.js'
 
 export const Fragment = ReactJSXRuntimeDev.Fragment
 

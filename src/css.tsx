@@ -1,8 +1,8 @@
 import * as React from 'react'
 
-import { ClientStyles } from './client-styles'
-import type { CSSObject } from './types'
-import { createRules } from './utils'
+import { ClientStyles } from './client-styles.js'
+import type { CSSObject } from './types.js'
+import { createRules } from './utils.js'
 
 /**
  * Generates CSS from an object of styles.
