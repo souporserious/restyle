@@ -1,5 +1,10 @@
 # restyle
 
+## 3.1.1
+
+- Fixes regression when validating children in the pragma that caused an infinite loop
+- Adds `area` and `col` void HTML elements in pragma
+
 ## 3.1.0
 
 - **Remove `media` Return Type Casting (#18)**
@@ -29,8 +34,8 @@
   </div>
   ```
 
-  - **Fix React-Children Validation (#28)**  
-    Resolves an issue where falsy children (e.g., `0`) were omitted and not rendered.
+- **Fix React-Children Validation (#28)**  
+   Resolves an issue where falsy children (e.g., `0`) were omitted and not rendered.
 
 - **Support Importing from ESM (#29)**  
   Adds support for importing Restyle in ESM environments.
