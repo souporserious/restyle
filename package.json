@@ -74,7 +74,7 @@
     "dev": "pnpm build --watch",
     "build:site": "pnpm -F site build",
     "test": "vitest",
-    "prepare": "pnpm test -- run && pnpm run build"
+    "prepare": "pnpm test run && pnpm run build"
   },
   "peerDependencies": {
     "react": ">=19.0.0"
