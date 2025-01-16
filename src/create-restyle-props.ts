@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { css } from './index'
 
-const voidElements = new Set(['br', 'embed', 'hr', 'img', 'input'])
+const voidElements = new Set(['br', 'embed', 'hr', 'img', 'input', 'textarea'])
 
 /** Create a `restyle` JSX props object that handles the `css` prop to generate atomic class names. */
 export function createRestyleProps(
