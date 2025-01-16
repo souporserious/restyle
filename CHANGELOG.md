@@ -1,5 +1,45 @@
 # restyle
 
+## 3.1.0
+
+- **Remove `media` Return Type Casting (#18)**
+  Improves the return type of the media helper function and removes unnecessary type casts.
+
+- **Depth-Based Precedence (#24)**
+  Introduces a depth-based precedence system that gives higher precedence to deeper nested styles (e.g., media queries) over shallower styles. This approach fixes property order determining precedence and ensures that media query styles are applied correctly.
+
+  ```js
+  const A = styled('div', {
+    '@media (max-width: 600px)': {
+      background: 'yellow',
+    },
+    background: 'green',
+  })
+  ```
+
+- **Add `<textarea>` to Void Elements (#25)**
+  Corrects an issue where `<textarea>` was treated incorrectly, resulting in errors when applying styles.
+
+- **Fix Children Selector Issue (#27)**
+  Fixes an issue where the selector for children elements was incorrectly concatenated without a space. Now, selectors for children are properly separated unless they are pseudo-selectors:
+
+  ```tsx
+  <div css={{ input: { backgroundColor: 'red' } }}>
+    <input defaultValue="" type="text" />
+  </div>
+  ```
+
+  - **Fix React-Children Validation (#28)**  
+    Resolves an issue where falsy children (e.g., `0`) were omitted and not rendered.
+
+- **Support Importing from ESM (#29)**  
+  Adds support for importing Restyle in ESM environments.
+
+## 3.0.0
+
+- Updates peer dependencies to React 19.
+- Fixes types to use `React.JSX` instead of bare `JSX` for compatibility with React 19.
+
 ## 2.4.0
 
 - Adds a `keyframes` utility to help with creating keyframes for animations.
