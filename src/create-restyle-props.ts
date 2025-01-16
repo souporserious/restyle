@@ -35,21 +35,18 @@ export function createRestyleProps(
   if (Styles) {
     const stylesToRender = React.createElement(Styles, { key: 'rss' })
 
-    if (React.Children.count(props.children)) {
-      if (props.children.constructor === Array) {
-        props.children = props.children.concat(stylesToRender)
-      } else if (!React.isValidElement(props.children)) {
-        props.children = [props.children, stylesToRender]
-      } else {
-        props.children = [
-          React.cloneElement(props.children, { key: 'rse' }),
-          stylesToRender,
-        ]
-      }
-    } else {
+    if (typeof props.children === 'undefined') {
       props.children = stylesToRender
+    } else if (props.children.constructor === Array) {
+      props.children = props.children.concat(stylesToRender)
+    } else if (React.isValidElement(props.children)) {
+      props.children = [
+        React.cloneElement(props.children, { key: 'rse' }),
+        stylesToRender,
+      ]
+    } else {
+      props.children = [props.children, stylesToRender]
     }
   }
-
   return [props, null]
 }
