@@ -26,10 +26,10 @@ export function createRestyleProps(
   if (Styles) {
     const stylesToRender = React.createElement(Styles, { key: 'rss' })
 
-    if (props.children) {
+    if (React.Children.count(props.children)) {
       if (props.children.constructor === Array) {
         props.children = props.children.concat(stylesToRender)
-      } else if (typeof props.children === 'string') {
+      } else if (!React.isValidElement(props.children)) {
         props.children = [props.children, stylesToRender]
       } else {
         props.children = [
