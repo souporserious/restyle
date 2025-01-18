@@ -1,36 +1,55 @@
-import { ComponentType, FC, ReactNode } from 'react'
+import type { FC, ReactNode } from 'react'
 import { expect, test } from 'vitest'
 import { render } from 'vitest-browser-react'
 
 /**
- * verify that styles applied to a single div
- * match the equivalent native CSS
+ * in order to deeply compare styles across all browsers, we need to convert
+ * to a regular object - deep comparison of style objects will always
+ * succeed in webkit & firefox otherwise
+ */
+const styleDeclarationToObject = (style: CSSStyleDeclaration) => {
+  const object: Record<string, string | undefined> = {}
+  for (const key in style) {
+    object[key] = style[key]
+  }
+  return object
+}
+
+/**
+ * compare a restyle component to a native html + css structure
+ * and verify that current styles and structure match exactly
  */
 export const createUnitTest = ({
   name,
   test: TestContent,
   expect: ExpectContent,
   css,
+  fails,
 }: {
   /**
    * what should this test be called?
    */
   name: string
   /**
-   * a restyle component to render
+   * a restyle component to render or JSX to display
    */
-  test: ReactNode | ((...args: unknown[]) => ReactNode)
+  test: ReactNode | FC
   /**
    * the expected HTML structure of the component
    * only tag names are compared, not attributes
    */
-  expect: ReactNode | ((...args: unknown[]) => ReactNode)
+  expect: ReactNode | FC
   /**
-   * the expected CSS styles of the component
+   * CSS styles to add to the stylesheet for this test
    */
   css?: string
+  /**
+   * for newly tested behaviors
+   * specify if this test is expected to fail
+   */
+  fails?: boolean
 }) => {
-  test(name, async () => {
+  test(name, { fails }, async () => {
     const { getByTestId } = render(
       <>
         <div data-testid="restyle">
@@ -52,12 +71,26 @@ export const createUnitTest = ({
     const native = getByTestId('native').element()
     const restyle = getByTestId('restyle').element()
 
-    const recursiveCompare = (native: Element, restyle: Element) => {
-      const nativeCSS = window.getComputedStyle(native)
-      const restyleCSS = window.getComputedStyle(restyle)
+    const recursiveCompare = (
+      native: Element | undefined,
+      restyle: Element | undefined
+    ) => {
+      if (native === undefined || restyle === undefined) return
 
+      const nativeCSS = styleDeclarationToObject(
+        window.getComputedStyle(native)
+      )
+      const restyleCSS = styleDeclarationToObject(
+        window.getComputedStyle(restyle)
+      )
+
+      // verify that the dom structure matches
       expect(native.tagName).toEqual(restyle.tagName)
       expect(native.children.length).toEqual(restyle.children.length)
+
+      // check some common styles first, then check all styles
+      expect(nativeCSS.color).toEqual(restyleCSS.color)
+      expect(nativeCSS.backgroundColor).toEqual(restyleCSS.backgroundColor)
       expect(nativeCSS).toEqual(restyleCSS)
 
       for (let index = 0; index < native.children.length; index++) {
