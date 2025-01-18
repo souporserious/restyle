@@ -28,6 +28,6 @@
     /* If your code runs in the DOM: */
     "lib": ["es2022", "dom", "dom.iterable"]
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*", "test/**/*"],
   "exclude": ["node_modules", "dist"]
 }

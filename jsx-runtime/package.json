@@ -1,5 +1,5 @@
 {
-  "main": "../dist/jsx-runtime.js",
-  "types": "../dist/jsx-runtime.d.ts",
+  "main": "../dist/src/jsx-runtime.js",
+  "types": "../dist/src/jsx-runtime.d.ts",
   "sideEffects": false
 }
