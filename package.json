@@ -23,48 +23,49 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js",
+      "default": "./dist/src/index.js"
     },
     "./css": {
-      "types": "./dist/css.d.ts",
-      "import": "./dist/css.js",
-      "default": "./dist/css.js"
+      "types": "./dist/src/css.d.ts",
+      "import": "./dist/src/css.js",
+      "default": "./dist/src/css.js"
     },
     "./global-styles": {
-      "types": "./dist/global-styles.d.ts",
-      "import": "./dist/global-styles.js",
-      "default": "./dist/global-styles.js"
+      "types": "./dist/src/global-styles.d.ts",
+      "import": "./dist/src/global-styles.js",
+      "default": "./dist/src/global-styles.js"
     },
     "./keyframes": {
-      "types": "./dist/keyframes.d.ts",
-      "import": "./dist/keyframes.js",
-      "default": "./dist/keyframes.js"
+      "types": "./dist/src/keyframes.d.ts",
+      "import": "./dist/src/keyframes.js",
+      "default": "./dist/src/keyframes.js"
     },
     "./media": {
-      "types": "./dist/media.d.ts",
-      "import": "./dist/media.js",
-      "default": "./dist/media.js"
+      "types": "./dist/src/media.d.ts",
+      "import": "./dist/src/media.js",
+      "default": "./dist/src/media.js"
     },
     "./styled": {
-      "types": "./dist/styled.d.ts",
-      "import": "./dist/styled.js",
-      "default": "./dist/styled.js"
+      "types": "./dist/src/styled.d.ts",
+      "import": "./dist/src/styled.js",
+      "default": "./dist/src/styled.js"
     },
     "./jsx-runtime": {
-      "types": "./dist/jsx-runtime.d.ts",
-      "import": "./dist/jsx-runtime.js",
-      "default": "./dist/jsx-runtime.js"
+      "types": "./dist/src/jsx-runtime.d.ts",
+      "import": "./dist/src/jsx-runtime.js",
+      "default": "./dist/src/jsx-runtime.js"
     },
     "./jsx-dev-runtime": {
-      "types": "./dist/jsx-dev-runtime.d.ts",
-      "import": "./dist/jsx-dev-runtime.js",
-      "default": "./dist/jsx-dev-runtime.js"
+      "types": "./dist/src/jsx-dev-runtime.d.ts",
+      "import": "./dist/src/jsx-dev-runtime.js",
+      "default": "./dist/src/jsx-dev-runtime.js"
     }
   },
   "files": [
-    "dist",
+    "src",
+    "dist/src",
     "jsx-runtime",
     "jsx-dev-runtime"
   ],
