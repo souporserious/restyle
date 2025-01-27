@@ -1,5 +1,9 @@
 # restyle
 
+## 3.1.2
+
+- Fixes `Cannot read properties of null` error when rendering `null` children in the pragma
+
 ## 3.1.1
 
 - Fixes regression when validating children in the pragma that caused an infinite loop
