@@ -82,11 +82,11 @@
   "devDependencies": {
     "@types/mdx": "^2.0.13",
     "@types/node": "^20",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
     "prettier": "^3.4.2",
-    "typescript": "^5.7.2",
-    "vitest": "^2.1.8"
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.4"
   },
   "engines": {
     "node": ">=20.0.0"
