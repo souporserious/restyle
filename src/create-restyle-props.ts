@@ -35,7 +35,7 @@ export function createRestyleProps(
   if (Styles) {
     const stylesToRender = React.createElement(Styles, { key: 'rss' })
 
-    if (typeof props.children === 'undefined') {
+    if (props.children === undefined || props.children === null) {
       props.children = stylesToRender
     } else if (props.children.constructor === Array) {
       props.children = props.children.concat(stylesToRender)
