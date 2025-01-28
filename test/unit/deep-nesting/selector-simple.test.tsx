@@ -1,6 +1,6 @@
 /**
- * Simple Selectors
- * @see https://www.w3schools.com/cssref/css_selectors.php
+ * CSS Simple Selectors
+ * @see https://www.w3schools.com/cssref/css_selectors.php#:~:text=CSS%20Simple%20Selectors
  */
 
 import { styled } from '../../../src/styled.js'

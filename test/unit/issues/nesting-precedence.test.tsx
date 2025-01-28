@@ -1,5 +1,9 @@
-import { styled } from '../../src/styled.js'
-import { createUnitTest } from '../createUnitTest.js'
+/**
+ * tests related to https://github.com/souporserious/restyle/issues/23
+ */
+
+import { styled } from '../../../src/styled.js'
+import { createUnitTest } from '../../createUnitTest.js'
 
 const css = String.raw
 

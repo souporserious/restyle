@@ -1,3 +1,8 @@
+/**
+ * CSS Nesting Selector
+ * @see https://www.w3schools.com/cssref/css_selectors.php#:~:text=CSS%20Nesting%20Selector
+ */
+
 import { styled } from '../../../src/styled.js'
 import { createUnitTest } from '../../createUnitTest.js'
 
