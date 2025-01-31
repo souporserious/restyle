@@ -1,5 +1,9 @@
 # restyle
 
+## 3.1.3
+
+- Fixes `Each child in a list should have a unique "key" prop.` error for void elements when using the pragma.
+
 ## 3.1.2
 
 - Fixes `Cannot read properties of null` error when rendering `null` children in the pragma
