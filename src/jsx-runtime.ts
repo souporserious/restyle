@@ -16,12 +16,16 @@ export function jsx(
     const [parsedProps, Styles] = createRestyleProps(type, props)
 
     if (Styles) {
+      if (parsedProps.key === undefined) {
+        parsedProps.key = 'rse'
+      }
+
       return ReactJSXRuntime.jsx(
         Fragment,
         {
           children: [
             React.createElement(type, parsedProps),
-            React.createElement(Styles),
+            React.createElement(Styles, { key: 'rss' }),
           ],
         },
         key

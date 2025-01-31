@@ -18,6 +18,10 @@ export function jsxDEV(
     const [parsedProps, Styles] = createRestyleProps(type, props)
 
     if (Styles) {
+      if (parsedProps.key === undefined) {
+        parsedProps.key = 'rse'
+      }
+
       return ReactJSXRuntimeDev.jsxDEV(
         Fragment,
         {

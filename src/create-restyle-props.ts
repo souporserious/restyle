@@ -27,8 +27,6 @@ export function createRestyleProps(
     : classNames
 
   if (voidElements.has(type)) {
-    props.key = type
-
     return [props, Styles]
   }
 
