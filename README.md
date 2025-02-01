@@ -38,7 +38,7 @@
 - Supports `css` prop with JSX pragma
 - Loads styles on demand
 - Allows shipping CSS in NPM packages
-- `2.1kb` minified and gzipped
+- `2.3kb` minified and gzipped
 
 ## Installation
 

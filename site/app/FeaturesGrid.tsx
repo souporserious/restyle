@@ -48,11 +48,11 @@ const features = [
   {
     title: (
       <>
-        <code className="px-1 rounded bg-pink-50">2.1kb</code> minified &
+        <code className="px-1 rounded bg-pink-50">2.3kb</code> minified &
         gzipped
       </>
     ),
-    description: `Tiny core size for optimal performance.`,
+    description: `Lightweight with zero dependencies.`,
     color: 'text-pink-500',
   },
 ] as const
