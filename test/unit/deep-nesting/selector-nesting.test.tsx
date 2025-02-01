@@ -6,8 +6,6 @@
 import { styled } from '../../../src/styled.js'
 import { createUnitTest } from '../../createUnitTest.js'
 
-const css = String.raw
-
 const Basic = styled('div', {
   color: 'red',
   '&': {
@@ -38,7 +36,7 @@ createUnitTest({
       <div />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
       & {
@@ -95,7 +93,7 @@ createUnitTest({
       <div />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
       & & {
@@ -151,7 +149,7 @@ createUnitTest({
       <div />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
       && {

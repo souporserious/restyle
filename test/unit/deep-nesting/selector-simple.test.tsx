@@ -6,8 +6,6 @@
 import { styled } from '../../../src/styled.js'
 import { createUnitTest } from '../../createUnitTest.js'
 
-const css = String.raw
-
 createUnitTest({
   name: 'deeply nesting element selectors',
   test: styled('div', {
@@ -38,7 +36,7 @@ createUnitTest({
       <p />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
       div {
@@ -83,7 +81,7 @@ createUnitTest({
       <p />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .abc {
       color: red;
 
@@ -127,7 +125,7 @@ createUnitTest({
       <p />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
       div {
@@ -170,7 +168,7 @@ createUnitTest({
       <div id="b" />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
       #a {
@@ -214,7 +212,7 @@ createUnitTest({
       <div id="b" />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .abc {
       color: red;
       #a {
@@ -257,7 +255,7 @@ createUnitTest({
       <div id="b" />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
       #a {
@@ -308,7 +306,7 @@ createUnitTest({
       </div>
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
       * {
@@ -360,7 +358,7 @@ createUnitTest({
       </div>
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .abc {
       color: red;
       * {
@@ -410,7 +408,7 @@ createUnitTest({
       </div>
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
       * {
@@ -453,7 +451,7 @@ createUnitTest({
       <div className="name" />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
       .name {
@@ -497,7 +495,7 @@ createUnitTest({
       <div className="name" />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .abc {
       color: red;
       .name {
@@ -541,7 +539,7 @@ createUnitTest({
       <div className="name" />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
       .name {

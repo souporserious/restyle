@@ -5,18 +5,16 @@
 import { styled } from '../../../src/styled.js'
 import { createUnitTest } from '../../createUnitTest.js'
 
-const css = String.raw
-
 const A = styled('div', {
   color: 'green',
-  '@media (max-width: 9999px)': {
+  '@media (max-width: 1000px)': {
     color: 'yellow',
   },
 })
 
 const B = styled('div', {
   color: 'orange',
-  '@media (max-width: 9999px)': {
+  '@media (max-width: 1000px)': {
     color: 'yellow',
   },
 })
@@ -32,12 +30,21 @@ createUnitTest({
   expect: (
     <>
       <div className="a" />
-      <div className="a" />
+      <div className="b" />
     </>
   ),
-  css: css`
+  css: (css) => css`
     .a {
-      color: yellow;
+      color: green;
+      @media (max-width: 1000px) {
+        color: yellow;
+      }
+    }
+    .b {
+      color: orange;
+      @media (max-width: 1000px) {
+        color: yellow;
+      }
     }
   `,
 })
@@ -45,21 +52,24 @@ createUnitTest({
 createUnitTest({
   name: 'deeper styles have higher precedence regardless of order',
   test: styled('div', {
-    '@media (max-width: 9999px)': {
-      '@media (max-width: 9999px)': {
-        '@media (max-width: 9999px)': {
+    '@media (max-width: 1000px)': {
+      '@media (max-width: 1000px)': {
+        color: 'green',
+        '@media (max-width: 1000px)': {
           color: 'red',
         },
-        color: 'green',
       },
       color: 'blue',
     },
     color: 'yellow',
   }),
   expect: <div className="a" />,
-  css: css`
+  css: (css) => css`
     .a {
-      color: red;
+      color: yellow;
+      @media (max-width: 1000px) {
+        color: red;
+      }
     }
   `,
 })
@@ -73,7 +83,7 @@ createUnitTest({
     color: 'red',
   }),
   expect: <div className="a" />,
-  css: css`
+  css: (css) => css`
     .a {
       color: orange;
     }
@@ -93,7 +103,7 @@ createUnitTest({
     color: 'red',
   }),
   expect: <div className="a" />,
-  css: css`
+  css: (css) => css`
     .a {
       color: blue;
     }

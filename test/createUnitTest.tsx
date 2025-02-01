@@ -1,6 +1,7 @@
 import type { FC, ReactNode } from 'react'
 import { expect, test } from 'vitest'
 import { render } from 'vitest-browser-react'
+import { page } from '@vitest/browser/context'
 
 /**
  * in order to deeply compare styles across all browsers, we need to convert
@@ -41,15 +42,18 @@ export const createUnitTest = ({
   expect: ReactNode | FC
   /**
    * CSS styles to add to the stylesheet for this test
+   *
+   * (as a note, naming the template `css` gives convenient formatting)
    */
-  css?: string
+  css?: (css: typeof String.raw) => string
   /**
    * for newly tested behaviors
    * specify if this test is expected to fail
    */
   fails?: boolean
 }) => {
-  test(name, { fails }, async () => {
+  const runner = fails ? test.todo : test
+  runner(name, { fails }, async () => {
     const { getByTestId } = render(
       <>
         <div data-testid="restyle">
@@ -62,7 +66,7 @@ export const createUnitTest = ({
             ExpectContent
           )}
         </div>
-        <style>{css}</style>
+        <style>{css?.(String.raw)}</style>
       </>
     )
 
@@ -98,6 +102,11 @@ export const createUnitTest = ({
       }
     }
 
-    recursiveCompare(native, restyle)
+    const sizesToCheck = [10, 1000, 10000]
+
+    for (const size of sizesToCheck) {
+      await page.viewport(size, size)
+      recursiveCompare(native, restyle)
+    }
   })
 }

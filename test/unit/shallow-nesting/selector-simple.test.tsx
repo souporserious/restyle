@@ -6,8 +6,6 @@
 import { styled } from '../../../src/styled.js'
 import { createUnitTest } from '../../createUnitTest.js'
 
-const css = String.raw
-
 createUnitTest({
   name: 'nesting element selectors',
   test: styled('div', {
@@ -22,7 +20,7 @@ createUnitTest({
       <div />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
       div {
@@ -46,7 +44,7 @@ createUnitTest({
       <div />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
       & div {
@@ -70,7 +68,7 @@ createUnitTest({
       <div />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
       &div {
@@ -94,7 +92,7 @@ createUnitTest({
       <div id="a" />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
       #a {
@@ -118,7 +116,7 @@ createUnitTest({
       <div id="a" />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
 
@@ -143,7 +141,7 @@ createUnitTest({
       <div id="a" />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
 
@@ -168,7 +166,7 @@ createUnitTest({
       <div />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
       * {
@@ -192,7 +190,7 @@ createUnitTest({
       <div />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
       & * {
@@ -216,7 +214,7 @@ createUnitTest({
       <div />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
       &* {
@@ -240,7 +238,7 @@ createUnitTest({
       <div className="name" />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
       .name {
@@ -264,7 +262,7 @@ createUnitTest({
       <div className="name" />
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
       & .name {
@@ -299,7 +297,7 @@ createUnitTest({
       <div className="a name" />
     </>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
       &.name {
