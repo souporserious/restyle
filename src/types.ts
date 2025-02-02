@@ -24,6 +24,30 @@ export type AcceptsClassName<T> = T extends keyof React.JSX.IntrinsicElements
       : ClassNameMessage
     : ClassNameMessage
 
+type IncompatiblePropsMessage =
+  "Specified style props are incompatible with component props. Style props are filtered out of the component's props before being passed."
+
+export type CompatibleProps<
+  ComponentType extends React.ElementType,
+  StyleProps,
+> = [string] extends [keyof StyleProps]
+  ? StyleProps & React.ComponentProps<ComponentType>
+  : Omit<
+        React.ComponentProps<ComponentType>,
+        keyof StyleProps
+      > extends React.ComponentProps<ComponentType>
+    ? StyleProps
+    : IncompatiblePropsMessage
+
+type RestrictToRecordMessage =
+  'Style props must extend type `Record<string, unknown>`'
+
+export type RestrictToRecord<T> = T extends string
+  ? Record<never, never>
+  : T extends Record<string, unknown>
+    ? T
+    : RestrictToRecordMessage
+
 export declare namespace RestyleJSX {
   export type Element = React.JSX.Element
   export type ElementType = React.JSX.ElementType
