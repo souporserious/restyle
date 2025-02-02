@@ -12,6 +12,11 @@ export type CSSValue = CSSObject[keyof CSSObject]
 
 export type CSSRule = [className: string, rule?: string]
 
+/**
+ * using the built-in react types won't let us preserve generic component types
+ */
+export type SimpleFunctionComponent<P> = (props: P) => React.JSX.Element
+
 type ClassNameMessage = 'Component must accept a className prop'
 
 export type AcceptsClassName<T> = T extends keyof React.JSX.IntrinsicElements
@@ -27,26 +32,26 @@ export type AcceptsClassName<T> = T extends keyof React.JSX.IntrinsicElements
 type IncompatiblePropsMessage =
   "Specified style props are incompatible with component props. Style props are filtered out of the component's props before being passed."
 
-export type CompatibleProps<
-  ComponentType extends React.ElementType,
-  StyleProps,
-> = [string] extends [keyof StyleProps]
-  ? StyleProps & React.ComponentProps<ComponentType>
-  : Omit<
-        React.ComponentProps<ComponentType>,
-        keyof StyleProps
-      > extends React.ComponentProps<ComponentType>
-    ? StyleProps
-    : IncompatiblePropsMessage
+export type CompatibleProps<ComponentProps, StyleProps> =
+  // check if style props is a wide type like Record<string, unknown>
+  [string] extends [keyof StyleProps]
+    ? // if the type is wide, a simple intersection works nicely
+      StyleProps & ComponentProps
+    : // for narrower types, we can omit properties for a stronger type
+      Omit<ComponentProps, keyof StyleProps> extends ComponentProps
+      ? StyleProps
+      : IncompatiblePropsMessage
 
 type RestrictToRecordMessage =
   'Style props must extend type `Record<string, unknown>`'
 
-export type RestrictToRecord<T> = T extends string
-  ? Record<never, never>
-  : T extends Record<string, unknown>
-    ? T
-    : RestrictToRecordMessage
+export type RestrictToRecord<T> =
+  // our error message is assignable to string, so handle it separately
+  T extends string
+    ? Record<never, never>
+    : T extends Record<string, unknown>
+      ? T
+      : RestrictToRecordMessage
 
 export declare namespace RestyleJSX {
   export type Element = React.JSX.Element
