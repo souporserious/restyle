@@ -4,6 +4,12 @@ import { render } from 'vitest-browser-react'
 import { page } from '@vitest/browser/context'
 
 /**
+ * if set to true, we'll run failing tests to verify that they are, in fact, failing
+ * this is useful because vitest will not run tests that are marked as "todo"
+ */
+const VERIFY_TEST_FAILURES = false
+
+/**
  * in order to deeply compare styles across all browsers, we need to convert
  * to a regular object - deep comparison of style objects will always
  * succeed in webkit & firefox otherwise
@@ -19,6 +25,8 @@ const styleDeclarationToObject = (style: CSSStyleDeclaration) => {
 /**
  * compare a restyle component to a native html + css structure
  * and verify that current styles and structure match exactly
+ *
+ * this is the broadest way to test a behavior, and all unit tests helpers wrap this
  */
 export const createUnitTest = ({
   name,
@@ -52,7 +60,7 @@ export const createUnitTest = ({
    */
   fails?: boolean
 }) => {
-  const runner = fails ? test.todo : test
+  const runner = fails && !VERIFY_TEST_FAILURES ? test.todo : test
   runner(name, { fails }, async () => {
     const { getByTestId } = render(
       <>
@@ -93,9 +101,9 @@ export const createUnitTest = ({
       expect(native.children.length).toEqual(restyle.children.length)
 
       // check some common styles first, then check all styles
-      expect(nativeCSS.color).toEqual(restyleCSS.color)
-      expect(nativeCSS.backgroundColor).toEqual(restyleCSS.backgroundColor)
-      expect(nativeCSS).toEqual(restyleCSS)
+      expect(restyleCSS.color).toEqual(nativeCSS.color)
+      expect(restyleCSS.backgroundColor).toEqual(nativeCSS.backgroundColor)
+      expect(restyleCSS).toEqual(nativeCSS)
 
       for (let index = 0; index < native.children.length; index++) {
         recursiveCompare(native.children[index], restyle.children[index])
