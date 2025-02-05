@@ -4,7 +4,18 @@ import { render } from 'vitest-browser-react'
 import { page } from '@vitest/browser/context'
 
 /**
+ * by default, we do a fast check of styles to verify that they match
+ * however this can be inconvenient when debugging a test because
+ * you do not know which styles are failing
+ *
+ * set this to true to check each style property individually,
+ * which is slower but more useful for debugging
+ */
+const DEBUG_TEST_FAILURES = false
+
+/**
  * if set to true, we'll run failing tests to verify that they are, in fact, failing
+ *
  * this is useful because vitest will not run tests that are marked as "todo"
  */
 const VERIFY_TEST_FAILURES = false
@@ -60,7 +71,7 @@ export const createUnitTest = ({
    */
   fails?: boolean
 }) => {
-  const runner = fails && !VERIFY_TEST_FAILURES ? test.todo : test
+  const runner = fails && !VERIFY_TEST_FAILURES ? test.todo : test.concurrent
   runner(name, { fails }, async () => {
     const { getByTestId } = render(
       <>
@@ -100,20 +111,34 @@ export const createUnitTest = ({
       expect(native.tagName).toEqual(restyle.tagName)
       expect(native.children.length).toEqual(restyle.children.length)
 
-      // check some common styles first, then check all styles
-      expect(restyleCSS.color).toEqual(nativeCSS.color)
-      expect(restyleCSS.backgroundColor).toEqual(nativeCSS.backgroundColor)
-      expect(restyleCSS).toEqual(nativeCSS)
+      // verify that styles match
+      if (DEBUG_TEST_FAILURES) {
+        for (const key in restyleCSS) {
+          expect(`${key}: ${restyleCSS[key]}`).toEqual(
+            `${key}: ${nativeCSS[key]}`
+          )
+        }
+      } else {
+        expect(restyleCSS).toEqual(nativeCSS)
+      }
 
       for (let index = 0; index < native.children.length; index++) {
         recursiveCompare(native.children[index], restyle.children[index])
       }
     }
 
-    const sizesToCheck = [10, 1000, 10000]
+    // if we're in headless mode, we want to fail asap (before resizing, if possible)
+    recursiveCompare(native, restyle)
+
+    const sizesToCheck = [
+      { width: 320, height: 568 },
+      { width: 834, height: 1112 },
+      { width: 1920, height: 1080 },
+      { width: 414, height: 896 },
+    ]
 
     for (const size of sizesToCheck) {
-      await page.viewport(size, size)
+      await page.viewport(size.width, size.height)
       recursiveCompare(native, restyle)
     }
   })

@@ -67,6 +67,10 @@ type TestProperties = {
    * CSS styles to use for this element
    */
   css: CSSObject
+  /**
+   * if you need to inject extra styles to e.g. define something like @layer
+   */
+  injectStyle?: (css: typeof String.raw) => string
 }
 
 /**
@@ -81,6 +85,7 @@ export const createSyntaxTest = ({
   children: children,
   css: cssInput,
   rulePrefix = '',
+  injectStyle,
 }: TestProperties & {
   /**
    * for newly tested behaviors
@@ -138,6 +143,8 @@ export const createSyntaxTest = ({
       </>
     ),
     css: (css) => css`
+      ${injectStyle?.(String.raw) || ''}
+
       .native-test-element {
         ${CSSObjectToString(prefixedStyle)}
       }
