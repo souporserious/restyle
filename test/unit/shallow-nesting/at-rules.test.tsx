@@ -5,7 +5,7 @@
  * at-rules that are used for definitions, like @font-face, don't make sense in this context
  */
 
-import { createSyntaxTest } from '../../createNestingTest.js'
+import { createSyntaxTest } from '../../createSyntaxTest.js'
 
 /**
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@container

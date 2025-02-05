@@ -7,7 +7,7 @@
  * each rule is nested on itself if possible, or on an arbitrary element if not
  */
 
-import { createSyntaxTest } from '../../createNestingTest.js'
+import { createSyntaxTest } from '../../createSyntaxTest.js'
 
 /**
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@container

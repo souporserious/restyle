@@ -1,7 +1,8 @@
+import { page } from '@vitest/browser/context'
 import type { FC, ReactNode } from 'react'
 import { expect, test } from 'vitest'
 import { render } from 'vitest-browser-react'
-import { page } from '@vitest/browser/context'
+import { styleDeclarationToObject } from './util.js'
 
 /**
  * by default, we do a fast check of styles to verify that they match
@@ -19,19 +20,6 @@ const DEBUG_TEST_FAILURES = false
  * this is useful because vitest will not run tests that are marked as "todo"
  */
 const VERIFY_TEST_FAILURES = false
-
-/**
- * in order to deeply compare styles across all browsers, we need to convert
- * to a regular object - deep comparison of style objects will always
- * succeed in webkit & firefox otherwise
- */
-const styleDeclarationToObject = (style: CSSStyleDeclaration) => {
-  const object: Record<string, string | undefined> = {}
-  for (const key in style) {
-    object[key] = style[key]
-  }
-  return object
-}
 
 /**
  * compare a restyle component to a native html + css structure
