@@ -25,7 +25,7 @@ export type SyntaxTestOptions = {
    * what tag should this test element use?
    * @default 'div'
    */
-  tagName?: keyof JSX.IntrinsicElements
+  tagName?: 'div'
   /**
    * content to nest beneath this test element
    * can also be a function that takes the test element as an argument

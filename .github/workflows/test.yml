@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: '20'
 
-      - run: npm install -g corepack
+      - run: npm install -g corepack@latest
       - run: corepack enable
       - run: corepack pnpm install
 
@@ -34,6 +34,7 @@ jobs:
         with:
           node-version: '20'
 
+      - run: npm install -g corepack@latest
       - run: corepack enable
       - run: corepack pnpm install
 
