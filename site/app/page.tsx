@@ -4,8 +4,8 @@ import {
   Copyright,
   GitProviderLink,
   GitProviderLogo,
-  MDXComponents,
 } from 'renoun/components'
+import type { MDXComponents } from 'renoun/mdx'
 
 import Examples from './Examples.mdx'
 import { FeaturesGrid } from './FeaturesGrid'
@@ -144,7 +144,7 @@ export default function Page() {
                     className="text-2xl font-semibold text-cyan-600"
                   />
                 ),
-              } satisfies MDXComponents as any
+              } satisfies MDXComponents
             }
           />
         </section>

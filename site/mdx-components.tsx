@@ -1,16 +1,18 @@
-import { CodeBlock, CodeInline } from 'renoun/components'
+import {
+  CodeBlock,
+  CodeInline,
+  parseCodeProps,
+  parsePreProps,
+} from 'renoun/components'
 import type { MDXComponents } from 'renoun/mdx'
 
 export function useMDXComponents() {
   return {
     code: (props) => {
-      return (
-        <CodeInline value={props.children as string} language="typescript" />
-      )
+      return <CodeInline {...parseCodeProps(props)} />
     },
     pre: (props) => {
-      const { value, language } = CodeBlock.parsePreProps(props)
-      return <CodeBlock allowErrors value={value} language={language} />
+      return <CodeBlock allowErrors {...parsePreProps(props)} />
     },
   } satisfies MDXComponents
 }
