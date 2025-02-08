@@ -82,7 +82,7 @@ type MediaQueryObject = MediaQueryTypes & MediaFeatureQualifiers & MediaFeatures
 
 type MediaQueryKey = keyof MediaQueryObject
 
-function camelToHyphen(str: string): string {
+export function camelToHyphen(str: string): string {
   return str.replace(/[A-Z]/g, (match) => '-' + match.toLowerCase())
 }
 
