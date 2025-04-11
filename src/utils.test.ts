@@ -1,6 +1,51 @@
 import { describe, it, expect } from 'vitest'
 
-import { createStyles } from './utils.js'
+import { createRules, createStyles } from './utils.js'
+
+describe('createRules', () => {
+  it('should convert simple style object into CSS rules', () => {
+    const result = createRules({ color: 'red' })
+    expect(result).toMatchInlineSnapshot(`
+      [
+        "h1oa3ggs",
+        [],
+        [],
+        [
+          [
+            "h1oa3ggs",
+            ".h1oa3ggs{color:red}",
+          ],
+        ],
+        [],
+      ]
+    `)
+  })
+
+  it('handles parent selectors', () => {
+    const result = createRules({ '[data-theme]& span': { color: 'red' } })
+    expect(result).toMatchInlineSnapshot(`
+      [
+        "htvdw3y",
+        [],
+        [],
+        [],
+        [
+          [
+            [],
+            [],
+            [
+              [
+                "htvdw3y",
+                "[data-theme].htvdw3y span{color:red}",
+              ],
+            ],
+            [],
+          ],
+        ],
+      ]
+    `)
+  })
+})
 
 describe('createStyles', () => {
   it('should convert simple style objects into CSS strings', () => {
