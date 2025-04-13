@@ -61,10 +61,17 @@ test('style props are filtered from the component props', () => {
     }>
   >()
 
-  const extended2 = styled('div', ({ onClick }: { onClick: string }) => ({
-    color: onClick,
+  const extended2 = styled('div', (styleProps: { color: string }, props) => ({
+    color: styleProps.color,
+    opacity: props['aria-disabled'] ? 0.5 : 1,
   }))
-  expectTypeOf(extended2).toMatchTypeOf<FC<{ onClick: string }>>()
+
+  expectTypeOf(extended2).toMatchTypeOf<
+    FC<{
+      color: string
+      'aria-disabled'?: boolean
+    }>
+  >()
 })
 
 test('style props are not allowed to break the component type', () => {
@@ -89,9 +96,7 @@ test('extra properties are not allowed', () => {
   const Extended = styled(Component, { color: 'red' })
   const ExtendedWithProps = styled(
     Extended,
-    ({ color }: { color: string }) => ({
-      color,
-    })
+    ({ color }: { color: string }) => ({ color })
   )
 
   const basicTest = (
@@ -133,6 +138,15 @@ test('extra properties are not allowed', () => {
       color="red"
     />
   )
+})
+
+test('props used in style props resolver are forwarded', () => {
+  const StyledDiv = styled('div', (styleProps: { color: string }, props) => ({
+    color: styleProps.color,
+    opacity: props['aria-disabled'] ? 0.6 : 1,
+  }))
+
+  const test = <StyledDiv color="tomato" aria-disabled />
 })
 
 test('extra properties are permitted if style props allow them', () => {

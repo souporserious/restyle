@@ -24,12 +24,13 @@ export function styled<Props extends { className?: string }, StyleProps>(
     | ((
         // style props will be omitted from the props passed to the component
         // so we need to ensure that we won't break the type the component expects
-        props: CompatibleProps<
+        styleProps: CompatibleProps<
           NoInfer<Props>,
           // style props cannot extend from Record without unintended consequences
           // so we restrict them here instead
           RestrictToRecord<StyleProps>
-        >
+        >,
+        props: NoInfer<Props>
       ) => CSSObject)
 ): SimpleFunctionComponent<
   Omit<Props, keyof StyleProps> & {
@@ -38,8 +39,6 @@ export function styled<Props extends { className?: string }, StyleProps>(
   } & StyleProps
 >
 
-// in order to preserve generic types, the signatures for function and intrinsic/class components must be entirely separate
-// having any sort of union type for `Component` will break generic types
 export function styled<TagName extends keyof JSX.IntrinsicElements, StyleProps>(
   Component:
     | AcceptsClassName<TagName>
@@ -47,12 +46,11 @@ export function styled<TagName extends keyof JSX.IntrinsicElements, StyleProps>(
   styles?:
     | CSSObject
     | ((
-        // see above
-        props: CompatibleProps<
+        styleProps: CompatibleProps<
           React.ComponentProps<TagName>,
-          // see above
           RestrictToRecord<StyleProps>
-        >
+        >,
+        props: React.ComponentProps<TagName>
       ) => CSSObject)
 ): SimpleFunctionComponent<
   Omit<React.ComponentProps<TagName>, keyof StyleProps> & {
@@ -63,7 +61,7 @@ export function styled<TagName extends keyof JSX.IntrinsicElements, StyleProps>(
 
 export function styled(
   Component: string | SimpleFunctionComponent<unknown>,
-  styles?: CSSObject | ((props: unknown) => CSSObject)
+  styles?: CSSObject | ((styleProps: unknown, props: unknown) => CSSObject)
 ) {
   return ({
     className: classNameProp,
@@ -76,20 +74,22 @@ export function styled(
     let parsedStyles: CSSObject
 
     if (typeof styles === 'function') {
-      const accessedProps = new Set<string>()
-      const proxyProps = new Proxy(props, {
-        get(target, prop: string) {
-          accessedProps.add(prop)
-          return target[prop as keyof typeof target]
-        },
-      })
+      const styleProps = new Set<string>()
 
-      parsedStyles = styles(proxyProps)
+      parsedStyles = styles(
+        new Proxy(props, {
+          get(target, prop: string) {
+            styleProps.add(prop)
+            return target[prop as keyof typeof target]
+          },
+        }),
+        props
+      )
 
-      // Filter out accessed props from the original props
-      accessedProps.forEach((prop) => {
+      // Filter out accessed style props so they are not forwarded to the component
+      for (const prop of styleProps) {
         delete props[prop as keyof typeof props]
-      })
+      }
     } else {
       parsedStyles = styles || {}
     }
