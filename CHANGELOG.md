@@ -1,5 +1,19 @@
 # restyle
 
+## 3.2.0
+
+- Improves the types returned by the `styled` utility #32
+- When passing a function to `styled` to resolve styles, the function is now called with the component `props` in addition to the `styleProps`. This allows styles based on the component's props without filtering them.
+
+  ```tsx
+  import { styled } from 'restyle'
+
+  const StyledDiv = styled('div', (styleProps: { color: string }, props) => ({
+    color: styleProps.color,
+    opacity: props['aria-disabled'] ? 0.6 : 1,
+  }))
+  ```
+
 ## 3.1.3
 
 - Fixes `Each child in a list should have a unique "key" prop.` error for void elements when using the pragma.
@@ -30,6 +44,8 @@
   })
   ```
 
+````
+
 - **Add `<textarea>` to Void Elements (#25)**
   Corrects an issue where `<textarea>` was treated incorrectly, resulting in errors when applying styles.
 
@@ -42,10 +58,10 @@
   </div>
   ```
 
-- **Fix React-Children Validation (#28)**  
+- **Fix React-Children Validation (#28)**
    Resolves an issue where falsy children (e.g., `0`) were omitted and not rendered.
 
-- **Support Importing from ESM (#29)**  
+- **Support Importing from ESM (#29)**
   Adds support for importing Restyle in ESM environments.
 
 ## 3.0.0
@@ -132,3 +148,4 @@ function App() {
 - Initial style elements for precedence ordering are only rendered the first time they are encountered in the tree instead of every time the component is rendered.
 - Serialized data has been reduced to minimal size for better performance.
 - Styles are now deduplicated on the client if they were not able to be deduplicated during server and client rendering.
+````
