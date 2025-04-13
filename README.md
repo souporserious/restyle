@@ -31,14 +31,15 @@
 ## Features
 
 - Generates atomic class names
+- `2.3kb` minified and gzipped
+- Zero dependencies
 - Works in Server and Client Components
 - Compatible with Suspense and streaming
 - Deduplicates styles across environments
 - Encourages encapsulation
 - Supports `css` prop with JSX pragma
 - Loads styles on demand
-- Allows shipping CSS in NPM packages
-- `2.3kb` minified and gzipped
+- Ship CSS in your NPM packages
 
 ## Installation
 
