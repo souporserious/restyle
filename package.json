@@ -1,7 +1,7 @@
 {
   "name": "restyle",
   "version": "3.1.3",
-  "description": "The simplest way to add CSS to your React components.",
+  "description": "The easiest way to style your React components.",
   "author": "Travis Arnold (http://souporserious.com)",
   "license": "MIT",
   "homepage": "https://restyle.dev",
@@ -15,8 +15,10 @@
     "react",
     "css",
     "css-in-js",
+    "style",
+    "styling",
     "styled",
-    "styling"
+    "components"
   ],
   "type": "module",
   "main": "dist/index.js",

@@ -4,8 +4,8 @@ const url = 'https://restyle.dev/'
 
 export function getSiteMetadata({
   title = 'Restyle - Zero Config CSS for React',
-  description = `The simplest way to add CSS styles to your React components.`,
-  keywords = 'react, css, css-in-js, styling, components, design, systems',
+  description = `The easiest way to add CSS styles to your React components.`,
+  keywords = 'react, css, css-in-js, styling, styled, components, design, systems',
   ...rest
 }: { title?: string; description?: string } & Omit<
   Metadata,

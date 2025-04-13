@@ -95,7 +95,7 @@ export default function Page() {
               className="text-lg sm:text-xl leading-relaxed text-violet-900 mb-8 sm:mb-10"
               css={{ textWrap: 'balance' }}
             >
-              The simplest way to add CSS to React.
+              The easiest way to style your React components.
               <br />
               No build configuration required.
             </p>
