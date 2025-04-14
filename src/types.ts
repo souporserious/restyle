@@ -15,7 +15,7 @@ export type CSSRule = [className: string, rule?: string]
 /**
  * using the built-in react types won't let us preserve generic component types
  */
-export type SimpleFunctionComponent<P> = (props: P) => React.JSX.Element
+export type SimpleFunctionComponent<P> = (props: P) => React.ReactNode
 
 type ClassNameMessage = 'Component must accept a className prop'
 

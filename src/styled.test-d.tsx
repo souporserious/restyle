@@ -1,6 +1,6 @@
 import { expectTypeOf, test } from 'vitest'
 import { styled } from './styled.js'
-import { Component, type FC } from 'react'
+import { Component, type FC, type ImgHTMLAttributes } from 'react'
 
 test('basic component type is preserved', () => {
   const component = ({
@@ -12,7 +12,15 @@ test('basic component type is preserved', () => {
   }) => <div className={className}>{name}</div>
   const extended = styled(component, {})
 
-  expectTypeOf(extended).toMatchTypeOf<typeof component>()
+  expectTypeOf(extended).toMatchTypeOf<
+    ({
+      className,
+      name,
+    }: {
+      className: string
+      name: string
+    }) => React.ReactNode
+  >()
 })
 
 test('additional property types are added', () => {
@@ -447,4 +455,13 @@ test('css prop is added to the component props', () => {
       <Extended className="abc" css={{ color: 'red' }} />
     </>
   )
+})
+
+test('components that return non-element react nodes are allowed', () => {
+  const NullComponent = ({ className }: { className: string }) => null
+  const NullExtended = styled(NullComponent, { color: 'red' })
+  const StringComponent = ({ className }: { className: string }) => 'abc'
+  const StringExtended = styled(StringComponent, { color: 'red' })
+  const NumberComponent = ({ className }: { className: string }) => 123
+  const NumberExtended = styled(NumberComponent, { color: 'red' })
 })
