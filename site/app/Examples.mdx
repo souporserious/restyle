@@ -14,7 +14,7 @@
 
 ### Styled Function
 
-The `styled` function is a higher-order function that takes an HTML element tag name or a component that accepts a `className` prop and a initial styles object that returns a styled component that can accept a `css` prop:
+The `styled` utility is a higher-order function that takes an HTML element tag name or a component that accepts a `className` prop and a initial styles object that returns a styled component that can accept a `css` prop:
 
 ```tsx
 import Link from 'next/link'
@@ -28,18 +28,22 @@ const StyledLink = styled(Link, {
 
 ### Style Props
 
-The second argument to the `styled` function also accepts a function that returns a styles object based on the props passed to the component:
+The second argument to the `styled` utility also accepts a style resolver function that returns an object of styles based on the props passed to the component, referred to as _style props_. This is useful for creating components that accept dynamic styles based on props.
+
+For example, you can create a `Grid` component that accepts `gridTemplateColumns` and `gridTemplateRows` props:
 
 ```tsx
 import { styled } from 'restyle'
 
-type GridProps = {
+interface GridStyleProps {
   gridTemplateColumns: string
+  gridTemplateRows: string
 }
 
-const Grid = styled('div', (props: GridProps) => ({
+const Grid = styled('div', (styleProps: GridStyleProps) => ({
   display: 'grid',
-  gridTemplateColumns: props.gridTemplateColumns,
+  gridTemplateColumns: styleProps.gridTemplateColumns,
+  gridTemplateRows: styleProps.gridTemplateRows,
 }))
 ```
 
@@ -53,7 +57,25 @@ Now you can use these props to style the component:
 </Grid>
 ```
 
-**Note**, a proxy is used to differentiate between style props and those passed directly to the component. Therefore, only style props should be accessed within the function to ensure proper filtering.
+> [!IMPORTANT]
+> A proxy is used to differentiate between style props and those passed directly to the component. Only style props should be accessed from the first parameter of the style resolver function to ensure proper filtering.
+
+To access the props passed to the component, you can use the second parameter of the style resolver function. This is useful for applying styles based on props that are not style props:
+
+```tsx
+import { styled } from 'restyle'
+
+interface ButtonStyleProps {
+  backgroundColor: string
+  color: string
+}
+
+const Button = styled('button', (styleProps: ButtonStyleProps, props) => ({
+  backgroundColor: styleProps.backgroundColor,
+  color: styleProps.color,
+  opacity: props.disabled ? 0.6 : 1,
+}))
+```
 
 ### CSS Function
 
