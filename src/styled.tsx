@@ -5,8 +5,9 @@ import type {
   AcceptsClassName,
   CompatibleProps,
   CSSObject,
+  MaybeAsyncFunctionComponent,
   RestrictToRecord,
-  SimpleFunctionComponent,
+  StyledOutput,
 } from './types.js'
 import type { JSX } from './jsx-runtime.js'
 
@@ -18,7 +19,7 @@ import type { JSX } from './jsx-runtime.js'
  * Note, the provided component must accept a `className` prop.
  */
 export function styled<Props extends { className?: string }, StyleProps>(
-  Component: SimpleFunctionComponent<Props>,
+  Component: MaybeAsyncFunctionComponent<Props>,
   styles?:
     | CSSObject
     | ((
@@ -32,7 +33,7 @@ export function styled<Props extends { className?: string }, StyleProps>(
         >,
         props: NoInfer<Props>
       ) => CSSObject)
-): SimpleFunctionComponent<
+): StyledOutput<
   Omit<Props, keyof StyleProps> & {
     css?: CSSObject
     className?: string
@@ -52,7 +53,7 @@ export function styled<TagName extends keyof JSX.IntrinsicElements, StyleProps>(
         >,
         props: React.ComponentProps<TagName>
       ) => CSSObject)
-): SimpleFunctionComponent<
+): StyledOutput<
   Omit<React.ComponentProps<TagName>, keyof StyleProps> & {
     css?: CSSObject
     className?: string
@@ -60,7 +61,7 @@ export function styled<TagName extends keyof JSX.IntrinsicElements, StyleProps>(
 >
 
 export function styled(
-  Component: string | SimpleFunctionComponent<unknown>,
+  Component: string | MaybeAsyncFunctionComponent<unknown>,
   styles?: CSSObject | ((styleProps: unknown, props: unknown) => CSSObject)
 ) {
   return ({
