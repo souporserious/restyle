@@ -32,18 +32,57 @@ export type AcceptsClassName<T> = T extends keyof React.JSX.IntrinsicElements
       : ClassNameMessage
     : ClassNameMessage
 
-type IncompatiblePropsMessage =
-  "Specified style props are incompatible with component props. Style props are filtered out of the component's props before being passed."
+type FilteredRequiredPropErrorMessage<Keys extends PropertyKey> =
+  `Error: Styles function filters prop(s) '${Extract<Keys, string>}' which are explicitly named in style props and required by the original component.`
 
+/**
+ * extract keys from T that are explicitly named
+ * (excludes string/number index signatures)
+ */
+type KnownKeys<T> = keyof {
+  [K in keyof T as string extends K
+    ? never
+    : number extends K
+      ? never
+      : K]: T[K]
+}
+
+/**
+ * extract keys of required properties from T
+ */
+type RequiredKeys<T> = {
+  [K in keyof T]-?: {} extends Pick<T, K> ? never : K
+}[keyof T]
+
+/**
+ * check if any required component props overlap with ONLY the
+ * style prop keys
+ *
+ * This ignores potential conflicts via index signatures
+ * unless the key is also explicitly named in StyleProps
+ */
+type RequiredKnownKeyFiltered<CompProps, StyleProps> =
+  Extract<RequiredKeys<CompProps>, KnownKeys<StyleProps>> extends never
+    ? false // No required component prop conflicts with a KNOWN style prop key
+    : true // A required component prop conflicts with a KNOWN style prop key
+
+/**
+ * Calculates the compatible props for a styled component considering runtime filtering
+ */
 export type CompatibleProps<ComponentProps, StyleProps> =
-  // check if style props is a wide type like Record<string, unknown>
-  [string] extends [keyof StyleProps]
-    ? // if the type is wide, a simple intersection works nicely
-      StyleProps & ComponentProps
-    : // for narrower types, we can omit properties for a stronger type
-      Omit<ComponentProps, keyof StyleProps> extends ComponentProps
-      ? StyleProps
-      : IncompatiblePropsMessage
+  StyleProps extends never
+    ? ComponentProps
+    : // check if any required ComponentProps conflict with explicitly named (Known) StyleProps keys
+      RequiredKnownKeyFiltered<ComponentProps, StyleProps> extends true
+      ? // if conflict with KNOWN keys, return error
+        FilteredRequiredPropErrorMessage<
+          Extract<RequiredKeys<ComponentProps>, KnownKeys<StyleProps>>
+        >
+      : // if NO conflict with KNOWN keys, calculate props:
+        //   - start with ComponentProps
+        //   - remove properties explicitly named in StyleProps
+        //   - add all StyleProps (which includes potential index signatures)
+        Omit<ComponentProps, KnownKeys<StyleProps>> & StyleProps
 
 type RestrictToRecordMessage =
   'Style props must extend type `Record<string, unknown>`'

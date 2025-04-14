@@ -198,6 +198,7 @@ test('style props are required to be a record', () => {
   // allowed
   styled(component, (props: unknown) => ({ color: 'red' }))
   styled(component, (props: never) => ({ color: 'red' }))
+  styled(component, (props: object) => ({ color: 'red' }))
 
   // disallowed
   // @ts-expect-error
@@ -215,8 +216,6 @@ test('style props are required to be a record', () => {
   // @ts-expect-error
   styled(component, (props: null) => ({ color: 'red' }))
   // @ts-expect-error
-  styled(component, (props: object) => ({ color: 'red' }))
-  // @ts-expect-error
   styled(component, (props: { color: string } | undefined) => ({
     color: 'red',
   }))
@@ -224,6 +223,7 @@ test('style props are required to be a record', () => {
   // allowed
   styled('div', (props: unknown) => ({ color: 'red' }))
   styled('div', (props: never) => ({ color: 'red' }))
+  styled('div', (props: object) => ({ color: 'red' }))
 
   // disallowed
   // @ts-expect-error
@@ -240,8 +240,6 @@ test('style props are required to be a record', () => {
   styled('div', (props: undefined) => ({ color: 'red' }))
   // @ts-expect-error
   styled('div', (props: null) => ({ color: 'red' }))
-  // @ts-expect-error
-  styled('div', (props: object) => ({ color: 'red' }))
   // @ts-expect-error
   styled('div', (props: { color: string } | undefined) => ({
     color: 'red',
@@ -463,4 +461,28 @@ test('async components are allowed', () => {
     className?: string
   }) => Promise<React.ReactNode> = () => Promise.resolve(null)
   const Extended = styled(Component, { color: 'red' })
+})
+
+test('unions are not broken', () => {
+  type ButtonProps = {
+    type: 'submit' | 'button' | 'reset'
+    href?: undefined
+    className?: string
+  }
+
+  type AnchorProps = {
+    /**
+     * where should the link navigate to?
+     */
+    href: string | null | undefined
+    type?: undefined
+    className?: string
+  }
+
+  type LinkProps = ButtonProps | AnchorProps
+  const Test: FC<LinkProps> = () => null
+
+  const Extended = styled(Test, ({ active }: { active: boolean }) => ({
+    color: 'red',
+  }))
 })
