@@ -36,6 +36,13 @@ type FilteredRequiredPropErrorMessage<Keys extends PropertyKey> =
   `Error: Styles function filters prop(s) '${Extract<Keys, string>}' which are explicitly named in style props and required by the original component.`
 
 /**
+ * Omit over a union of types without merging them
+ */
+export type DistributiveOmit<T, K extends keyof any> = T extends any
+  ? Omit<T, K>
+  : never
+
+/**
  * extract keys from T that are explicitly named
  * (excludes string/number index signatures)
  */

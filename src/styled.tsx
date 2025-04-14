@@ -5,6 +5,7 @@ import type {
   AcceptsClassName,
   CompatibleProps,
   CSSObject,
+  DistributiveOmit,
   MaybeAsyncFunctionComponent,
   RestrictToRecord,
   StyledOutput,
@@ -34,7 +35,7 @@ export function styled<Props extends { className?: string }, StyleProps>(
         props: NoInfer<Props>
       ) => CSSObject)
 ): StyledOutput<
-  Omit<Props, keyof StyleProps> & {
+  DistributiveOmit<Props, keyof StyleProps> & {
     css?: CSSObject
     className?: string
   } & StyleProps
@@ -54,7 +55,7 @@ export function styled<TagName extends keyof JSX.IntrinsicElements, StyleProps>(
         props: React.ComponentProps<TagName>
       ) => CSSObject)
 ): StyledOutput<
-  Omit<React.ComponentProps<TagName>, keyof StyleProps> & {
+  DistributiveOmit<React.ComponentProps<TagName>, keyof StyleProps> & {
     css?: CSSObject
     className?: string
   } & StyleProps

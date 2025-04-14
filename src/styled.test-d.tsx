@@ -1,4 +1,4 @@
-import { Component, type FC } from 'react'
+import { Component, type ComponentProps, type FC, type Ref } from 'react'
 import { expectTypeOf, test } from 'vitest'
 import { styled } from './styled.js'
 
@@ -466,23 +466,28 @@ test('async components are allowed', () => {
 test('unions are not broken', () => {
   type ButtonProps = {
     type: 'submit' | 'button' | 'reset'
-    href?: undefined
+    onClick?: VoidFunction
     className?: string
   }
 
   type AnchorProps = {
-    /**
-     * where should the link navigate to?
-     */
     href: string | null | undefined
-    type?: undefined
     className?: string
   }
 
   type LinkProps = ButtonProps | AnchorProps
-  const Test: FC<LinkProps> = () => null
 
+  const Test: FC<LinkProps> = () => null
   const Extended = styled(Test, ({ active }: { active: boolean }) => ({
     color: 'red',
   }))
+
+  const test = (
+    <>
+      <Test href="test" />
+      <Test type="button" onClick={() => {}} />
+      <Extended href="test" active />
+      <Extended type="button" onClick={() => {}} active />
+    </>
+  )
 })
