@@ -1,8 +1,12 @@
 # restyle
 
+## 3.2.2
+
+- Fixes `main` and `types` fields in package.json to point to the correct files.
+
 ## 3.2.1
 
-- Fix `styled` type edge cases #35
+- Fixes `styled` type edge cases #35
 
 ## 3.2.0
 
