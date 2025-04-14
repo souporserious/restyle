@@ -1,5 +1,9 @@
 # restyle
 
+## 3.2.1
+
+- Fix `styled` type edge cases #35
+
 ## 3.2.0
 
 - Improves the types returned by the `styled` utility #32
