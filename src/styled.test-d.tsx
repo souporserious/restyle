@@ -1,6 +1,6 @@
+import { Component, type ComponentProps, type FC, type Ref } from 'react'
 import { expectTypeOf, test } from 'vitest'
 import { styled } from './styled.js'
-import { Component, type FC } from 'react'
 
 test('basic component type is preserved', () => {
   const component = ({
@@ -198,6 +198,7 @@ test('style props are required to be a record', () => {
   // allowed
   styled(component, (props: unknown) => ({ color: 'red' }))
   styled(component, (props: never) => ({ color: 'red' }))
+  styled(component, (props: object) => ({ color: 'red' }))
 
   // disallowed
   // @ts-expect-error
@@ -215,8 +216,6 @@ test('style props are required to be a record', () => {
   // @ts-expect-error
   styled(component, (props: null) => ({ color: 'red' }))
   // @ts-expect-error
-  styled(component, (props: object) => ({ color: 'red' }))
-  // @ts-expect-error
   styled(component, (props: { color: string } | undefined) => ({
     color: 'red',
   }))
@@ -224,6 +223,7 @@ test('style props are required to be a record', () => {
   // allowed
   styled('div', (props: unknown) => ({ color: 'red' }))
   styled('div', (props: never) => ({ color: 'red' }))
+  styled('div', (props: object) => ({ color: 'red' }))
 
   // disallowed
   // @ts-expect-error
@@ -240,8 +240,6 @@ test('style props are required to be a record', () => {
   styled('div', (props: undefined) => ({ color: 'red' }))
   // @ts-expect-error
   styled('div', (props: null) => ({ color: 'red' }))
-  // @ts-expect-error
-  styled('div', (props: object) => ({ color: 'red' }))
   // @ts-expect-error
   styled('div', (props: { color: string } | undefined) => ({
     color: 'red',
@@ -445,6 +443,51 @@ test('css prop is added to the component props', () => {
         css={{ color: 'red' }}
       />
       <Extended className="abc" css={{ color: 'red' }} />
+    </>
+  )
+})
+
+test('components that return non-element react nodes are allowed', () => {
+  const NullComponent = ({ className }: { className: string }) => null
+  const NullExtended = styled(NullComponent, { color: 'red' })
+  const StringComponent = ({ className }: { className: string }) => 'abc'
+  const StringExtended = styled(StringComponent, { color: 'red' })
+  const NumberComponent = ({ className }: { className: string }) => 123
+  const NumberExtended = styled(NumberComponent, { color: 'red' })
+})
+
+test('async components are allowed', () => {
+  const Component: (props: {
+    className?: string
+  }) => Promise<React.ReactNode> = () => Promise.resolve(null)
+  const Extended = styled(Component, { color: 'red' })
+})
+
+test('unions are not broken', () => {
+  type ButtonProps = {
+    type: 'submit' | 'button' | 'reset'
+    onClick?: VoidFunction
+    className?: string
+  }
+
+  type AnchorProps = {
+    href: string | null | undefined
+    className?: string
+  }
+
+  type LinkProps = ButtonProps | AnchorProps
+
+  const Test: FC<LinkProps> = () => null
+  const Extended = styled(Test, ({ active }: { active: boolean }) => ({
+    color: 'red',
+  }))
+
+  const test = (
+    <>
+      <Test href="test" />
+      <Test type="button" onClick={() => {}} />
+      <Extended href="test" active />
+      <Extended type="button" onClick={() => {}} active />
     </>
   )
 })
