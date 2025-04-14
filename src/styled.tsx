@@ -5,6 +5,7 @@ import type {
   AcceptsClassName,
   CSSObject,
   FunctionComponent,
+  NoOverlap,
   StyledElement,
 } from './types.js'
 import type { JSX } from './jsx-runtime.js'
@@ -23,14 +24,11 @@ export function styled<
   Component: FunctionComponent<Props>,
   styles?:
     | CSSObject
-    | ((styleProps: StyleProps, props: NoInfer<Props>) => CSSObject)
-): StyledElement<
-  Props &
-    StyleProps & {
-      css?: CSSObject
-      className?: string
-    }
->
+    | ((
+        styleProps: NoOverlap<StyleProps, Props>,
+        props: NoInfer<Props>
+      ) => CSSObject)
+): StyledElement<Props & StyleProps>
 
 export function styled<
   TagName extends keyof JSX.IntrinsicElements,
@@ -42,21 +40,18 @@ export function styled<
   styles?:
     | CSSObject
     | ((
-        styleProps: StyleProps,
+        styleProps: NoOverlap<StyleProps, React.ComponentProps<TagName>>,
         props: React.ComponentProps<TagName>
       ) => CSSObject)
-): StyledElement<
-  React.ComponentProps<TagName> &
-    StyleProps & {
-      css?: CSSObject
-      className?: string
-    }
->
+): StyledElement<React.ComponentProps<TagName> & StyleProps>
 
 export function styled(
-  Component: string | FunctionComponent<unknown>,
-  styles?: CSSObject | ((styleProps: unknown, props: unknown) => CSSObject)
-) {
+  Component:
+    | AcceptsClassName<any>
+    | React.ComponentClass<{ className?: string }>
+    | FunctionComponent<any>,
+  styles?: CSSObject | ((styleProps: any, props: any) => CSSObject)
+): StyledElement<any> {
   return ({
     className: classNameProp,
     css: cssProp,
@@ -98,7 +93,6 @@ export function styled(
 
     return (
       <>
-        {/* @ts-expect-error */}
         <Component className={className} {...props} />
         <Styles />
       </>

@@ -16,7 +16,17 @@ export type FunctionComponent<Props> = (
   props: Props
 ) => React.ReactNode | Promise<React.ReactNode>
 
-export type StyledElement<Props> = (props: Props) => React.JSX.Element
+export type NoOverlap<StyleProps, Props> = keyof StyleProps &
+  keyof Props extends never
+  ? StyleProps
+  : 'Error: Overlapping keys not allowed'
+
+export type StyledElement<Props> = (
+  props: Props & {
+    css?: CSSObject
+    className?: string
+  }
+) => React.JSX.Element
 
 type ClassNameMessage = 'Component must accept a className prop'
 
