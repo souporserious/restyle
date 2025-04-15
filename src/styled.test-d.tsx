@@ -1,6 +1,7 @@
 import { Component, type ComponentProps, type FC, type Ref } from 'react'
 import { expectTypeOf, test } from 'vitest'
 import { styled } from './styled.js'
+import type { StyledComponent } from './types.js'
 
 test('basic component type is preserved', () => {
   const component = ({
@@ -35,8 +36,8 @@ test('additional property types are added', () => {
     }>
   >()
 
-  const extended2 = styled('div', ({ color }: { color: string }) => ({
-    color,
+  const extended2 = styled('div', (props: { color: string }) => ({
+    color: props.color,
   }))
 
   expectTypeOf(extended2).toMatchTypeOf<FC<{ color: string }>>()
@@ -55,38 +56,26 @@ test('style props are filtered from the component props', () => {
   }))
 
   expectTypeOf(extended).toMatchTypeOf<
-    FC<{
+    StyledComponent<{
       className: string
-      color: string
+      color: number & string
     }>
   >()
 
-  const extended2 = styled('div', (styleProps: { color: string }, props) => ({
-    color: styleProps.color,
-    opacity: props['aria-disabled'] ? 0.5 : 1,
-  }))
+  const extended2 = styled(
+    'button',
+    (styleProps: { color: string }, props) => ({
+      color: styleProps.color,
+      opacity: props.disabled ? 0.5 : 1,
+    })
+  )
 
   expectTypeOf(extended2).toMatchTypeOf<
     FC<{
       color: string
-      'aria-disabled'?: boolean
+      disabled?: boolean
     }>
   >()
-})
-
-test('style props are not allowed to break the component type', () => {
-  const component = ({
-    className,
-    color,
-  }: {
-    className: string
-    color: number
-  }) => <div className={className}>{color}</div>
-
-  // @ts-expect-error extending with color would make color always undefined, which is a type error (color must be a number)
-  const extended = styled(component, ({ color }: { color: string }) => ({
-    color,
-  }))
 })
 
 test('extra properties are not allowed', () => {
@@ -206,12 +195,6 @@ test('style props are required to be a record', () => {
   // @ts-expect-error
   styled(component, (props: string) => ({ color: 'red' }))
   // @ts-expect-error
-  styled(component, (props: Map<string, string>) => ({ color: 'red' }))
-  // @ts-expect-error
-  styled(component, (props: []) => ({ color: 'red' }))
-  // @ts-expect-error
-  styled(component, (props: Set<string>) => ({ color: 'red' }))
-  // @ts-expect-error
   styled(component, (props: undefined) => ({ color: 'red' }))
   // @ts-expect-error
   styled(component, (props: null) => ({ color: 'red' }))
@@ -230,12 +213,6 @@ test('style props are required to be a record', () => {
   styled('div', (props: number) => ({ color: 'red' }))
   // @ts-expect-error
   styled('div', (props: string) => ({ color: 'red' }))
-  // @ts-expect-error
-  styled('div', (props: Map<string, string>) => ({ color: 'red' }))
-  // @ts-expect-error
-  styled('div', (props: []) => ({ color: 'red' }))
-  // @ts-expect-error
-  styled('div', (props: Set<string>) => ({ color: 'red' }))
   // @ts-expect-error
   styled('div', (props: undefined) => ({ color: 'red' }))
   // @ts-expect-error
@@ -370,7 +347,8 @@ test('generic types are preserved even when partially overwritten by style props
   })
   extended({
     id: 'id-abc',
-    one: 'xyz', // <- allowable because the type comes from style props
+    // @ts-expect-error preserved type even when overwritten by style props
+    one: 'xyz',
     // @ts-expect-error types require 'abc'
     two: 'xyz',
   })

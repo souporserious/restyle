@@ -16,12 +16,12 @@ export type FunctionComponent<Props> = (
   props: Props
 ) => React.ReactNode | Promise<React.ReactNode>
 
-export type NoOverlap<StyleProps, Props> = keyof StyleProps &
-  keyof Props extends never
-  ? StyleProps
-  : 'Error: Overlapping keys not allowed'
+export type StyleResolver<StyleProps extends object, Props extends object> = (
+  styleProps: StyleProps,
+  props: Props
+) => CSSObject
 
-export type StyledElement<Props> = (
+export type StyledComponent<Props> = (
   props: Props & {
     css?: CSSObject
     className?: string
