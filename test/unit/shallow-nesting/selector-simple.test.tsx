@@ -3,308 +3,58 @@
  * @see https://www.w3schools.com/cssref/css_selectors.php#:~:text=CSS%20Simple%20Selectors
  */
 
-import { styled } from '../../../src/styled.js'
-import { createUnitTest } from '../../createUnitTest.js'
+import { createNestingTest } from '../../createNestingTest.js'
 
-const css = String.raw
-
-createUnitTest({
-  name: 'nesting element selectors',
-  test: styled('div', {
-    color: 'red',
+createNestingTest({
+  name: 'element selectors',
+  children: <div />,
+  css: {
+    backgroundColor: 'red',
 
     div: {
-      color: 'blue',
+      backgroundColor: 'blue',
     },
-  })({ children: <div /> }),
-  expect: (
-    <div className="a">
-      <div />
-    </div>
-  ),
-  css: css`
-    .a {
-      color: red;
-      div {
-        color: blue;
-      }
-    }
-  `,
-})
-
-createUnitTest({
-  name: 'nesting element selectors with &',
-  test: styled('div', {
-    color: 'red',
-
-    '& div': {
-      color: 'blue',
-    },
-  })({ children: <div /> }),
-  expect: (
-    <div className="a">
-      <div />
-    </div>
-  ),
-  css: css`
-    .a {
-      color: red;
-      & div {
-        color: blue;
-      }
-    }
-  `,
-})
-
-createUnitTest({
-  name: 'nesting element selectors with & (no space)',
-  test: styled('div', {
-    color: 'red',
-
-    '&div': {
-      color: 'blue',
-    },
-  })({ children: <div /> }),
-  expect: (
-    <div className="a">
-      <div />
-    </div>
-  ),
-  css: css`
-    .a {
-      color: red;
-      &div {
-        color: blue;
-      }
-    }
-  `,
-})
-
-createUnitTest({
-  name: 'nesting id selectors',
-  test: styled('div', {
-    color: 'red',
-
-    '#a': {
-      color: 'blue',
-    },
-  })({ children: <div id="a" /> }),
-  expect: (
-    <div className="a">
-      <div id="a" />
-    </div>
-  ),
-  css: css`
-    .a {
-      color: red;
-      #a {
-        color: blue;
-      }
-    }
-  `,
-})
-
-createUnitTest({
-  name: 'nesting id selectors with &',
-  test: styled('div', {
-    color: 'red',
-
-    '& #a': {
-      color: 'blue',
-    },
-  })({ children: <div id="a" /> }),
-  expect: (
-    <div className="a">
-      <div id="a" />
-    </div>
-  ),
-  css: css`
-    .a {
-      color: red;
-
-      & #a {
-        color: blue;
-      }
-    }
-  `,
-})
-
-createUnitTest({
-  name: 'nesting id selectors with & (no space)',
-  test: styled('div', {
-    color: 'red',
-
-    '&#a': {
-      color: 'blue',
-    },
-  })({ children: <div id="a" /> }),
-  expect: (
-    <div className="a">
-      <div id="a" />
-    </div>
-  ),
-  css: css`
-    .a {
-      color: red;
-
-      &#a {
-        color: blue;
-      }
-    }
-  `,
-})
-
-createUnitTest({
-  name: 'nesting * selectors',
-  test: styled('div', {
-    color: 'red',
-
-    '*': {
-      color: 'blue',
-    },
-  })({ children: <div /> }),
-  expect: (
-    <div className="a">
-      <div />
-    </div>
-  ),
-  css: css`
-    .a {
-      color: red;
-      * {
-        color: blue;
-      }
-    }
-  `,
-})
-
-createUnitTest({
-  name: 'nesting * selectors with &',
-  test: styled('div', {
-    color: 'red',
-
-    '& *': {
-      color: 'blue',
-    },
-  })({ children: <div /> }),
-  expect: (
-    <div className="a">
-      <div />
-    </div>
-  ),
-  css: css`
-    .a {
-      color: red;
-      & * {
-        color: blue;
-      }
-    }
-  `,
-})
-
-createUnitTest({
-  name: 'nesting * selectors with & (no space)',
-  test: styled('div', {
-    color: 'red',
-
-    '&*': {
-      color: 'blue',
-    },
-  })({ children: <div /> }),
-  expect: (
-    <div className="a">
-      <div />
-    </div>
-  ),
-  css: css`
-    .a {
-      color: red;
-      &* {
-        color: blue;
-      }
-    }
-  `,
-})
-
-createUnitTest({
-  name: 'nesting class selectors',
-  test: styled('div', {
-    color: 'red',
-
-    '.name': {
-      color: 'blue',
-    },
-  })({ children: <div className="name" /> }),
-  expect: (
-    <div className="a">
-      <div className="name" />
-    </div>
-  ),
-  css: css`
-    .a {
-      color: red;
-      .name {
-        color: blue;
-      }
-    }
-  `,
-})
-
-createUnitTest({
-  name: 'nesting class selectors with &',
-  test: styled('div', {
-    color: 'red',
-
-    '& .name': {
-      color: 'blue',
-    },
-  })({ children: <div className="name" /> }),
-  expect: (
-    <div className="a">
-      <div className="name" />
-    </div>
-  ),
-  css: css`
-    .a {
-      color: red;
-      & .name {
-        color: blue;
-      }
-    }
-  `,
-})
-
-const A = styled('div', {
-  color: 'red',
-
-  '&.name': {
-    color: 'blue',
   },
 })
-createUnitTest({
-  name: 'nesting class selectors with & (no space)',
-  test: (
+
+createNestingTest({
+  name: 'id selectors',
+  children: <div id="a" />,
+  css: {
+    backgroundColor: 'red',
+
+    '#a': {
+      backgroundColor: 'blue',
+    },
+  },
+})
+
+createNestingTest({
+  name: '* selectors',
+  children: <div />,
+  css: {
+    backgroundColor: 'red',
+    '*': {
+      backgroundColor: 'blue',
+    },
+  },
+})
+
+createNestingTest({
+  name: 'class selectors',
+  children: (This) => (
     <>
-      <A>
+      <This>
         <div className="name" />
-      </A>
-      <A className="name" />
+      </This>
+      <This className="name" />
     </>
   ),
-  expect: (
-    <>
-      <div className="a">
-        <div className="name" />
-      </div>
-      <div className="a name" />
-    </>
-  ),
-  css: css`
-    .a {
-      color: red;
-      &.name {
-        color: blue;
-      }
-    }
-  `,
+  css: {
+    backgroundColor: 'red',
+
+    '.name': {
+      backgroundColor: 'blue',
+    },
+  },
 })

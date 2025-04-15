@@ -1,13 +1,11 @@
 import { styled } from '../../src/styled.js'
 import { createUnitTest } from '../createUnitTest.js'
 
-const css = String.raw
-
 createUnitTest({
   name: 'basic style is applied correctly',
   test: styled('div', { color: 'red' }),
   expect: <div className="a"></div>,
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
     }
@@ -33,7 +31,7 @@ createUnitTest({
       <div className="b"></div>
     </div>
   ),
-  css: css`
+  css: (css) => css`
     .a {
       color: red;
     }

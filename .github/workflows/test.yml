@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: '20'
 
-      - run: npm install -g corepack
+      - run: npm install -g corepack@latest
       - run: corepack enable
       - run: corepack pnpm install
 
@@ -24,3 +24,19 @@ jobs:
         run: corepack pnpm exec playwright install --with-deps
       - name: Run Tests
         run: corepack pnpm test run
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - run: npm install -g corepack@latest
+      - run: corepack enable
+      - run: corepack pnpm install
+
+      - name: Build Site
+        run: corepack pnpm --filter site run build
