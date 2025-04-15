@@ -78,6 +78,32 @@ test('style props are filtered from the component props', () => {
   >()
 })
 
+test('style props are allowed to override the component type', () => {
+  const component = ({
+    className,
+    color,
+  }: {
+    className: string
+    color: number
+  }) => <div className={className}>{color}</div>
+
+  const Component = styled(component, ({ color }: { color: string }) => ({
+    color,
+  }))
+
+  const App = () => <Component className="abc" color="red" />
+
+  const Button = styled(
+    'button',
+    (styleProps: { disabled: boolean }, props) => {
+      styleProps.disabled
+      // @ts-expect-error disabled is treated as a style prop so it's won't be forwarded to the component
+      props.disabled
+      return {}
+    }
+  )
+})
+
 test('extra properties are not allowed', () => {
   const Component = ({ className }: { className: string }) => (
     <div className={className} />
@@ -347,7 +373,6 @@ test('generic types are preserved even when partially overwritten by style props
   })
   extended({
     id: 'id-abc',
-    // @ts-expect-error preserved type even when overwritten by style props
     one: 'xyz',
     // @ts-expect-error types require 'abc'
     two: 'xyz',

@@ -18,7 +18,7 @@ export type FunctionComponent<Props> = (
 
 export type StyleResolver<StyleProps extends object, Props extends object> = (
   styleProps: StyleProps,
-  props: Props
+  props: DistributiveOmit<Props, keyof StyleProps>
 ) => CSSObject
 
 export type StyledComponent<Props> = (
@@ -39,6 +39,10 @@ export type AcceptsClassName<T> = T extends keyof React.JSX.IntrinsicElements
       ? T
       : ClassNameMessage
     : ClassNameMessage
+
+export type DistributiveOmit<Type, Keys extends keyof any> = Type extends any
+  ? Omit<Type, Keys>
+  : never
 
 export declare namespace RestyleJSX {
   export type Element = React.JSX.Element

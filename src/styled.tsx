@@ -4,6 +4,7 @@ import { css } from './css.js'
 import type {
   AcceptsClassName,
   CSSObject,
+  DistributiveOmit,
   FunctionComponent,
   StyleResolver,
   StyledComponent,
@@ -23,7 +24,7 @@ export function styled<
 >(
   Component: FunctionComponent<Props>,
   styles?: CSSObject | StyleResolver<StyleProps, Props>
-): StyledComponent<Props & StyleProps>
+): StyledComponent<DistributiveOmit<Props, keyof StyleProps> & StyleProps>
 
 export function styled<
   TagName extends keyof JSX.IntrinsicElements,
@@ -33,7 +34,9 @@ export function styled<
     | AcceptsClassName<TagName>
     | React.ComponentClass<{ className?: string }>,
   styles?: CSSObject | StyleResolver<StyleProps, React.ComponentProps<TagName>>
-): StyledComponent<React.ComponentProps<TagName> & StyleProps>
+): StyledComponent<
+  DistributiveOmit<React.ComponentProps<TagName>, keyof StyleProps> & StyleProps
+>
 
 export function styled(
   Component:
