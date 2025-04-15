@@ -1,5 +1,9 @@
 # restyle
 
+## 3.3.0
+
+- Simplifies `styled` utility so style prop types can override component prop types #36
+
 ## 3.2.2
 
 - Fixes `main` and `types` fields in package.json to point to the correct files.
