@@ -12,13 +12,10 @@ export function css(
   styles: CSSObject,
   nonce?: string
 ): [string, () => React.JSX.Element] {
-  const [classNames, lowRules, mediumRules, highRules, nested] =
-    createRules(styles)
+  const [classNames, rules] = createRules(styles)
 
   function Styles() {
-    return (
-      <ClientStyles r={[lowRules, mediumRules, highRules, nested]} n={nonce} />
-    )
+    return <ClientStyles r={rules} n={nonce} />
   }
 
   return [classNames, Styles]

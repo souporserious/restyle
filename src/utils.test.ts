@@ -8,15 +8,17 @@ describe('createRules', () => {
     expect(result).toMatchInlineSnapshot(`
       [
         "h1oa3ggs",
-        [],
-        [],
         [
+          [],
+          [],
           [
-            "h1oa3ggs",
-            ".h1oa3ggs{color:red}",
+            [
+              "h1oa3ggs",
+              ".h1oa3ggs{color:red}",
+            ],
           ],
+          [],
         ],
-        [],
       ]
     `)
   })
@@ -26,20 +28,22 @@ describe('createRules', () => {
     expect(result).toMatchInlineSnapshot(`
       [
         "htvdw3y",
-        [],
-        [],
-        [],
         [
+          [],
+          [],
+          [],
           [
-            [],
-            [],
             [
+              [],
+              [],
               [
-                "htvdw3y",
-                "[data-theme].htvdw3y span{color:red}",
+                [
+                  "htvdw3y",
+                  "[data-theme].htvdw3y span{color:red}",
+                ],
               ],
+              [],
             ],
-            [],
           ],
         ],
       ]
