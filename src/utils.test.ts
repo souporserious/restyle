@@ -7,14 +7,14 @@ describe('createRules', () => {
     const result = createRules({ color: 'red' })
     expect(result).toMatchInlineSnapshot(`
       [
-        "h1oa3ggs",
+        "hh45au7",
         [
           [],
           [],
           [
             [
-              "h1oa3ggs",
-              ".h1oa3ggs{color:red}",
+              "hh45au7",
+              ".hh45au7{color:red}",
             ],
           ],
           [],
@@ -27,7 +27,7 @@ describe('createRules', () => {
     const result = createRules({ '[data-theme]& span': { color: 'red' } })
     expect(result).toMatchInlineSnapshot(`
       [
-        "htvdw3y",
+        "h1jb4e15",
         [
           [],
           [],
@@ -38,8 +38,8 @@ describe('createRules', () => {
               [],
               [
                 [
-                  "htvdw3y",
-                  "[data-theme].htvdw3y span{color:red}",
+                  "h1jb4e15",
+                  "[data-theme].h1jb4e15 span{color:red}",
                 ],
               ],
               [],
