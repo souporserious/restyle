@@ -105,7 +105,8 @@ export function createRule(
   } else if (selector.includes('&')) {
     className = selector.replace('&', '.' + name)
   } else {
-    className = '.' + name + (selector.startsWith(":") ? selector : ' ' + selector)
+    className =
+      '.' + name + (selector.startsWith(':') ? selector : ' ' + selector)
   }
 
   const hyphenProp = prop.replace(/[A-Z]|^ms/g, '-$&').toLowerCase()
@@ -122,19 +123,23 @@ export function createRule(
   return parentSelector === '' ? rule : parentSelector + '{' + rule + '}'
 }
 
-type NestedRules = [CSSRule[], CSSRule[], CSSRule[], NestedRules[]]
-type RuleList = [string, CSSRule[], CSSRule[], CSSRule[], NestedRules[]]
+type CSSRulePrecedences = [
+  CSSRule[],
+  CSSRule[],
+  CSSRule[],
+  CSSRulePrecedences[],
+]
 
 /** Create a string of CSS class names and rules ordered by precedence from a CSS object. */
 export function createRules(
   styles: CSSObject,
   selector = '',
   parentSelector = ''
-): RuleList {
+): [classNames: string, rules: CSSRulePrecedences] {
   const lowRules: CSSRule[] = []
   const mediumRules: CSSRule[] = []
   const highRules: CSSRule[] = []
-  const nested: NestedRules[] = []
+  const nested: CSSRulePrecedences[] = []
   let classNames = ''
 
   for (const key in styles) {
@@ -151,8 +156,7 @@ export function createRules(
         : key.startsWith(':')
           ? selector + key
           : selector + ' ' + key
-
-      const [nestedClass, ...nestedRules] = createRules(
+      const [nestedClass, nestedRules] = createRules(
         value as CSSObject,
         chainedSelector,
         atSelector || parentSelector
@@ -183,7 +187,7 @@ export function createRules(
     }
   }
 
-  return [classNames.trim(), lowRules, mediumRules, highRules, nested]
+  return [classNames.trim(), [lowRules, mediumRules, highRules, nested]]
 }
 
 /** Convert a CSS object into a string of global CSS styles. */
