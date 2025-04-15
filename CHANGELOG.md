@@ -1,5 +1,11 @@
 # restyle
 
+## 3.4.0
+
+- Fixes `Styles` component type
+- Avoids creating extra arrays in `css` utility #37
+- Improves hash performance #38
+
 ## 3.3.0
 
 - Simplifies `styled` utility so style prop types can override component prop types #36
