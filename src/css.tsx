@@ -11,7 +11,7 @@ import { createRules } from './utils.js'
 export function css(
   styles: CSSObject,
   nonce?: string
-): [string, () => React.ReactNode] {
+): [string, () => React.JSX.Element] {
   const [classNames, lowRules, mediumRules, highRules, nested] =
     createRules(styles)
 
