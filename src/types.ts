@@ -30,15 +30,16 @@ export type StyledComponent<Props> = (
 
 type ClassNameMessage = 'Component must accept a className prop'
 
-export type AcceptsClassName<T> = T extends keyof React.JSX.IntrinsicElements
-  ? 'className' extends keyof React.JSX.IntrinsicElements[T]
-    ? T
-    : ClassNameMessage
-  : T extends React.ComponentType<infer P>
-    ? 'className' extends keyof P
-      ? T
+export type AcceptsClassName<Type> =
+  Type extends keyof React.JSX.IntrinsicElements
+    ? 'className' extends keyof React.JSX.IntrinsicElements[Type]
+      ? Type
       : ClassNameMessage
-    : ClassNameMessage
+    : Type extends React.ComponentType<infer Props>
+      ? 'className' extends keyof Props
+        ? Type
+        : ClassNameMessage
+      : ClassNameMessage
 
 export type DistributiveOmit<Type, Keys extends keyof any> = Type extends any
   ? Omit<Type, Keys>
@@ -50,13 +51,13 @@ export declare namespace RestyleJSX {
   export type ElementClass = React.JSX.ElementClass
   export type ElementAttributesProperty = React.JSX.ElementAttributesProperty
   export type ElementChildrenAttribute = React.JSX.ElementChildrenAttribute
-  export type LibraryManagedAttributes<C, P> =
-    React.JSX.LibraryManagedAttributes<C, P>
+  export type LibraryManagedAttributes<Component, Props> =
+    React.JSX.LibraryManagedAttributes<Component, Props>
   export type IntrinsicAttributes = React.JSX.IntrinsicAttributes
-  export type IntrinsicClassAttributes<T> =
-    React.JSX.IntrinsicClassAttributes<T>
+  export type IntrinsicClassAttributes<Type> =
+    React.JSX.IntrinsicClassAttributes<Type>
   export type IntrinsicElements = {
-    [K in keyof React.JSX.IntrinsicElements]: React.JSX.IntrinsicElements[K] & {
+    [Key in keyof React.JSX.IntrinsicElements]: React.JSX.IntrinsicElements[Key] & {
       css?: CSSObject
     }
   }
