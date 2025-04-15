@@ -3,12 +3,11 @@ import * as React from 'react'
 import { css } from './css.js'
 import type {
   AcceptsClassName,
-  CompatibleProps,
   CSSObject,
   DistributiveOmit,
-  MaybeAsyncFunctionComponent,
-  RestrictToRecord,
-  StyledOutput,
+  FunctionComponent,
+  StyleResolver,
+  StyledComponent,
 } from './types.js'
 import type { JSX } from './jsx-runtime.js'
 
@@ -19,52 +18,33 @@ import type { JSX } from './jsx-runtime.js'
  *
  * Note, the provided component must accept a `className` prop.
  */
-export function styled<Props extends { className?: string }, StyleProps>(
-  Component: MaybeAsyncFunctionComponent<Props>,
-  styles?:
-    | CSSObject
-    | ((
-        // style props will be omitted from the props passed to the component
-        // so we need to ensure that we won't break the type the component expects
-        styleProps: CompatibleProps<
-          NoInfer<Props>,
-          // style props cannot extend from Record without unintended consequences
-          // so we restrict them here instead
-          RestrictToRecord<StyleProps>
-        >,
-        props: NoInfer<Props>
-      ) => CSSObject)
-): StyledOutput<
-  DistributiveOmit<Props, keyof StyleProps> & {
-    css?: CSSObject
-    className?: string
-  } & StyleProps
->
+export function styled<
+  Props extends { className?: string },
+  StyleProps extends object,
+>(
+  Component: FunctionComponent<Props>,
+  styles?: CSSObject | StyleResolver<StyleProps, Props>
+): StyledComponent<DistributiveOmit<Props, keyof StyleProps> & StyleProps>
 
-export function styled<TagName extends keyof JSX.IntrinsicElements, StyleProps>(
+export function styled<
+  TagName extends keyof JSX.IntrinsicElements,
+  StyleProps extends object,
+>(
   Component:
     | AcceptsClassName<TagName>
     | React.ComponentClass<{ className?: string }>,
-  styles?:
-    | CSSObject
-    | ((
-        styleProps: CompatibleProps<
-          React.ComponentProps<TagName>,
-          RestrictToRecord<StyleProps>
-        >,
-        props: React.ComponentProps<TagName>
-      ) => CSSObject)
-): StyledOutput<
-  DistributiveOmit<React.ComponentProps<TagName>, keyof StyleProps> & {
-    css?: CSSObject
-    className?: string
-  } & StyleProps
+  styles?: CSSObject | StyleResolver<StyleProps, React.ComponentProps<TagName>>
+): StyledComponent<
+  DistributiveOmit<React.ComponentProps<TagName>, keyof StyleProps> & StyleProps
 >
 
 export function styled(
-  Component: string | MaybeAsyncFunctionComponent<unknown>,
-  styles?: CSSObject | ((styleProps: unknown, props: unknown) => CSSObject)
-) {
+  Component:
+    | AcceptsClassName<any>
+    | React.ComponentClass<{ className?: string }>
+    | FunctionComponent<any>,
+  styles?: CSSObject | ((styleProps: any, props: any) => CSSObject)
+): StyledComponent<any> {
   return ({
     className: classNameProp,
     css: cssProp,
@@ -106,7 +86,6 @@ export function styled(
 
     return (
       <>
-        {/* @ts-expect-error */}
         <Component className={className} {...props} />
         <Styles />
       </>
