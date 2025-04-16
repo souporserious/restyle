@@ -53,7 +53,6 @@ createUnitTest({
 
 createUnitTest({
   name: 'deeply nesting element selectors with &',
-  fails: true,
   test: styled('div', {
     color: 'red',
 
@@ -185,7 +184,6 @@ createUnitTest({
 
 createUnitTest({
   name: 'deeply nesting id selectors with &',
-  fails: true,
   test: styled('div', {
     color: 'red',
 
@@ -323,7 +321,6 @@ createUnitTest({
 
 createUnitTest({
   name: 'deeply nesting * selectors with &',
-  fails: true,
   test: styled('div', {
     color: 'red',
 
@@ -468,7 +465,6 @@ createUnitTest({
 
 createUnitTest({
   name: 'deeply nesting class selectors with &',
-  fails: true,
   test: styled('div', {
     color: 'red',
 
@@ -513,7 +509,6 @@ createUnitTest({
 
 createUnitTest({
   name: 'deeply nesting class selectors with & (no space)',
-  fails: true,
   test: styled('div', {
     color: 'red',
 
