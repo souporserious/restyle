@@ -60,12 +60,8 @@ describe('createRules', () => {
           content: '""',
         },
       },
-      '@supports not (color: orange)': {
-        '@media (width >= 768px)': {
-          color: 'orange',
-        },
-      },
       '@media (width >= 768px)': {
+        color: 'green',
         '@media (width <= 1024px)': {
           color: 'orange',
         },
@@ -73,7 +69,7 @@ describe('createRules', () => {
     })
     expect(result).toMatchInlineSnapshot(`
       [
-        "ho9xm10 ho9xm10 h17w3bk0 h1qhiauq",
+        "ho9xm10 ho9xm10 h1vtbor2 h1qhiauq",
         [
           [],
           [],
@@ -111,25 +107,12 @@ describe('createRules', () => {
             [
               [],
               [],
-              [],
               [
                 [
-                  [],
-                  [],
-                  [
-                    [
-                      "h17w3bk0",
-                      "@supports not (color: orange){@media (width >= 768px){.h17w3bk0{color:orange}}}",
-                    ],
-                  ],
-                  [],
+                  "h1vtbor2",
+                  "@media (width >= 768px){.h1vtbor2{color:green}}",
                 ],
               ],
-            ],
-            [
-              [],
-              [],
-              [],
               [
                 [
                   [],
