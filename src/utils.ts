@@ -78,6 +78,18 @@ export function hash(value: string): string {
   return hash.toString(36)
 }
 
+/** Resolve a nested selector. */
+function resolveNestedSelector(key: string, selector: string) {
+  if (key.includes('&')) {
+    return selector ? key.replace(/&/g, selector) : key
+  } else if (key.startsWith(':') || key.startsWith('::')) {
+    return selector + key
+  } else if (selector) {
+    return selector + ' ' + key
+  }
+  return key
+}
+
 /** Create a single CSS rule from a CSS object. */
 export function createRule(
   name: string,
@@ -139,17 +151,14 @@ export function createRules(
 
     if (typeof value === 'object') {
       const atSelector = /^@/.test(key) ? key : undefined
-      const chainedSelector = atSelector
+      const nestedSelector = atSelector
         ? selector
-        : key.startsWith(':')
-          ? selector + key
-          : selector + ' ' + key
+        : resolveNestedSelector(key, selector)
       const [nestedClass, nestedRules] = createRules(
         value as CSSObject,
-        chainedSelector,
+        nestedSelector,
         atSelector || parentSelector
       )
-
       classNames += nestedClass + ' '
       nested.push(nestedRules)
       continue
@@ -179,72 +188,57 @@ export function createRules(
 }
 
 /** Convert a CSS object into a string of global CSS styles. */
-export function createStyles(styles: CSSObject): string {
-  function process(
-    styles: CSSObject,
-    selector = '',
-    parentAtRule = ''
-  ): string {
-    let declarations = ''
-    let nestedCss = ''
+export function createStyles(
+  styles: CSSObject,
+  selector = '',
+  parentSelector = ''
+): string {
+  let declarations = ''
+  let nestedCss = ''
 
-    for (const key in styles) {
-      const value = styles[key as keyof CSSObject]
+  for (const key in styles) {
+    const value = styles[key as keyof CSSObject]
 
-      if (value === undefined || value === null) {
-        continue
-      }
+    if (value === undefined || value === null) {
+      continue
+    }
 
-      if (typeof value === 'object') {
-        const atRule = /^@/.test(key) ? key : undefined
-        let nestedSelector = ''
-
-        if (atRule) {
-          nestedSelector = selector
-        } else if (key.includes('&')) {
-          nestedSelector = key.replace(/&/g, selector)
-        } else if (key.startsWith(':') || key.startsWith('::')) {
-          nestedSelector = selector + key
-        } else if (selector) {
-          nestedSelector = selector + ' ' + key
-        } else {
-          nestedSelector = key
-        }
-
-        const nestedResult = process(
-          value as CSSObject,
-          nestedSelector,
-          atRule || parentAtRule
-        )
-        if (atRule) {
-          nestedCss += `${key}{${nestedResult}}`
-        } else {
-          nestedCss += nestedResult
-        }
-        continue
-      }
-
-      // CSS property
-      const hyphenProp = key.replace(/[A-Z]|^ms/g, '-$&').toLowerCase()
-      let parsedValue: CSSValue
-
-      if (key.startsWith('--') || u.test(key)) {
-        parsedValue = value
+    if (typeof value === 'object') {
+      const atSelector = /^@/.test(key) ? key : undefined
+      const nestedSelector = atSelector
+        ? selector
+        : resolveNestedSelector(key, selector)
+      const nestedResult = createStyles(
+        value as CSSObject,
+        nestedSelector,
+        atSelector || parentSelector
+      )
+      if (atSelector) {
+        nestedCss += `${key}{${nestedResult}}`
       } else {
-        parsedValue = typeof value === 'number' ? value + 'px' : value
+        nestedCss += nestedResult
       }
-
-      declarations += `${hyphenProp}:${parsedValue};`
+      continue
     }
 
-    let result = ''
-    if (declarations) {
-      result += `${selector}{${declarations}}`
-    }
-    result += nestedCss
+    // CSS property
+    const hyphenProp = key.replace(/[A-Z]|^ms/g, '-$&').toLowerCase()
+    let parsedValue: CSSValue
 
-    return result
+    if (key.startsWith('--') || u.test(key)) {
+      parsedValue = value
+    } else {
+      parsedValue = typeof value === 'number' ? value + 'px' : value
+    }
+
+    declarations += `${hyphenProp}:${parsedValue};`
   }
 
-  return process(styles)
+  let result = ''
+  if (declarations) {
+    result += `${selector}{${declarations}}`
+  }
+  result += nestedCss
+
+  return result
 }

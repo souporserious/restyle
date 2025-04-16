@@ -27,7 +27,7 @@ describe('createRules', () => {
     const result = createRules({ '[data-theme]& span': { color: 'red' } })
     expect(result).toMatchInlineSnapshot(`
       [
-        "h1jb4e15",
+        "h9ymzgp",
         [
           [],
           [],
@@ -38,11 +38,65 @@ describe('createRules', () => {
               [],
               [
                 [
-                  "h1jb4e15",
-                  "[data-theme].h1jb4e15 span{color:red}",
+                  "h9ymzgp",
+                  "[data-theme].h9ymzgp span{color:red}",
                 ],
               ],
               [],
+            ],
+          ],
+        ],
+      ]
+    `)
+  })
+
+  it('handles nested rules', () => {
+    const result = createRules({
+      'h1::before': {
+        content: '""',
+      },
+      h1: {
+        '&::before': {
+          content: '""',
+        },
+      },
+    })
+    expect(result).toMatchInlineSnapshot(`
+      [
+        "ho9xm10 ho9xm10",
+        [
+          [],
+          [],
+          [],
+          [
+            [
+              [],
+              [],
+              [
+                [
+                  "ho9xm10",
+                  ".ho9xm10 h1::before{content:""}",
+                ],
+              ],
+              [],
+            ],
+            [
+              [],
+              [],
+              [],
+              [
+                [
+                  [],
+                  [],
+                  [
+                    [
+                      "ho9xm10",
+                      ".ho9xm10 h1::before{content:""}",
+                    ],
+                  ],
+                  [],
+                ],
+              ],
             ],
           ],
         ],
