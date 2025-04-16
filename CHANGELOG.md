@@ -1,5 +1,10 @@
 # restyle
 
+## 3.4.1
+
+- Fixes nested selectors
+- Fixes nested at-rules #40
+
 ## 3.4.0
 
 - Fixes `Styles` component type
