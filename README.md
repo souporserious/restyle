@@ -31,7 +31,7 @@
 ## Features
 
 - Generates atomic class names
-- `2.3kb` minified and gzipped
+- `2.2kb` minified and gzipped
 - Zero dependencies
 - Works in Server and Client Components
 - Compatible with Suspense and streaming
