@@ -71,17 +71,17 @@ const u =
 
 /** Hash a string using the djb2 algorithm. */
 export function hash(value: string): string {
-  let hash = 5381
-  for (let index = 0; index < value.length; index++) {
-    hash = ((hash << 5) + hash + value.charCodeAt(index)) >>> 0
+  let h = 5381
+  for (let index = 0, len = value.length; index < len; index++) {
+    h = ((h << 5) + h + value.charCodeAt(index)) >>> 0
   }
-  return hash.toString(36)
+  return h.toString(36)
 }
 
 /** Resolve a nested selector. */
 function resolveNestedSelector(key: string, selector: string) {
   if (key.includes('&')) {
-    return selector ? key.replace(/&/g, selector) : key
+    return selector ? key.replaceAll('&', selector) : key
   } else if (key.startsWith(':') || key.startsWith('::')) {
     return selector + key
   } else if (selector) {
@@ -94,7 +94,6 @@ function resolveNestedSelector(key: string, selector: string) {
 export function createRule(
   name: string,
   selector: string,
-  parentSelector: string,
   prop: string,
   value: CSSValue
 ): string {
@@ -103,7 +102,7 @@ export function createRule(
   if (selector === '') {
     className = '.' + name
   } else if (selector.includes('&')) {
-    className = selector.replace('&', '.' + name)
+    className = selector.replaceAll('&', '.' + name)
   } else {
     className =
       '.' + name + (selector.startsWith(':') ? selector : ' ' + selector)
@@ -111,16 +110,13 @@ export function createRule(
 
   const hyphenProp = prop.replace(/[A-Z]|^ms/g, '-$&').toLowerCase()
   let parsedValue: CSSValue
-
   if (prop.startsWith('--') || u.test(prop)) {
     parsedValue = value
   } else {
     parsedValue = typeof value === 'number' ? value + 'px' : value
   }
 
-  const rule = className.trim() + '{' + hyphenProp + ':' + parsedValue + '}'
-
-  return parentSelector === '' ? rule : parentSelector + '{' + rule + '}'
+  return className.trim() + '{' + hyphenProp + ':' + parsedValue + '}'
 }
 
 type CSSRulePrecedences = [
@@ -130,11 +126,13 @@ type CSSRulePrecedences = [
   CSSRulePrecedences[],
 ]
 
-/** Create a string of CSS class names and rules ordered by precedence from a CSS object. */
+/**
+ * Create a string of CSS class names and rules ordered by precedence from a CSS object.
+ */
 export function createRules(
   styles: CSSObject,
   selector = '',
-  parentSelector = ''
+  atRules: string[] = []
 ): [classNames: string, rules: CSSRulePrecedences] {
   const lowRules: CSSRule[] = []
   const mediumRules: CSSRule[] = []
@@ -150,30 +148,39 @@ export function createRules(
     }
 
     if (typeof value === 'object') {
-      const atSelector = /^@/.test(key) ? key : undefined
-      const nestedSelector = atSelector
-        ? selector
-        : resolveNestedSelector(key, selector)
-      const [nestedClass, nestedRules] = createRules(
-        value as CSSObject,
-        nestedSelector,
-        atSelector || parentSelector
-      )
+      let nestedClass = ''
+      let nestedRules: CSSRulePrecedences
+
+      if (key.startsWith('@')) {
+        atRules.push(key)
+        ;[nestedClass, nestedRules] = createRules(
+          value as CSSObject,
+          selector,
+          atRules
+        )
+        atRules.pop()
+      } else {
+        ;[nestedClass, nestedRules] = createRules(
+          value as CSSObject,
+          resolveNestedSelector(key, selector),
+          atRules
+        )
+      }
+
       classNames += nestedClass + ' '
       nested.push(nestedRules)
       continue
     }
 
     const precedence = l.has(key) ? 'l' : m.has(key) ? 'm' : 'h'
-    const className = precedence + hash(key + value + selector + parentSelector)
-    const rule = createRule(
-      className,
-      selector.trim(),
-      parentSelector.trim(),
-      key,
-      value
-    )
-
+    const className =
+      precedence + hash(key + value + selector + atRules.join(''))
+    let rule = createRule(className, selector, key, value)
+    if (atRules.length > 0) {
+      const atPrefix = atRules.join('{') + '{'
+      const atSuffix = '}'.repeat(atRules.length)
+      rule = atPrefix + rule + atSuffix
+    }
     classNames += className + ' '
     if (precedence === 'l') {
       lowRules.push([className, rule])
@@ -191,7 +198,7 @@ export function createRules(
 export function createStyles(
   styles: CSSObject,
   selector = '',
-  parentSelector = ''
+  atRules: string[] = []
 ): string {
   let declarations = ''
   let nestedCss = ''
@@ -204,24 +211,16 @@ export function createStyles(
     }
 
     if (typeof value === 'object') {
-      const atSelector = /^@/.test(key) ? key : undefined
-      const nestedSelector = atSelector
-        ? selector
-        : resolveNestedSelector(key, selector)
-      const nestedResult = createStyles(
-        value as CSSObject,
-        nestedSelector,
-        atSelector || parentSelector
-      )
-      if (atSelector) {
-        nestedCss += `${key}{${nestedResult}}`
+      if (key.startsWith('@')) {
+        nestedCss +=
+          key + '{' + createStyles(value as CSSObject, selector, []) + '}'
       } else {
-        nestedCss += nestedResult
+        const nestedSelector = resolveNestedSelector(key, selector)
+        nestedCss += createStyles(value as CSSObject, nestedSelector, atRules)
       }
       continue
     }
 
-    // CSS property
     const hyphenProp = key.replace(/[A-Z]|^ms/g, '-$&').toLowerCase()
     let parsedValue: CSSValue
 
@@ -236,9 +235,15 @@ export function createStyles(
 
   let result = ''
   if (declarations) {
-    result += `${selector}{${declarations}}`
+    result += selector ? selector + '{' + declarations + '}' : declarations
   }
   result += nestedCss
+
+  if (result && atRules.length > 0) {
+    const atPrefix = atRules.join('{') + '{'
+    const atSuffix = '}'.repeat(atRules.length)
+    result = atPrefix + result + atSuffix
+  }
 
   return result
 }
