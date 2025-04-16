@@ -126,9 +126,7 @@ type CSSRulePrecedences = [
   CSSRulePrecedences[],
 ]
 
-/**
- * Create a string of CSS class names and rules ordered by precedence from a CSS object.
- */
+/** Create a string of CSS class names and rules ordered by precedence from a CSS object. */
 export function createRules(
   styles: CSSObject,
   selector = '',
