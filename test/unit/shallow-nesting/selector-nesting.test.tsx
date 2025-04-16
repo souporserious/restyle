@@ -46,7 +46,6 @@ const Combined = styled('div', {
 })
 createUnitTest({
   name: 'nesting & selectors with &',
-  fails: true,
   test: (
     <Combined>
       <Combined></Combined>
@@ -77,7 +76,6 @@ const Weird = styled('div', {
 })
 createUnitTest({
   name: 'nesting & selectors with & (no space)',
-  fails: true,
   test: (
     <Weird>
       <Weird></Weird>

@@ -82,7 +82,6 @@ createUnitTest({
 
 createUnitTest({
   name: '& can be used to increase precedence deeply',
-  fails: true,
   test: styled('div', {
     '&': {
       '&': {

@@ -60,10 +60,16 @@ describe('createRules', () => {
           content: '""',
         },
       },
+      '@media (width >= 768px)': {
+        color: 'green',
+        '@media (width <= 1024px)': {
+          color: 'orange',
+        },
+      },
     })
     expect(result).toMatchInlineSnapshot(`
       [
-        "ho9xm10 ho9xm10",
+        "ho9xm10 ho9xm10 h1vtbor2 h1qhiauq",
         [
           [],
           [],
@@ -92,6 +98,29 @@ describe('createRules', () => {
                     [
                       "ho9xm10",
                       ".ho9xm10 h1::before{content:""}",
+                    ],
+                  ],
+                  [],
+                ],
+              ],
+            ],
+            [
+              [],
+              [],
+              [
+                [
+                  "h1vtbor2",
+                  "@media (width >= 768px){.h1vtbor2{color:green}}",
+                ],
+              ],
+              [
+                [
+                  [],
+                  [],
+                  [
+                    [
+                      "h1qhiauq",
+                      "@media (width >= 768px){@media (width <= 1024px){.h1qhiauq{color:orange}}}",
                     ],
                   ],
                   [],
