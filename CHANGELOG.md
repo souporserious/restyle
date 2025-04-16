@@ -1,5 +1,9 @@
 # restyle
 
+## 3.4.2
+
+- Exports `StyledComponent` type to fix _inferred type cannot be named without a reference_ type error when using `styled` utility
+
 ## 3.4.1
 
 - Fixes nested selectors
