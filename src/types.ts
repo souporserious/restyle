@@ -12,6 +12,13 @@ export type CSSValue = CSSObject[keyof CSSObject]
 
 export type CSSRule = [className: string, rule?: string]
 
+export type CSSRulePrecedences = [
+  CSSRule[],
+  CSSRule[],
+  CSSRule[],
+  CSSRulePrecedences[],
+]
+
 export type FunctionComponent<Props> = (
   props: Props
 ) => React.ReactNode | Promise<React.ReactNode>
