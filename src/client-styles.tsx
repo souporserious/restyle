@@ -60,9 +60,9 @@ export function ClientStyles({
       ) : (
         lowRules.map(([className, rule], index) => (
           <style
+            key={className}
             href={className}
             precedence={levels.low}
-            key={index}
             {...sharedProps}
           >
             {rule}
@@ -81,9 +81,9 @@ export function ClientStyles({
       ) : (
         mediumRules.map(([className, rule], index) => (
           <style
+            key={className}
             href={className}
             precedence={levels.med}
-            key={index}
             {...sharedProps}
           >
             {rule}
@@ -102,9 +102,9 @@ export function ClientStyles({
       ) : (
         highRules.map(([className, rule], index) => (
           <style
+            key={className}
             href={className}
             precedence={levels.high}
-            key={index}
             {...sharedProps}
           >
             {rule}
