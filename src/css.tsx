@@ -10,9 +10,10 @@ import type { CSSObject } from './types.js'
  */
 export function css(
   styles: CSSObject,
-  nonce?: string
+  nonce?: string,
+  classOverrides?: string[]
 ): [string, () => React.JSX.Element] {
-  const [classNames, rules] = createRules(styles)
+  const [classNames, rules] = createRules(styles, '', [], classOverrides)
 
   function Styles() {
     return <ClientStyles r={rules} n={nonce} />

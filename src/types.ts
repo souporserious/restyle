@@ -10,7 +10,11 @@ export type CSSObject = React.CSSProperties & {
 
 export type CSSValue = CSSObject[keyof CSSObject]
 
-export type CSSRule = [className: string, rule?: string]
+export type CSSRule = [
+  className: string,
+  rule: string,
+  originalObject: CSSObject,
+]
 
 export type CSSRulePrecedences = [
   CSSRule[],

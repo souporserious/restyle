@@ -76,10 +76,14 @@ export function styled(
       parsedStyles = styles || {}
     }
 
-    const [classNames, Styles] = css({
-      ...parsedStyles,
-      ...cssProp,
-    })
+    const [classNames, Styles] = css(
+      {
+        ...parsedStyles,
+        ...cssProp,
+      },
+      undefined,
+      classNameProp?.split(' ').map((x) => x.trim())
+    )
     const className = classNameProp
       ? classNameProp + ' ' + classNames
       : classNames

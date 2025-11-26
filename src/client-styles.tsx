@@ -2,6 +2,7 @@
 import { useLayoutEffect } from 'react'
 
 import type { CSSRule } from './types.js'
+import { addToRulesCache } from './create-rules.js'
 
 let hasRenderedInitialStylesToDepth = -1
 type NestedRules = [CSSRule[], CSSRule[], CSSRule[], NestedRules[]]
@@ -27,6 +28,9 @@ export function ClientStyles({
   d?: number
 }) {
   const [lowRules, mediumRules, highRules, nested] = rules
+  for (const rule of [...lowRules, ...mediumRules, ...highRules]) {
+    addToRulesCache(rule[0], rule[2])
+  }
 
   /* Only render the initial styles for each depth once to establish precedence order */
   const hasRenderedThisDepth = hasRenderedInitialStylesToDepth >= depth
