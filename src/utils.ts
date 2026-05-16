@@ -76,14 +76,86 @@ export function hash(value: string): string {
   return h.toString(36)
 }
 
+/** Split a comma-separated selector list while preserving nested function and attribute commas. */
+export function splitSelectorList(selector: string): string[] {
+  const selectors: string[] = []
+  let current = ''
+  let depth = 0
+  let quote = ''
+
+  for (let index = 0; index < selector.length; index++) {
+    const char = selector[index]
+
+    if (quote) {
+      current += char
+
+      if (char === '\\') {
+        current += selector[++index] ?? ''
+      } else if (char === quote) {
+        quote = ''
+      }
+
+      continue
+    }
+
+    if (char === '"' || char === "'") {
+      quote = char
+      current += char
+      continue
+    }
+
+    if (char === '(' || char === '[') {
+      depth++
+      current += char
+      continue
+    }
+
+    if (char === ')' || char === ']') {
+      depth--
+      current += char
+      continue
+    }
+
+    if (char === ',' && depth === 0) {
+      selectors.push(current.trim())
+      current = ''
+      continue
+    }
+
+    current += char
+  }
+
+  selectors.push(current.trim())
+  return selectors
+}
+
+function resolveSelectorPart(key: string, selector: string) {
+  if (key.includes('&')) {
+    return key.replaceAll('&', selector)
+  }
+
+  if (key.startsWith(':') || key.startsWith('::')) {
+    return selector + key
+  }
+
+  return selector + ' ' + key
+}
+
 /** Resolve a nested selector. */
 export function resolveNestedSelector(key: string, selector: string) {
-  if (key.includes('&')) {
-    return selector ? key.replaceAll('&', selector) : key
-  } else if (key.startsWith(':') || key.startsWith('::')) {
-    return selector + key
-  } else if (selector) {
-    return selector + ' ' + key
+  if (!selector) {
+    return key
   }
-  return key
+
+  const parents = splitSelectorList(selector)
+  const children = splitSelectorList(key)
+  const selectors: string[] = []
+
+  for (const parent of parents) {
+    for (const child of children) {
+      selectors.push(resolveSelectorPart(child, parent))
+    }
+  }
+
+  return selectors.join(', ')
 }

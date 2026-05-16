@@ -132,4 +132,115 @@ describe('createRules', () => {
       ]
     `)
   })
+
+  it('handles comma-separated selectors without explicit nesting selectors', () => {
+    const result = createRules({
+      '.x, .y': {
+        color: 'red',
+      },
+    })
+    expect(result).toMatchInlineSnapshot(`
+      [
+        "hibl5h4",
+        [
+          [],
+          [],
+          [],
+          [
+            [
+              [],
+              [],
+              [
+                [
+                  "hibl5h4",
+                  ".hibl5h4 .x, .hibl5h4 .y{color:red}",
+                ],
+              ],
+              [],
+            ],
+          ],
+        ],
+      ]
+    `)
+  })
+
+  it('handles nested comma-separated selectors as cartesian products', () => {
+    const result = createRules({
+      '&.a, &.b': {
+        '& .x, & .y': {
+          color: 'red',
+        },
+      },
+    })
+    expect(result).toMatchInlineSnapshot(`
+      [
+        "hfsxhbn",
+        [
+          [],
+          [],
+          [],
+          [
+            [
+              [],
+              [],
+              [],
+              [
+                [
+                  [],
+                  [],
+                  [
+                    [
+                      "hfsxhbn",
+                      ".hfsxhbn.a .x, .hfsxhbn.a .y, .hfsxhbn.b .x, .hfsxhbn.b .y{color:red}",
+                    ],
+                  ],
+                  [],
+                ],
+              ],
+            ],
+          ],
+        ],
+      ]
+    `)
+  })
+
+  it('handles nested comma-separated selectors without explicit nesting selectors', () => {
+    const result = createRules({
+      '&.a, &.b': {
+        '.x, .y': {
+          color: 'red',
+        },
+      },
+    })
+    expect(result).toMatchInlineSnapshot(`
+      [
+        "hfsxhbn",
+        [
+          [],
+          [],
+          [],
+          [
+            [
+              [],
+              [],
+              [],
+              [
+                [
+                  [],
+                  [],
+                  [
+                    [
+                      "hfsxhbn",
+                      ".hfsxhbn.a .x, .hfsxhbn.a .y, .hfsxhbn.b .x, .hfsxhbn.b .y{color:red}",
+                    ],
+                  ],
+                  [],
+                ],
+              ],
+            ],
+          ],
+        ],
+      ]
+    `)
+  })
 })
