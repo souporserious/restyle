@@ -4,7 +4,14 @@ import type {
   CSSRulePrecedences,
   CSSValue,
 } from './types.js'
-import { resolveNestedSelector, l, m, u, hash } from './utils.js'
+import {
+  resolveNestedSelector,
+  splitSelectorList,
+  l,
+  m,
+  u,
+  hash,
+} from './utils.js'
 
 /** Create a single CSS rule from a CSS object. */
 export function createRule(
@@ -20,8 +27,9 @@ export function createRule(
   } else if (selector.includes('&')) {
     className = selector.replaceAll('&', '.' + name)
   } else {
-    className =
-      '.' + name + (selector.startsWith(':') ? selector : ' ' + selector)
+    className = splitSelectorList(selector)
+      .map((part) => '.' + name + (part.startsWith(':') ? part : ' ' + part))
+      .join(', ')
   }
 
   const hyphenProp = prop.replace(/[A-Z]|^ms/g, '-$&').toLowerCase()
