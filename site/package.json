@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "renoun next dev",
-    "build": "renoun next build"
+    "dev": "renoun next dev --webpack",
+    "build": "renoun next build --webpack"
   },
   "dependencies": {
     "@mdx-js/loader": "3.1.1",

@@ -1,6 +1,7 @@
 .DS_Store
 .vscode
 .next
+.renoun
 .turbo
 .vercel
 dist

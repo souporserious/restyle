@@ -1,11 +1,11 @@
 import {
   CodeBlock,
-  CodeInline,
+  Command,
   Copyright,
-  GitProviderLink,
-  GitProviderLogo,
+  Logo,
 } from 'renoun/components'
 import type { MDXComponents } from 'renoun/mdx'
+import type { ComponentProps } from 'react'
 
 import Examples from './Examples.mdx'
 import { FeaturesGrid } from './FeaturesGrid'
@@ -68,6 +68,69 @@ const outputCode = `
 </html>
 `
 
+function InstallCommandContainer({
+  className,
+  style,
+  ...props
+}: ComponentProps<'div'>) {
+  return (
+    <div
+      {...props}
+      className={[
+        'relative inline-flex rounded-md font-mono text-sm sm:text-base shadow-sm',
+        className,
+      ]
+        .filter(Boolean)
+        .join(' ')}
+      style={{ ...style, backgroundColor: '#111827', color: 'white' }}
+    />
+  )
+}
+
+function InstallCommandTabs({
+  className,
+  ...props
+}: ComponentProps<'div'>) {
+  return (
+    <div
+      {...props}
+      className={[
+        'absolute inset-y-0 right-3 z-10 flex items-center text-gray-200',
+        className,
+      ]
+        .filter(Boolean)
+        .join(' ')}
+    />
+  )
+}
+
+function InstallCommandTabButton() {
+  return null
+}
+
+function InstallCommandTabPanel({
+  hidden,
+  className,
+  style,
+  ...props
+}: ComponentProps<'pre'>) {
+  const command = (props as { 'data-command'?: string })['data-command']
+
+  return (
+    <pre
+      {...props}
+      hidden={command === 'npm' ? undefined : hidden}
+      className={[
+        'm-0 rounded-md py-3 pl-5 pr-14 leading-normal',
+        className,
+      ]
+        .filter(Boolean)
+        .join(' ')}
+      style={{ ...style, backgroundColor: '#111827' }}
+    />
+  )
+}
+
 export default function Page() {
   return (
     <>
@@ -100,28 +163,48 @@ export default function Page() {
               No build configuration required.
             </p>
             <div className="flex gap-4 m-auto">
-              <CodeInline
-                allowCopy
-                value={`npm install restyle`}
-                language="bash"
-                paddingX="0.8em"
-                paddingY="0.5em"
-              />
-              <GitProviderLink className="flex items-center gap-2 px-3 py-2 text-white bg-gray-800 rounded-md">
-                <GitProviderLogo />
-              </GitProviderLink>
+              <Command
+                variant="install"
+                shouldValidate={false}
+                components={{
+                  Container: InstallCommandContainer,
+                  Tabs: InstallCommandTabs,
+                  TabButton: InstallCommandTabButton,
+                  TabPanel: InstallCommandTabPanel,
+                  CopyButton: {
+                    css: {
+                      backgroundColor: 'transparent',
+                      color: '#e5e7eb',
+                    },
+                  },
+                }}
+              >
+                restyle
+              </Command>
+              <a
+                href="https://github.com/souporserious/restyle"
+                rel="noopener"
+                target="_blank"
+                className="flex items-center gap-2 px-3 py-2 text-white bg-gray-800 rounded-md"
+                aria-label="View restyle on GitHub"
+              >
+                <Logo
+                  variant="gitHost"
+                  source="https://github.com/souporserious/restyle"
+                />
+              </a>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 py-20 gap-8">
             <div className="flex flex-col gap-4">
               <h3 className="text-2xl font-extrabold text-violet-400">Input</h3>
-              <CodeBlock value={inputCode} language="tsx" />
+              <CodeBlock language="tsx">{inputCode}</CodeBlock>
             </div>
             <div className="flex flex-col gap-4">
               <h3 className="text-2xl font-extrabold text-violet-400">
                 Output
               </h3>
-              <CodeBlock value={outputCode} language="html" />
+              <CodeBlock language="html">{outputCode}</CodeBlock>
             </div>
           </div>
         </section>
@@ -135,13 +218,13 @@ export default function Page() {
                 h2: (props) => (
                   <h2
                     {...props}
-                    className="text-2xl sm:text-3xl font-extrabold text-violet-400"
+                    className="text-2xl sm:text-3xl font-extrabold text-violet-400 [&_a]:text-inherit [&_a]:no-underline"
                   />
                 ),
                 h3: (props) => (
                   <h3
                     {...props}
-                    className="text-2xl font-semibold text-cyan-600"
+                    className="text-2xl font-semibold text-cyan-600 [&_a]:text-inherit [&_a]:no-underline"
                   />
                 ),
               } satisfies MDXComponents

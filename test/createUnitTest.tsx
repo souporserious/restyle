@@ -50,7 +50,7 @@ export const createUnitTest = ({
   fails?: boolean
 }) => {
   test(name, { fails }, async () => {
-    const { getByTestId } = render(
+    const { getByTestId } = await render(
       <>
         <div data-testid="restyle">
           {typeof TestContent === 'function' ? <TestContent /> : TestContent}
