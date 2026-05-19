@@ -39,6 +39,51 @@
       "import": "./dist/src/global-styles.js",
       "default": "./dist/src/global-styles.js"
     },
+    "./css-prop-cache": {
+      "types": "./dist/src/generated-css-prop-cache.d.ts",
+      "import": "./dist/src/generated-css-prop-cache.js",
+      "default": "./dist/src/generated-css-prop-cache.js"
+    },
+    "./head-styles": {
+      "types": "./dist/src/head-styles.d.ts",
+      "import": "./dist/src/head-styles.js",
+      "default": "./dist/src/head-styles.js"
+    },
+    "./unplugin": {
+      "types": "./dist/src/unplugin.d.ts",
+      "import": "./dist/src/unplugin.js",
+      "default": "./dist/src/unplugin.js"
+    },
+    "./vite": {
+      "types": "./dist/src/vite.d.ts",
+      "import": "./dist/src/vite.js",
+      "default": "./dist/src/vite.js"
+    },
+    "./rollup": {
+      "types": "./dist/src/rollup.d.ts",
+      "import": "./dist/src/rollup.js",
+      "default": "./dist/src/rollup.js"
+    },
+    "./webpack": {
+      "types": "./dist/src/webpack.d.ts",
+      "import": "./dist/src/webpack.js",
+      "default": "./dist/src/webpack.js"
+    },
+    "./rspack": {
+      "types": "./dist/src/rspack.d.ts",
+      "import": "./dist/src/rspack.js",
+      "default": "./dist/src/rspack.js"
+    },
+    "./esbuild": {
+      "types": "./dist/src/esbuild.d.ts",
+      "import": "./dist/src/esbuild.js",
+      "default": "./dist/src/esbuild.js"
+    },
+    "./turbopack": {
+      "types": "./dist/src/turbopack.d.ts",
+      "import": "./dist/src/turbopack.js",
+      "default": "./dist/src/turbopack.js"
+    },
     "./keyframes": {
       "types": "./dist/src/keyframes.d.ts",
       "import": "./dist/src/keyframes.js",
@@ -77,18 +122,28 @@
     "dev": "pnpm build --watch",
     "build:site": "pnpm -F site build",
     "test": "vitest --typecheck",
-    "prepublishOnly": "pnpm test run",
+    "test:browser": "VITEST_BROWSER=1 vitest --typecheck",
+    "prepublishOnly": "pnpm test run && pnpm test:browser run",
     "prepare": "pnpm run build"
   },
   "peerDependencies": {
-    "react": ">=19.2.6"
+    "react": ">=19.2.6",
+    "react-dom": ">=19.0.0",
+    "typescript": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@types/mdx": "^2.0.13",
+    "@types/node": "^20.19.41",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.1",
-    "@vitest/browser": "^4.0.18",
+    "@vitejs/plugin-react": "^5.2.0",
+    "@vitest/browser": "4.0.18",
+    "@vitest/browser-playwright": "4.0.18",
     "playwright": "^1.58.2",
     "prettier": "^3.8.1",
     "react": "19.2.6",
@@ -107,5 +162,8 @@
       "msw",
       "sharp"
     ]
+  },
+  "dependencies": {
+    "unplugin": "^2.3.11"
   }
 }

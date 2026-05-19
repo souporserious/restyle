@@ -24,3 +24,5 @@ jobs:
         run: corepack pnpm exec playwright install --with-deps
       - name: Run Tests
         run: corepack pnpm test run
+      - name: Run Browser Tests
+        run: corepack pnpm test:browser run

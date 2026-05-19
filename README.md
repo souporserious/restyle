@@ -18,6 +18,7 @@
   - [Style Props](#style-props)
   - [CSS Function](#css-function)
   - [CSS Prop](#css-prop)
+  - [Build Plugins](#build-plugins)
   - [Media Queries](#media-queries)
   - [Keyframes](#keyframes)
   - [Global Styles](#global-styles)
@@ -32,7 +33,7 @@
 
 - Generates atomic class names
 - `2.2kb` minified and gzipped
-- Zero dependencies
+- No browser runtime dependencies
 - Works in Server and Client Components
 - Compatible with Suspense and streaming
 - Deduplicates styles across environments
@@ -163,6 +164,7 @@ export default function MyComponent() {
 - [Style Props](#style-props)
 - [CSS Function](#css-function)
 - [CSS Prop](#css-prop)
+- [Build Plugins](#build-plugins)
 - [Media Queries](#media-queries)
 - [Keyframes](#keyframes)
 - [Global Styles](#global-styles)
@@ -307,6 +309,57 @@ export default function CSSProp() {
     </div>
   )
 }
+```
+
+### Build Plugins
+
+Restyle can analyze static `css` props at build time and generate a cache module for styles that should be emitted in the document head before streaming children render.
+
+```tsx
+import cssPropCache from 'restyle/css-prop-cache'
+import { HeadStyles } from 'restyle/head-styles'
+
+export function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html>
+      <head>
+        <HeadStyles cache={cssPropCache} />
+      </head>
+      <body>{children}</body>
+    </html>
+  )
+}
+```
+
+Use the plugin for your bundler:
+
+```ts
+// vite.config.ts
+import Restyle from 'restyle/vite'
+
+export default {
+  plugins: [Restyle()],
+}
+```
+
+```ts
+// webpack.config.ts, rspack.config.ts, rollup.config.ts, or esbuild config
+import Restyle from 'restyle/webpack'
+
+export default {
+  plugins: [Restyle()],
+}
+```
+
+For Turbopack in Next.js, use the config helper so `restyle/css-prop-cache` resolves to a generated file:
+
+```ts
+// next.config.ts
+import { withRestyleTurbopack } from 'restyle/turbopack'
+
+export default withRestyleTurbopack({
+  // your Next.js config
+})
 ```
 
 ### Media Queries

@@ -87,7 +87,7 @@ export function styled(
     return (
       <>
         <Component className={className} {...props} />
-        <Styles />
+        {Styles ? <Styles /> : null}
       </>
     )
   }

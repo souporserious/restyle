@@ -50,7 +50,7 @@ export const createUnitTest = ({
   fails?: boolean
 }) => {
   test(name, { fails }, async () => {
-    const { getByTestId } = render(
+    const result = await render(
       <>
         <div data-testid="restyle">
           {typeof TestContent === 'function' ? <TestContent /> : TestContent}
@@ -68,8 +68,8 @@ export const createUnitTest = ({
 
     // crawl through each tree and ensure every element has the same styles
 
-    const native = getByTestId('native').element()
-    const restyle = getByTestId('restyle').element()
+    const native = result.locator.getByTestId('native').element()
+    const restyle = result.locator.getByTestId('restyle').element()
 
     const recursiveCompare = (
       native: Element | undefined,
