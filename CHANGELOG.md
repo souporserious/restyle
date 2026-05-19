@@ -1,5 +1,10 @@
 # restyle
 
+## 3.4.3
+
+- Fixes site build and test configuration for updated Next, renoun, and Vitest dependencies.
+- Restores site MDX heading, inline code, and install command styles after dependency updates.
+
 ## 3.4.2
 
 - Exports `StyledComponent` type to fix _inferred type cannot be named without a reference_ type error when using `styled` utility
